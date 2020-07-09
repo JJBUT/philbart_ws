@@ -25,11 +25,13 @@ class SLSensorData
     public: SLSensorData();
     public: ~SLSensorData();
 
-    public: double time_stamp;
+    //Think about making this a pointer because we only need
+    // one memory location to store each data streams time_stamp information
+    public: double time_stamp; 
 
-    // Frame
+    // public: Frame
      
-    // Description
+    // public: Description
 };
 
 }

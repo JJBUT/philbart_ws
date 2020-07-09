@@ -1,5 +1,6 @@
 #include "iostream"
 #include "tuple"
+#include "memory"
 #include "../include/sensors/sl_sensor.h"
 
 #ifndef SL_ANEMOMETER_H
@@ -35,6 +36,9 @@ class SLAnemometerData: public SLSensorData
 
     //Destructor for class that stores anemometer data
     public: ~SLAnemometerData();
+
+    // This data's sensor; inherits SLSensor through this too 
+    public: std::shared_ptr<SLAnemometer> anemometer;
 
     // Components of the velocity read by the anemometer given in 
     // the "anemometer_link" frame
