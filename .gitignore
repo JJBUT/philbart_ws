@@ -3,3 +3,5 @@ logs/*
 build/*
 src/rviz_satellite
 src/sick_scan
+.catkin_tools/profiles/default/packages/source_localization/devel_manifest.txt
+.catkin_tools/profiles/default/devel_collisions.txt
