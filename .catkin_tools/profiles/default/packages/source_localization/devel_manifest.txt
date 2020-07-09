@@ -2,4 +2,8 @@ source_localization
 /home/jacksubuntu/philbart_ws/devel/.private/source_localization/cmake.lock /home/jacksubuntu/philbart_ws/devel/./cmake.lock
 /home/jacksubuntu/philbart_ws/devel/.private/source_localization/share/source_localization/cmake/source_localizationConfig-version.cmake /home/jacksubuntu/philbart_ws/devel/share/source_localization/cmake/source_localizationConfig-version.cmake
 /home/jacksubuntu/philbart_ws/devel/.private/source_localization/share/source_localization/cmake/source_localizationConfig.cmake /home/jacksubuntu/philbart_ws/devel/share/source_localization/cmake/source_localizationConfig.cmake
+/home/jacksubuntu/philbart_ws/devel/.private/source_localization/share/source_localization/cmake/source_localization-msg-paths.cmake /home/jacksubuntu/philbart_ws/devel/share/source_localization/cmake/source_localization-msg-paths.cmake
+/home/jacksubuntu/philbart_ws/devel/.private/source_localization/share/source_localization/cmake/source_localization-msg-extras.cmake /home/jacksubuntu/philbart_ws/devel/share/source_localization/cmake/source_localization-msg-extras.cmake
 /home/jacksubuntu/philbart_ws/devel/.private/source_localization/lib/pkgconfig/source_localization.pc /home/jacksubuntu/philbart_ws/devel/lib/pkgconfig/source_localization.pc
+/home/jacksubuntu/philbart_ws/devel/.private/source_localization/lib/python2.7/dist-packages/source_localization/__init__.py /home/jacksubuntu/philbart_ws/devel/lib/python2.7/dist-packages/source_localization/__init__.py
+/home/jacksubuntu/philbart_ws/devel/.private/source_localization/lib/source_localization/source_localization_node /home/jacksubuntu/philbart_ws/devel/lib/source_localization/source_localization_node
