@@ -21,15 +21,11 @@ class SLSensor
     //The sensor (i.e. gas/wind/lidar)
     public: bool is_gas_sensor = false;
 
-    //The frame of the sensor as specified in the tf tree
     public: bool is_anemometer = false;
 
         
 };
 
-//SLSensorData should include:
-    // the sensor that generated the data 
-    // time
 
 class SLSensorData
 {
