@@ -1,3 +1,5 @@
 devel/*
 logs/*
 build/*
+src/rviz_satellite
+src/sick_scan
