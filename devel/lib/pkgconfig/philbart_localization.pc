@@ -1,1 +1,0 @@
-/home/jacksubuntu/philbart_ws/devel/.private/philbart_localization/lib/pkgconfig/philbart_localization.pc

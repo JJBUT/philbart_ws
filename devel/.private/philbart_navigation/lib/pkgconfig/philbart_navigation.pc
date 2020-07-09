@@ -1,8 +1,0 @@
-prefix=/home/jacksubuntu/philbart_ws/devel/.private/philbart_navigation
-
-Name: philbart_navigation
-Description: Description of philbart_navigation
-Version: 0.3.4
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

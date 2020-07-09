@@ -1,1 +1,0 @@
-/home/jacksubuntu/philbart_ws/devel/.private/rviz_satellite/lib/pkgconfig/rviz_satellite.pc

@@ -1,1 +1,0 @@
-/home/jacksubuntu/philbart_ws/devel/.private/piksi_rtk_msgs/share/roseus/ros/piksi_rtk_msgs/msg/MagRaw.l

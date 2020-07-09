@@ -1,1 +1,0 @@
-/home/jacksubuntu/philbart_ws/devel/.private/catkin_tools_prebuild/local_setup.zsh
