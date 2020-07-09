@@ -1,2 +1,0 @@
-aus05_philbart:ethz_piksi_ros/ethz_piksi_ros:ethz_piksi_ros/piksi_multi_rtk_ros:ethz_piksi_ros/piksi_pps_sync:ethz_piksi_ros/piksi_rtk_kml:ethz_piksi_ros/piksi_rtk_msgs:ethz_piksi_ros/piksi_v2_rtk_ros:philbart_localization:philbart_navigation:philbart_tools:rviz_satellite:sick_scan:source_localization
--DCATKIN_DEVEL_PREFIX=/home/jacksubuntu/philbart_ws/devel -DCMAKE_INSTALL_PREFIX=/home/jacksubuntu/philbart_ws/install -G Unix Makefiles

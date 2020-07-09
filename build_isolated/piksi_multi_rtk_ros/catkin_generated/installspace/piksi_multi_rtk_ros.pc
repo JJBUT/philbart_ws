@@ -1,8 +1,0 @@
-prefix=/home/jacksubuntu/philbart_ws/install_isolated
-
-Name: piksi_multi_rtk_ros
-Description: Description of piksi_multi_rtk_ros
-Version: 1.10.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: geometry_msgs sensor_msgs piksi_rtk_msgs roslib rospy

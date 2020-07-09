@@ -1,8 +1,0 @@
-prefix=/home/jacksubuntu/philbart_ws/install_isolated
-
-Name: rviz_satellite
-Description: Description of rviz_satellite
-Version: 3.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: sensor_msgs
