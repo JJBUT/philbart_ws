@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+	<!-- NODE LAUNCH FILE-->
+	<arg name="output" default="screen"/>
+	<rosparam command="load" file="$(find philbart_localization)/config/map.yaml" />
+	<node pkg="robot_localization" type="ekf_localization_node" name="ekf_map" clear_params="true" output="$(arg output)">
+		<remap from="odometry/filtered" to="odometry/filtered_map"/>
+	</node>
+ 
+</launch>

@@ -1,0 +1,30 @@
+footprint: [[-0.5, -0.33], [-0.5, 0.33], [0.5, 0.33], [0.5, -0.33]]
+footprint_padding: 0.01
+
+robot_base_frame: base_link
+update_frequency: 4.0
+publish_frequency: 3.0
+transform_tolerance: 0.5
+
+resolution: 0.05
+
+
+
+#layer definitions
+static:
+    map_topic: /map
+    subscribe_to_updates: true
+
+obstacles_laser:
+    observation_sources: laser
+    laser: {data_type: LaserScan, clearing: true, raytrace_range: 6.0, marking: true, obstacle_range: 5.5, topic: scan, inf_is_valid: true}
+
+inflation:
+    inflation_radius: 1.0
+
+cameras:
+  observation_sources: camera1 camera2 camera3 camera4
+  camera1: {sensor_frame: camera1_link, data_type: PointCloud2, topic: /camera1/depth/color/points, marking: true, clearing: true, obstacle_range: 1.0, raytrace_range: 3.0, max_obstacle_height: 1.5, min_obstacle_height: 0.1}
+  camera2: {sensor_frame: camera2_link, data_type: PointCloud2, topic: /camera2/depth/color/points, marking: true, clearing: true, obstacle_range: 1.0, raytrace_range: 3.0, max_obstacle_height: 1.5, min_obstacle_height: 0.1}
+  camera3: {sensor_frame: camera3_link, data_type: PointCloud2, topic: /camera3/depth/color/points, marking: true, clearing: true, obstacle_range: 1.0, raytrace_range: 3.0, max_obstacle_height: 1.5, min_obstacle_height: 0.1}
+  camera4: {sensor_frame: camera4_link, data_type: PointCloud2, topic: /camera4/depth/color/points, marking: true, clearing: true, obstacle_range: 1.0, raytrace_range: 3.0, max_obstacle_height: 1.5, min_obstacle_height: 0.1}

@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+   <node pkg="philbart_navigation" type="goal_planner.py" name="goal_planner" output="screen">
+  </node>
+</launch> 

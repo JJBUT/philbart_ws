@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<launch>
+	<!-- NODE LAUNCH FILE -->
+
+  	<arg name="output" default="screen"/>
+  	<arg name="static_map_frame" default="map"/>
+  	<arg name="publish_static_tf" default="false"/>
+
+  	<arg name="static_map" default="$(find philbart_navigation)/maps/open_high_bay_june27.yaml"/>
+  	<node name="map_server" pkg="map_server" type="map_server"  args="$(arg static_map)" clear_params="true" output="$(arg output)">
+  		<param name="frame_id" value="$(arg static_map_frame)"/>
+  	</node>
+
+  	<node pkg="tf2_ros" type="static_transform_publisher" name="static_tf_amcl_gps"  args="13.0 -70.75 0.0 1.38 0.0 0.0 map $(arg static_map_frame)" clear_params="true" output="$(arg output)" if="$(arg publish_static_tf)"/>
+</launch>
+
+<!--args="12.5 -70.5 0.0 1.38 0.0 0.0 map $(arg static_map_frame)"-->

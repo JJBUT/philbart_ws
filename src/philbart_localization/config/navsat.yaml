@@ -1,0 +1,13 @@
+navsat_transform:
+  frequency: 10
+  delay: 0.0
+  magnetic_declination_radians: 0.063  # For lat/long 55.944831, -3.186998
+  yaw_offset: 1.570796327  # IMU reads 0 facing magnetic north, not east
+  zero_altitude: true
+  broadcast_utm_transform: false
+  publish_filtered_gps: true
+  use_odometry_yaw: false
+  wait_for_datum: true
+  datum: [30.385408, -97.728792, 0.0]
+
+

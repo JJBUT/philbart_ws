@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<launch>
+	<!-- INCLUDE ONLY FILE -->
+
+	<arg name="output" default="screen"/> 
+    <arg name="tf_broadcast" default="false"/>
+	<arg name="static_map_frame" default="map_amcl"/>
+	
+	
+    <include file="$(find philbart_localization)/launch/odom.launch">
+    	<arg name="output" value="$(arg output)"/>
+    </include>
+    <include file="$(find philbart_localization)/launch/map.launch">
+    	<arg name="output" value="$(arg output)"/>
+    </include>
+    <include file="$(find philbart_localization)/launch/navsat.launch">
+    	<arg name="output" value="$(arg output)"/>
+    </include>
+    <include file="$(find philbart_localization)/launch/amcl.launch">
+    	<arg name="output" value="$(arg output)"/>
+    	<arg name="tf_broadcast" default="$(arg tf_broadcast)"/>
+    	<arg name="static_map_frame" default="$(arg static_map_frame)"/>
+    </include>
+
+</launch>

@@ -1,0 +1,8 @@
+prefix=/home/jacksubuntu/philbart_ws/devel
+
+Name: philbart_tools
+Description: Description of philbart_tools
+Version: 0.3.4
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

@@ -1,0 +1,30 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "C/C++: g++ build active file",
+            "command": "/usr/bin/g++",
+            "args": [
+                "-g",
+                "-std=c++11",
+                "-I${workspaceFolder}/src/source_localization/include/",
+                "${file}",
+                "${workspaceFolder}/src/source_localization/src/sensors/sl_anemometer.cpp",
+                "${workspaceFolder}/src/source_localization/src/sensors/sl_sensor.cpp",
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}

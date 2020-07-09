@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+	<!-- NODE LAUNCH FILE-->
+	<arg name="position_error_thresh" default="3.0"/>
+	<arg name="orientation_error_thresh" default="0.785"/>
+	<arg name="satellite_thresh" default="20"/>
+	<arg name="carrier_noise_thresh" default="150.0"/>
+
+	<node pkg="philbart_localization" type="localization_transition.py" name="namespace" output="screen" clear_params="true">
+		<param name="position_error_thresh" value="$(arg position_error_thresh)"/>
+		<param name="orientation_error_thresh" value="$(arg orientation_error_thresh)"/>
+		<param name="carrier_noise_thresh" value="$(arg carrier_noise_thresh)"/>
+		<param name="satellite_thresh" value="$(arg satellite_thresh)"/>
+		
+	</node> 
+</launch>

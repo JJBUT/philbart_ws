@@ -1,0 +1,25 @@
+<?xml version="1.0"?> 
+<!--Create a fixed joint to connect the mesh to the rest of the robot-->
+
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+<!-- Duro Antennas --> 
+  <link name="antenna_link">
+   <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+     <mesh filename="package://aus05_husky/meshes/antennas.dae" />
+    </geometry> 
+   </visual>
+  </link>
+
+  <joint name="antennas_to_base_link" type="fixed">
+    <parent link="base_link" />
+    <child link="antenna_link" />
+    <origin xyz="0.08 0 0.223"/>
+  </joint>
+
+
+</robot>
+

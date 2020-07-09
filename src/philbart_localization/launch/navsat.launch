@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+	<!-- NODE LAUNCH FILE-->
+	<arg name="output" default="screen"/>
+	<rosparam command="load" file="$(find philbart_localization)/config/navsat.yaml" />
+	<node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform" clear_params="true" output="$(arg output)">
+    	<remap from="imu/data" to="/gx5/imu/data"/>
+    	<remap from="odometry/filtered" to="odometry/filtered_map"/>
+    	<remap from="gps/fix" to="piksi/navsatfix_best_fix"/>
+  	</node>
+ 
+</launch>

@@ -1,0 +1,54 @@
+{"version": 0,
+
+ "goals":{
+ 		"1": {
+ 			"position":[, 0.000],
+ 			"orientation":[0.000, 0.000,]
+ 		},
+
+ 		"2": {
+ 			"position":[, 0.000],
+ 			"orientation":[0.000, 0.000, ]	
+ 		},
+
+ 		"3": {
+ 			"position":[, 0.000],
+ 			"orientation":[0.000, 0.000, ]
+ 		},
+ 		
+ 		"": {
+ 			"position":[, 0.000],
+ 			"orientation":[0.000, 0.000,]
+ 		},
+
+ 		"": {
+ 			"position":[, 0.000],
+ 			"orientation":[0.000, 0.000,]	
+ 		},
+
+ 		"": {
+ 			"position":[, 0.000],
+ 			"orientation":[0.000, 0.000,]
+ 		},
+
+ 		"": {
+ 			"position":[, 0.000],
+ 			"orientation":[0.000, 0.000,]
+ 			
+ 		},
+
+ 		"": {
+ 			"position":[, 0.000],
+ 			"orientation":[0.000, 0.000,]
+ 		},
+
+ 		"": {
+ 			"position":[, 0.000],
+ 			"orientation":[0.000, 0.000,]
+ 		}
+ }}
+
+
+ 
+
+
