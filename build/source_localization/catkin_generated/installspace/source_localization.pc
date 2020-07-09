@@ -1,0 +1,8 @@
+prefix=/home/jacksubuntu/philbart_ws/install
+
+Name: source_localization
+Description: Description of source_localization
+Version: 0.3.4
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

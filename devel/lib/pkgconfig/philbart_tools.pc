@@ -1,0 +1,1 @@
+/home/jacksubuntu/philbart_ws/devel/.private/philbart_tools/lib/pkgconfig/philbart_tools.pc

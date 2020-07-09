@@ -1,0 +1,1 @@
+/home/jacksubuntu/philbart_ws/devel/.private/sick_scan/include/sick_scan/SickScanConfig.h

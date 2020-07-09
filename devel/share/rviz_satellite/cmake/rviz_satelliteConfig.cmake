@@ -1,0 +1,1 @@
+/home/jacksubuntu/philbart_ws/devel/.private/rviz_satellite/share/rviz_satellite/cmake/rviz_satelliteConfig.cmake

@@ -1,0 +1,1 @@
+/home/jacksubuntu/philbart_ws/devel/.private/philbart_navigation/share/philbart_navigation/cmake/philbart_navigationConfig-version.cmake

@@ -1,0 +1,1 @@
+/home/jacksubuntu/philbart_ws/devel/.private/catkin_tools_prebuild/env.sh

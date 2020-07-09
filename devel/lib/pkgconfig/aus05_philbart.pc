@@ -1,0 +1,1 @@
+/home/jacksubuntu/philbart_ws/devel/.private/aus05_philbart/lib/pkgconfig/aus05_philbart.pc

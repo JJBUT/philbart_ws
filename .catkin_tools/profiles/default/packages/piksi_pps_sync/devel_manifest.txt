@@ -1,0 +1,8 @@
+ethz_piksi_ros/piksi_pps_sync
+/home/jacksubuntu/philbart_ws/devel/.private/piksi_pps_sync/cmake.lock /home/jacksubuntu/philbart_ws/devel/./cmake.lock
+/home/jacksubuntu/philbart_ws/devel/.private/piksi_pps_sync/share/piksi_pps_sync/cmake/piksi_pps_syncConfig-version.cmake /home/jacksubuntu/philbart_ws/devel/share/piksi_pps_sync/cmake/piksi_pps_syncConfig-version.cmake
+/home/jacksubuntu/philbart_ws/devel/.private/piksi_pps_sync/share/piksi_pps_sync/cmake/piksi_pps_syncConfig.cmake /home/jacksubuntu/philbart_ws/devel/share/piksi_pps_sync/cmake/piksi_pps_syncConfig.cmake
+/home/jacksubuntu/philbart_ws/devel/.private/piksi_pps_sync/bin/evaluate_pps /home/jacksubuntu/philbart_ws/devel/bin/evaluate_pps
+/home/jacksubuntu/philbart_ws/devel/.private/piksi_pps_sync/bin/cmake.lock /home/jacksubuntu/philbart_ws/devel/bin/cmake.lock
+/home/jacksubuntu/philbart_ws/devel/.private/piksi_pps_sync/lib/pkgconfig/piksi_pps_sync.pc /home/jacksubuntu/philbart_ws/devel/lib/pkgconfig/piksi_pps_sync.pc
+/home/jacksubuntu/philbart_ws/devel/.private/piksi_pps_sync/lib/python2.7/dist-packages/piksi_pps_sync/__init__.py /home/jacksubuntu/philbart_ws/devel/lib/python2.7/dist-packages/piksi_pps_sync/__init__.py

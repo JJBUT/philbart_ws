@@ -1,0 +1,1 @@
+/home/jacksubuntu/philbart_ws/devel/.private/aus05_philbart/share/aus05_philbart/cmake/aus05_philbartConfig-version.cmake

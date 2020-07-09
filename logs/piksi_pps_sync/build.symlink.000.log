@@ -1,0 +1,6 @@
+Symlinking /home/jacksubuntu/philbart_ws/devel/share/piksi_pps_sync/cmake/piksi_pps_syncConfig-version.cmake
+Symlinking /home/jacksubuntu/philbart_ws/devel/share/piksi_pps_sync/cmake/piksi_pps_syncConfig.cmake
+Symlinking /home/jacksubuntu/philbart_ws/devel/bin/evaluate_pps
+Symlinking /home/jacksubuntu/philbart_ws/devel/bin/cmake.lock
+Symlinking /home/jacksubuntu/philbart_ws/devel/lib/pkgconfig/piksi_pps_sync.pc
+Symlinking /home/jacksubuntu/philbart_ws/devel/lib/python2.7/dist-packages/piksi_pps_sync/__init__.py

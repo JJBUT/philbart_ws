@@ -1,0 +1,1 @@
+/home/jacksubuntu/philbart_ws/devel/.private/philbart_navigation/lib/pkgconfig/philbart_navigation.pc

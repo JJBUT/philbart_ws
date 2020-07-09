@@ -1,0 +1,6 @@
+devel_space: /home/jacksubuntu/philbart_ws/devel
+install: false
+install_space: /home/jacksubuntu/philbart_ws/install
+profile: default
+source_space: /home/jacksubuntu/philbart_ws/src
+workspace: /home/jacksubuntu/philbart_ws
