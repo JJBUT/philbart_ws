@@ -37,6 +37,8 @@ class SLNode
 
       //No update allowed, it's either receieved or not
       bool map_received_; 
+
+      std::string transport_model_type_;
   
 };
 
@@ -56,5 +58,25 @@ int main(int argc, char** argv)
   return(0);
 }
 
-SLNode::SLNode() {}
+SLNode::SLNode() 
+{
+  // Get all parameters off of the parameter server
+  // Think about using a private nodehandle?
+  /*
+  // Uncomment this module when the parameter server has been brought online
+  // This code is future proofing the node for future transport models
+  std::string tmp_model_type;
+  private_nh_.param("transport_model_type", tmp_model_type, std::string("gaussian_plume"));
+  if(tmp_model_type == "gaussian_plume")
+  {
+    transport_model_type_ = "GAUSSIAN_PLUME";
+  }else
+  {
+    ROS_WARN("Unknown transport model type \"%s\"; defaulting to gaussian_plume model", tmp_model_type.c_str());
+    transport_model_type_ = "GAUSSIAN_PLUME";
+  }
+  */
+
+
+}
 
