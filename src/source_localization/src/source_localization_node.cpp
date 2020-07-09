@@ -9,6 +9,10 @@
 
 //Required ROS msgs
 #include "std_msgs/String.h"
+#include "nav_msgs/OccupancyGrid.h"
+#include "nav_msgs/Odometry.h"
+#include "geometry_msgs/Twist.h"
+#include "std_msgs/Float32.h"
 
 
 // Maybe once we import the header files this error will do away
@@ -16,9 +20,11 @@
 
 //Pose hypothesis
 static const std::string node_name_ = "sl";
+
+static const std::string map_topic_ = "map";
+static const std::string odom_topic_ = "odometry/filtered_map";
 static const std::string anemometer_topic_ = "anemometer/data";
 static const std::string gas_sensor_topic_ = "gas_sensor/data";
-static const std::string pose_topic_ = "odometry/filtered_map";
 
 class SLNode
 {
@@ -30,7 +36,8 @@ class SLNode
       std::string base_frame_id_;
       std::string map_frame_id_; 
 
-      ros::subscriber map_sub_;
+      ros::NodeHandle nh_;
+      ros::Subscriber map_sub_;
       ros::Subscriber map_pose_sub_;
       ros::Subscriber anemometer_sub_;
       ros::Subscriber gas_sensor_sub_;
@@ -39,6 +46,11 @@ class SLNode
       bool map_received_; 
 
       std::string transport_model_type_;
+
+      void mapCB(const nav_msgs::OccupancyGrid& msg);
+      void mapOdomCB(const nav_msgs::Odometry& msg);
+      void anemometerCB(const geometry_msgs::Twist& msg);
+      void gasSensorCB(const std_msgs::Float32& msg);
   
 };
 
@@ -61,10 +73,11 @@ int main(int argc, char** argv)
 SLNode::SLNode() 
 {
   // Get all parameters off of the parameter server
-  // Think about using a private nodehandle?
+  // Think about using a private nodehandle for some reason?
+
   /*
   // Uncomment this module when the parameter server has been brought online
-  // This code is future proofing the node for future transport models
+  //Future proofing the node for adding transport models later
   std::string tmp_model_type;
   private_nh_.param("transport_model_type", tmp_model_type, std::string("gaussian_plume"));
   if(tmp_model_type == "gaussian_plume")
@@ -77,6 +90,16 @@ SLNode::SLNode()
   }
   */
 
+  //Get and store static transforms
+  map_sub_ = nh_.subscribe(map_topic_, 2, &SLNode::mapCB, this);
+  map_pose_sub_ = nh_.subscribe(odom_topic_, 2, &SLNode::mapOdomCB, this);
+  anemometer_sub_ = nh_.subscribe(anemometer_topic_, 2, &SLNode::anemometerCB, this);
+  gas_sensor_sub_ = nh_.subscribe(gas_sensor_topic_, 2, &SLNode::gasSensorCB, this);
 
 }
+
+void SLNode::mapCB(const nav_msgs::OccupancyGrid& msg){}
+void SLNode::mapOdomCB(const nav_msgs::Odometry& msg){}
+void SLNode::anemometerCB(const geometry_msgs::Twist& msg){}
+void SLNode::gasSensorCB(const std_msgs::Float32& msg){}
 
