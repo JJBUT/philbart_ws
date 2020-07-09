@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/jacksubuntu/philbart_ws/devel_isolated/ethz_piksi_ros/setup.sh

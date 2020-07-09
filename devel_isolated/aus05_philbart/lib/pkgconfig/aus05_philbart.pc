@@ -1,0 +1,8 @@
+prefix=/home/jacksubuntu/philbart_ws/devel_isolated/aus05_philbart
+
+Name: aus05_philbart
+Description: Description of aus05_philbart
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
