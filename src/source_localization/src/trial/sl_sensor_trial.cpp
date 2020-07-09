@@ -11,8 +11,9 @@ int main(){
 
 void trial()
 {
-    // sl::SLAnemometer anemometer;
-    // sl::SLAnemometerData anemometer_data;
+    sl::SLAnemometer anemometer;
+    sl::SLAnemometerData anemometer_data;
+
     
 
 
