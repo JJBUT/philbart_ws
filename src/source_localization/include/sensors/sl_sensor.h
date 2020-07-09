@@ -38,9 +38,13 @@ class SLSensorData
 
     // Assign values to sensor like "data.sensor = &anemometer;"
     // where anemometer is "sl::SLSensor anemometer;"
-    public: SLSensor* sensor; 
+    // public: SLSensor* sensor; //Eliminate this and let each sensors data class inherit SLSensor from its own sensor class
 
     public: double time_stamp;
+
+    // Frame
+     
+    // Description
 
 };
 
