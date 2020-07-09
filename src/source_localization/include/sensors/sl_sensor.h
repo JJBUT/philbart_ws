@@ -4,10 +4,6 @@
 #ifndef SL_SENSOR_H
 #define SL_SENSOR_H
 
-//SLSensor should include:
-    // name
-    // frame
-
 namespace sl
 {
 
