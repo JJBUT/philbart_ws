@@ -17,11 +17,8 @@ class SLSensor
     //The sensor (i.e. gas/wind/lidar)
     public: bool is_gas_sensor = false;
 
-    public: bool is_anemometer = false;
-
-        
+    public: bool is_anemometer = false;    
 };
-
 
 class SLSensorData
 {
@@ -33,11 +30,8 @@ class SLSensorData
     // Frame
      
     // Description
-
 };
 
 }
-
-
 
 #endif 
