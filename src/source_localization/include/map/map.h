@@ -7,7 +7,7 @@
 // Description for a map
 typedef struct
 {
-    const nav_msgs::OccupancyGrid map;
+    nav_msgs::OccupancyGrid map;
 
     double width, height;
 
