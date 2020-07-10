@@ -10,12 +10,14 @@
 //roscpp
 #include "ros/ros.h"
 
-//Required ROS msgs
+//Required ROS msgs and srvs
 #include "std_msgs/String.h"
 #include "nav_msgs/OccupancyGrid.h"
 #include "nav_msgs/Odometry.h"
 #include "geometry_msgs/Twist.h"
 #include "std_msgs/Float32.h"
+#include "nav_msgs/GetMap.h"
+
 
 
 // Maybe once we import the header files this error will do away
@@ -37,6 +39,8 @@ class SLNode
 
     private:  
       void handleMapMessage(const nav_msgs::OccupancyGrid& msg);
+      void mapRecieved(const nav_msgs::OccupancyGridConstPtr& msg);
+      void requestMap();
 
       std::string base_frame_id_;
       std::string global_frame_id_; 
@@ -49,6 +53,7 @@ class SLNode
       std::string transport_model_type_;
 
       ros::NodeHandle nh_;
+      ros::NodeHandle private_nh_;
       ros::Subscriber map_sub_;
       ros::Subscriber map_pose_sub_;
       ros::Subscriber anemometer_sub_;
@@ -57,7 +62,7 @@ class SLNode
       //No update allowed, it's either receieved or not
      
 
-      void mapRecieved(const nav_msgs::OccupancyGrid& msg);
+      
       void mapOdomCB(const nav_msgs::Odometry& msg);
       void anemometerCB(const geometry_msgs::Twist& msg);
       void gasSensorCB(const std_msgs::Float32& msg);
@@ -86,6 +91,7 @@ SLNode::SLNode()
 {
   // Get all parameters off of the parameter server
   // Think about using a private nodehandle for some reason?
+  private_nh_.param("use_map_topic", use_map_topic_, false);
 
   /*
   // Uncomment this module when the parameter server has been brought online
@@ -101,14 +107,12 @@ SLNode::SLNode()
     transport_model_type_ = "GAUSSIAN_PLUME";
   }
   */
-  if(use_map_topic_) { //line 490
+  if(use_map_topic_){ //line 490
     map_sub_ = nh_.subscribe(map_topic_, 1, &SLNode::mapRecieved, this);
     ROS_INFO("Subscribed to map topic.");
-  } else {
+  }else{
     requestMap();
   }
-
-
 
   map_pose_sub_ = nh_.subscribe(odom_topic_, 2, &SLNode::mapOdomCB, this);
   anemometer_sub_ = nh_.subscribe(anemometer_topic_, 2, &SLNode::anemometerCB, this);
@@ -116,30 +120,60 @@ SLNode::SLNode()
 
 }
 
-void SLNode::mapRecieved(const nav_msgs::OccupancyGridConstPtr& msg)
+
+
+void 
+SLNode::mapOdomCB(const nav_msgs::Odometry& msg)
 {
-  //Checl the handle map message function
+
+}
+void 
+SLNode::anemometerCB(const geometry_msgs::Twist& msg)
+{
+
+}
+void 
+SLNode::gasSensorCB(const std_msgs::Float32& msg)
+{
+
+}
+
+////////////Notes////////////
+// Fill out request map
+// Fill out map recieved
+// Think about how hand map message drives the program
+
+//Descrip
+void 
+SLNode::requestMap()
+{
+  nav_msgs::GetMap::Request req;
+  nav_msgs::GetMap::Response resp;
+  ROS_INFO("Requesting the map...");
+  while(!ros::service::call("static_map", req, resp))
+  {
+    ROS_WARN("Request for map failed; trying again...");
+    ros::Duration d(0.5);
+    d.sleep();
+  }
+  handleMapMessage( resp.map );
+}
+
+//Descrip
+void 
+SLNode::mapRecieved(const nav_msgs::OccupancyGridConstPtr& msg)
+{
   if(first_map_only_ && first_map_received_) 
   {
     return;
   }
+
   handleMapMessage(*msg);
+
   first_map_received_ = true;
 }
 
-void SLNode::mapOdomCB(const nav_msgs::Odometry& msg)
-{
-
-}
-void SLNode::anemometerCB(const geometry_msgs::Twist& msg)
-{
-
-}
-void SLNode::gasSensorCB(const std_msgs::Float32& msg)
-{
-
-}
-
+//Descrip
 void
 SLNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
 {
