@@ -2,8 +2,7 @@
 
 boost::shared_ptr<map_t> load_map_t(const nav_msgs::OccupancyGrid& data)
 {
-    // Start with a regular pointer then transition to smart pointer for map?
-    boost::shared_ptr<map_t> map;
+    boost::shared_ptr<map_t> map(new map_t());
 
     map->width = 5.0;
     //map->height =
