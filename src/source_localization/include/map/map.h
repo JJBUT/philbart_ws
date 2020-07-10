@@ -5,13 +5,13 @@
 #define MAP_H
 
 // Description for a map
-typdef struct
+typedef struct
 {
     const nav_msgs::OccupancyGrid map;
 
     double width, height;
 
-} map_t
+} map_t;
 
 // Destroy a map
 void map_free(map_t *map);
