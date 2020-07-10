@@ -15,3 +15,8 @@ add_dependencies(source_localization_node source_localization)
 
 add_library(map src/map/map.cpp)
 target_link_libraries(source_localization_node map)
+
+
+add_library(pf_vector src/pf/pf_vector.cpp)
+target_link_libraries(source_localization_node pf_vector)
+
