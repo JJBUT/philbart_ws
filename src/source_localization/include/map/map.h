@@ -4,11 +4,13 @@
 #ifndef MAP_H
 #define MAP_H
 
-// Description for a map
+// Structure used to store maps for the pf
 typedef struct
 {
+    // Original ROS map
     nav_msgs::OccupancyGrid ros_map;
 
+    //Calculated dimensions in meters
     double width, height;
 
 } map_t;

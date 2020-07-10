@@ -46,7 +46,7 @@ class SLNode
 
     private:  
       void handleMapMessage(const nav_msgs::OccupancyGrid& msg);
-      void mapRecieved(const nav_msgs::OccupancyGridConstPtr& msg);
+      void mapReceived(const nav_msgs::OccupancyGridConstPtr& msg);
       void requestMap();
 
       std::string base_frame_id_;
@@ -121,7 +121,7 @@ SLNode::SLNode() :
   }
   */
   if(use_map_topic_){ //line 490
-    map_sub_ = nh_.subscribe(map_topic_, 1, &SLNode::mapRecieved, this);
+    map_sub_ = nh_.subscribe(map_topic_, 1, &SLNode::mapReceived, this);
     ROS_INFO("Subscribed to map topic.");
   }else{
     requestMap();
@@ -176,7 +176,7 @@ SLNode::requestMap()
 
 // The callback for the map subscription 
 void 
-SLNode::mapRecieved(const nav_msgs::OccupancyGridConstPtr& msg)
+SLNode::mapReceived(const nav_msgs::OccupancyGridConstPtr& msg)
 {
   if(first_map_only_ && first_map_received_) 
   {
@@ -208,6 +208,8 @@ SLNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
 
 
   // Create the particle filter
+  pf_ = pf_alloc(min_particles_, max_particles_);
+
 
   // Initialize the filter
   
