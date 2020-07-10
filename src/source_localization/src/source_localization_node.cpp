@@ -36,8 +36,17 @@ class SLNode
       ~SLNode() {};
 
     private:  
+      void handleMapMessage(const nav_msgs::OccupancyGrid& msg);
+
       std::string base_frame_id_;
       std::string map_frame_id_; 
+
+      bool use_map_topic_;
+      bool first_map_only_;
+      bool first_map_received_;
+      bool map_received_; 
+
+      std::string transport_model_type_;
 
       ros::NodeHandle nh_;
       ros::Subscriber map_sub_;
@@ -46,11 +55,9 @@ class SLNode
       ros::Subscriber gas_sensor_sub_;
 
       //No update allowed, it's either receieved or not
-      bool map_received_; 
+     
 
-      std::string transport_model_type_;
-
-      void mapCB(const nav_msgs::OccupancyGrid& msg);
+      void mapRecieved(const nav_msgs::OccupancyGrid& msg);
       void mapOdomCB(const nav_msgs::Odometry& msg);
       void anemometerCB(const geometry_msgs::Twist& msg);
       void gasSensorCB(const std_msgs::Float32& msg);
@@ -66,7 +73,6 @@ int main(int argc, char** argv)
 
   sl_node_ptr.reset(new SLNode());
   
-
   //Run using ROS, may add .bag file functionality later
   if (1)
   {
@@ -95,17 +101,75 @@ SLNode::SLNode()
     transport_model_type_ = "GAUSSIAN_PLUME";
   }
   */
+  if(use_map_topic_) { //line 490
+    map_sub_ = nh_.subscribe(map_topic_, 1, &SLNode::mapRecieved, this);
+    ROS_INFO("Subscribed to map topic.");
+  } else {
+    requestMap();
+  }
 
-  //Get and store static transforms
-  map_sub_ = nh_.subscribe(map_topic_, 2, &SLNode::mapCB, this);
+
+
   map_pose_sub_ = nh_.subscribe(odom_topic_, 2, &SLNode::mapOdomCB, this);
   anemometer_sub_ = nh_.subscribe(anemometer_topic_, 2, &SLNode::anemometerCB, this);
   gas_sensor_sub_ = nh_.subscribe(gas_sensor_topic_, 2, &SLNode::gasSensorCB, this);
 
 }
 
-void SLNode::mapCB(const nav_msgs::OccupancyGrid& msg){}
-void SLNode::mapOdomCB(const nav_msgs::Odometry& msg){}
-void SLNode::anemometerCB(const geometry_msgs::Twist& msg){}
-void SLNode::gasSensorCB(const std_msgs::Float32& msg){}
+void SLNode::mapRecieved(const nav_msgs::OccupancyGridConstPtr& msg)
+{
+  //Checl the handle map message function
+  if(first_map_only_ && first_map_received_) 
+  {
+    return;
+  }
+  handleMapMessage(*msg);
+  first_map_received_ = true;
+}
+
+void SLNode::mapOdomCB(const nav_msgs::Odometry& msg)
+{
+
+}
+void SLNode::anemometerCB(const geometry_msgs::Twist& msg)
+{
+
+}
+void SLNode::gasSensorCB(const std_msgs::Float32& msg)
+{
+
+}
+
+void
+AmclNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
+{
+  ROS_INFO("Received a %d X %d map @ %.3f m/pix\n",
+           msg.info.width,
+           msg.info.height,
+           msg.info.resolution);
+  
+  if(msg.header.frame_id != global_frame_id_)
+    ROS_WARN("Frame_id of map received:'%s' doesn't match global_frame_id:'%s'. This could cause issues with reading published topics",
+             msg.header.frame_id.c_str(),
+             global_frame_id_.c_str());
+
+  freeMapDependentMemory();
+  
+  map_ = convertMap(msg);
+
+
+  // Create the particle filter
+
+  // Initialize the filter
+  
+
+  // Instantiate the sensor objects
+  // Odometry
+  // Laser
+  
+  // In case the initial pose message arrived before the first map,
+  // try to apply the initial pose now that the map has arrived.
+
+
+}
 
