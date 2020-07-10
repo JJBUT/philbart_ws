@@ -16,11 +16,14 @@
 
 //Required ROS msgs and srvs
 #include "std_msgs/String.h"
-#include "nav_msgs/OccupancyGrid.h"
+#include "nav_msgs/OccupancyGrid.h" // Can I remove this becasue it is decalred in map.h?
 #include "nav_msgs/Odometry.h"
 #include "geometry_msgs/Twist.h"
 #include "std_msgs/Float32.h"
 #include "nav_msgs/GetMap.h"
+
+//Custom includes
+//#include "../include/map/map.h"
 
 
 
@@ -48,6 +51,8 @@ class SLNode
 
       std::string base_frame_id_;
       std::string global_frame_id_; 
+
+      //map_t* map_;
 
       bool use_map_topic_;
       bool first_map_only_;
@@ -91,7 +96,9 @@ int main(int argc, char** argv)
   return(0);
 }
 
-SLNode::SLNode() 
+SLNode::SLNode() :
+        //map_(NULL),
+        first_map_received_(false)
 {
   // Get all parameters off of the parameter server
   // Think about using a private nodehandle for some reason?
@@ -143,15 +150,16 @@ SLNode::gasSensorCB(const std_msgs::Float32& msg)
 }
 
 ////////////Notes////////////
-// Fill out request map
-// Fill out map recieved
-// Think about how hand map message drives the program
+// build header file for map_t
+// Think about how handle map message drives the program
 
 //Descrip
 void 
 SLNode::requestMap()
 {
+  // Service request for a static map from the map server
   nav_msgs::GetMap::Request req;
+  // Service response hopefully containing the static map from the map server
   nav_msgs::GetMap::Response resp;
   ROS_INFO("Requesting the map...");
   while(!ros::service::call("static_map", req, resp))
@@ -160,10 +168,11 @@ SLNode::requestMap()
     ros::Duration d(0.5);
     d.sleep();
   }
-  handleMapMessage( resp.map );
+
+  handleMapMessage(resp.map);
 }
 
-//Descrip
+// The callback for the map subscription 
 void 
 SLNode::mapRecieved(const nav_msgs::OccupancyGridConstPtr& msg)
 {
@@ -193,7 +202,7 @@ SLNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
 
   //freeMapDependentMemory();
   
-  //map_ = convertMap(msg);
+  //map_ = msg;
 
 
   // Create the particle filter
