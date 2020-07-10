@@ -14,6 +14,6 @@ typedef struct
 } map_t;
 
 // Load a new map into our map structure
-map_t* load_map(const nav_msgs::OccupancyGrid& map);
+boost::shared_ptr<map_t>  load_map_t(const nav_msgs::OccupancyGrid& map);
 
 #endif

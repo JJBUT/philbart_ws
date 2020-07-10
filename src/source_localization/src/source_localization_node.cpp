@@ -23,7 +23,7 @@
 #include "nav_msgs/GetMap.h"
 
 //Custom includes
-//#include "../include/map/map.h"
+#include "../include/map/map.h"
 
 
 
@@ -52,7 +52,7 @@ class SLNode
       std::string base_frame_id_;
       std::string global_frame_id_; 
 
-      //map_t* map_;
+     boost::shared_ptr<map_t> map_;
 
       bool use_map_topic_;
       bool first_map_only_;
@@ -68,7 +68,7 @@ class SLNode
       ros::Subscriber anemometer_sub_;
       ros::Subscriber gas_sensor_sub_;
 
-      //No update allowed, it's either receieved or not
+      //No update allowed, it's either received or not
      
 
       
@@ -103,6 +103,8 @@ SLNode::SLNode() :
   // Get all parameters off of the parameter server
   // Think about using a private nodehandle for some reason?
   private_nh_.param("use_map_topic", use_map_topic_, true);
+  private_nh_.param("base_frame_id", base_frame_id_, std::string("base_link"));
+  private_nh_.param("global_frame_id", global_frame_id_, std::string("map"));
 
   /*
   // Uncomment this module when the parameter server has been brought online
@@ -202,7 +204,7 @@ SLNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
 
   //freeMapDependentMemory();
   
-  //map_ = msg;
+  map_ = load_map_t(msg);
 
 
   // Create the particle filter
