@@ -12,3 +12,6 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 add_executable(source_localization_node src/source_localization_node.cpp)
 target_link_libraries(source_localization_node ${catkin_LIBRARIES})
 add_dependencies(source_localization_node source_localization)
+
+add_library(map src/map/map.cpp)
+target_link_libraries(source_localization_node map)
