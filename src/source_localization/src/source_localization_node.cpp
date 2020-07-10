@@ -2,6 +2,10 @@
 //Build Command: catkin build source_localization --cmake-args -DCMAKE_BUILD_TYPE=Debug 
 */
 
+/*Big Picture Questions
+// Do I need boost::mutex functionality
+*/
+
 
 //Standard library
 #include "iostream"
@@ -91,7 +95,7 @@ SLNode::SLNode()
 {
   // Get all parameters off of the parameter server
   // Think about using a private nodehandle for some reason?
-  private_nh_.param("use_map_topic", use_map_topic_, false);
+  private_nh_.param("use_map_topic", use_map_topic_, true);
 
   /*
   // Uncomment this module when the parameter server has been brought online
