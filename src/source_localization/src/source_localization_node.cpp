@@ -39,7 +39,7 @@ class SLNode
       void handleMapMessage(const nav_msgs::OccupancyGrid& msg);
 
       std::string base_frame_id_;
-      std::string map_frame_id_; 
+      std::string global_frame_id_; 
 
       bool use_map_topic_;
       bool first_map_only_;
@@ -141,7 +141,7 @@ void SLNode::gasSensorCB(const std_msgs::Float32& msg)
 }
 
 void
-AmclNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
+SLNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
 {
   ROS_INFO("Received a %d X %d map @ %.3f m/pix\n",
            msg.info.width,
@@ -153,9 +153,9 @@ AmclNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
              msg.header.frame_id.c_str(),
              global_frame_id_.c_str());
 
-  freeMapDependentMemory();
+  //freeMapDependentMemory();
   
-  map_ = convertMap(msg);
+  //map_ = convertMap(msg);
 
 
   // Create the particle filter
