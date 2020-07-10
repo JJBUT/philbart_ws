@@ -1,4 +1,7 @@
-/*Author Jack Borer*/
+/*Author Jack Borer July 2020
+//Build Command: catkin build source_localization --cmake-args -DCMAKE_BUILD_TYPE=Debug 
+*/
+
 
 //Standard library
 #include "iostream"
@@ -30,7 +33,7 @@ class SLNode
 {
     public:
       SLNode();
-      ~SLNode();
+      ~SLNode() {};
 
     private:  
       std::string base_frame_id_;
@@ -54,13 +57,16 @@ class SLNode
   
 };
 
-boost::shared_ptr<SLNode> source_localization_node_ptr;
+boost::shared_ptr<SLNode> sl_node_ptr;
 
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, node_name_);
   ros::NodeHandle nh;
+
+  sl_node_ptr.reset(new SLNode());
   
+
   //Run using ROS, may add .bag file functionality later
   if (1)
   {
