@@ -13,10 +13,7 @@ typedef struct
 
 } map_t;
 
-// Destroy a map
-void map_free(map_t *map);
-
 // Load a new map into our map structure
-map_t load_map(const nav_msgs::OccupancyGrid map);
+map_t* load_map(const nav_msgs::OccupancyGrid& map);
 
 #endif
