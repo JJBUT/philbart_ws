@@ -4,6 +4,14 @@
 
 /*Big Picture Questions
 // Do I need boost::mutex functionality
+// How do shared pointers interact with rps::spin?
+*/
+
+/*TO DO
+// Fill out pf.h function declarations
+// Build pf.cpp (pf_alloc, pf_init etc)
+// Remove pf_vector.h include because it will come with pf.h
+// Uncomment the model selection section now that we have the param server with defaults up
 */
 
 
@@ -24,6 +32,7 @@
 
 //Custom includes
 #include "../include/map/map.h"
+#include "../include/pf/pf_vector.h"
 
 
 
@@ -133,27 +142,23 @@ SLNode::SLNode() :
 
 }
 
-
-
 void 
 SLNode::mapOdomCB(const nav_msgs::Odometry& msg)
 {
 
 }
+
 void 
 SLNode::anemometerCB(const geometry_msgs::Twist& msg)
 {
 
 }
+
 void 
 SLNode::gasSensorCB(const std_msgs::Float32& msg)
 {
 
 }
-
-////////////Notes////////////
-// build header file for map_t
-// Think about how handle map message drives the program
 
 //Descrip
 void 
@@ -208,7 +213,7 @@ SLNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
 
 
   // Create the particle filter
-  pf_ = pf_alloc(min_particles_, max_particles_);
+  //pf_ = pf_alloc(min_particles_, max_particles_);
 
 
   // Initialize the filter
