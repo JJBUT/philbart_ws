@@ -4,11 +4,11 @@
 
 /*Big Picture Questions
 // Do I need boost::mutex functionality
-// How do shared pointers interact with rps::spin?
+// How do shared pointers interact with ros::spin?
 */
 
-/*TO DO
-// Fill out pf.h function declarations
+/*TO DO July 13 2020
+// Fill out pf.h function declarations 
 // Build pf.cpp (pf_alloc, pf_init etc)
 // Remove pf_vector.h include because it will come with pf.h
 // Uncomment the model selection section now that we have the param server with defaults up
@@ -32,7 +32,7 @@
 
 //Custom includes
 #include "../include/map/map.h"
-#include "../include/pf/pf_vector.h"
+#include "../include/pf/pf.h"
 
 
 
@@ -58,6 +58,11 @@ class SLNode
       void mapReceived(const nav_msgs::OccupancyGridConstPtr& msg);
       void requestMap();
 
+
+      // Particle filter
+      pf_t *pf_;
+      int min_particles_, max_particles_;
+
       std::string base_frame_id_;
       std::string global_frame_id_; 
 
@@ -76,10 +81,6 @@ class SLNode
       ros::Subscriber map_pose_sub_;
       ros::Subscriber anemometer_sub_;
       ros::Subscriber gas_sensor_sub_;
-
-      //No update allowed, it's either received or not
-     
-
       
       void mapOdomCB(const nav_msgs::Odometry& msg);
       void anemometerCB(const geometry_msgs::Twist& msg);
@@ -114,6 +115,8 @@ SLNode::SLNode() :
   private_nh_.param("use_map_topic", use_map_topic_, true);
   private_nh_.param("base_frame_id", base_frame_id_, std::string("base_link"));
   private_nh_.param("global_frame_id", global_frame_id_, std::string("map"));
+  private_nh_.param("min_particles", min_particles_, 100);
+  private_nh_.param("max_particles", max_particles_, 5000);
 
   /*
   // Uncomment this module when the parameter server has been brought online
@@ -213,7 +216,7 @@ SLNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
 
 
   // Create the particle filter
-  //pf_ = pf_alloc(min_particles_, max_particles_);
+  pf_ = pf_alloc(min_particles_, max_particles_);
 
 
   // Initialize the filter
