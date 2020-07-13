@@ -27,7 +27,7 @@ typedef struct
 {
   // The samples
   int sample_count;
-  std::unique_ptr<pf_sample_t> samples;
+  pf_sample_t samples;
 
   // Filter statistics
   pf_vector_t mean;
@@ -56,7 +56,7 @@ typedef struct
 
 
 // Create a new filter
-std::unique_ptr<pf_t> pf_alloc(int min_samples, int max_samples);
+std::shared_ptr<pf_t> pf_alloc(int min_samples, int max_samples);
 
 
 #endif

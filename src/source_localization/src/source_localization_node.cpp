@@ -60,7 +60,7 @@ class SLNode
 
 
       // Particle filter
-      std::unique_ptr<pf_t> pf_;
+      std::shared_ptr<pf_t> pf_;
       int min_particles_, max_particles_;
 
       std::string base_frame_id_;
