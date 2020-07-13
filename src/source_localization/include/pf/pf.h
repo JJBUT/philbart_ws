@@ -56,7 +56,7 @@ typedef struct
 
 
 // Create a new filter
-pf_t *pf_alloc(int min_samples, int max_samples);
+std::unique_ptr<pf_t> pf_alloc(int min_samples, int max_samples);
 
 
 #endif
