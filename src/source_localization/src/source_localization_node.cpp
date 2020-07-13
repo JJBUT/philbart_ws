@@ -3,7 +3,7 @@
 */
 
 /*Big Picture Questions
-// Do I need boost::mutex functionality
+// Do I need std::mutex functionality
 // How do shared pointers interact with ros::spin?
 */
 
@@ -66,7 +66,7 @@ class SLNode
       std::string base_frame_id_;
       std::string global_frame_id_; 
 
-     boost::shared_ptr<map_t> map_;
+     std::shared_ptr<map_t> map_;
 
       bool use_map_topic_;
       bool first_map_only_;
@@ -88,7 +88,7 @@ class SLNode
   
 };
 
-boost::shared_ptr<SLNode> sl_node_ptr;
+std::shared_ptr<SLNode> sl_node_ptr;
 
 int main(int argc, char** argv)
 {
