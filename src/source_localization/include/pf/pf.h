@@ -6,11 +6,6 @@
 #include "../include/pf/pf_vector.h"
 
 
-// Function prototype for the initialization model; generates a sample pose from
-// an appropriate distribution.
-typedef pf_vector_t (*pf_init_model_fn_t) (void *init_data);
-
-
 // Information for a single sample
 typedef struct
 {
@@ -61,7 +56,7 @@ typedef struct
 
 
 // Create a new filter
-pf_t *pf_alloc(int min_samples, int max_samples, pf_init_model_fn_t random_pose_fn, void *random_pose_data);
+pf_t *pf_alloc(int min_samples, int max_samples);
 
 
 #endif
