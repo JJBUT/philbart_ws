@@ -15,34 +15,35 @@ pf_t *pf_alloc(int min_samples, int max_samples)
     pf_sample_t *sample;
 
     // Use new instead of calloc which is more common in C
-    // https://stackoverflow.com/questions/30088025/malloc-invalid-conversion-from-void-to-double
-    pf = new pf_t[sizeof(pf_t)];
+    
+    // pf = calloc(1, sizeof(pf_t));
 
-    pf->min_samples = min_samples;
-    pf->max_samples = max_samples;
+    // pf->min_samples = min_samples;
+    // pf->max_samples = max_samples;
 
-    pf->current_set = 0;
-
-    for (j = 0; j < 2; j++)
-    {
-        // Build set 1/2 first (set=0) then loop and build set 2/2 (set=1)
-        set = pf->sets + j;
+    // pf->current_set = 0;
+    // for (j = 0; j < 2; j++)
+    // {
+    //     set = pf->sets + j;
       
-        set->sample_count = max_samples;
-        // set->samples = (std::shared_ptr<pf_sample_t>) calloc(max_samples, sizeof(pf_sample_t));
+    //     set->sample_count = max_samples;
+    //     set->samples = calloc(max_samples, sizeof(pf_sample_t));
 
-        // for (i = 0; i < set->sample_count; i++)
-        // {
-        //     sample = set->samples + i;
-        //     sample->state.v[0] = 0.0;
-        //     sample->state.v[1] = 0.0;
-        //     sample->state.v[2] = 0.0;
-        //     sample->state.v[3] = 0.0;
-        //     sample->weight = 1.0 / max_samples;
-        // }
-        set->mean = pf_vector_zero();
-        set->cov = pf_matrix_zero();
-    }
+    //     for (i = 0; i < set->sample_count; i++)
+    //     {
+    //         sample = set->samples + i;
+    //         sample->pose.v[0] = 0.0;
+    //         sample->pose.v[1] = 0.0;
+    //         sample->pose.v[2] = 0.0;
+    //         sample->weight = 1.0 / max_samples;
+    //     }
 
-    return pf;
+    //     set->mean = pf_vector_zero();
+    //     set->cov = pf_matrix_zero();
+    // }
+
+//   //set converged to 0
+//   pf_init_converged(pf);
+
+  return pf;
 }
