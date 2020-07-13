@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(source_localization)
 
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
 ## Find catkin and any catkin packages
 find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs genmsg)
 
@@ -20,3 +22,5 @@ target_link_libraries(source_localization_node map)
 add_library(pf_vector src/pf/pf_vector.cpp)
 target_link_libraries(source_localization_node pf_vector)
 
+add_library(pf src/pf/pf.cpp)
+target_link_libraries(source_localization_node pf)
