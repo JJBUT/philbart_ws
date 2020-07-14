@@ -66,6 +66,7 @@ class SLNode
       // Particle filter
       std::shared_ptr<pf_t> pf_;
       int min_particles_, max_particles_;
+      bool pf_init_;
 
       std::string base_frame_id_;
       std::string global_frame_id_; 
@@ -227,6 +228,8 @@ SLNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
   // std::cout<< pf_->sets[0]->samples[2000].state.v[0]  <<std::endl;
 
   // Initialize the filter
+  pf_init(pf_, map_);
+  pf_init_ = false;
   
 
   // Instantiate the sensor objects
