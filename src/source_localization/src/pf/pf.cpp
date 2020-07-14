@@ -60,13 +60,7 @@ void pf_init_uniform(std::shared_ptr<pf_t>  pf, std::shared_ptr<map_t> map,  dou
   std::unique_ptr<pf_sample_set_t>* set;
   pf_sample_t* sample;
 
-  // Random number engine for uniform distribution
-  // Taken from code here https://stackoverflow.com/questions/18880654/why-do-i-get-the-same-sequence-for-every-run-with-stdrandom-device-with-mingw/18880689#18880689
-  // Used ^^ to generate new seed everytime
-  std::random_device rd;
-  std::mt19937 mt(rd());
-  std::uniform_real_distribution<double> distribution(0.0,1.0);
-
+  
   set = &(pf->sets[0]);
   for (i = 0; i < (*set)->sample_count; i++)
   {
