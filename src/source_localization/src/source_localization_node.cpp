@@ -68,10 +68,16 @@ class SLNode
       int min_particles_, max_particles_;
       bool pf_init_;
 
+      // State space limits
+      double z_min_;
+      double z_max_;
+      double rate_min_;
+      double rate_max_;
+
       std::string base_frame_id_;
       std::string global_frame_id_; 
 
-     std::shared_ptr<map_t> map_;
+      std::shared_ptr<map_t> map_;
 
       bool use_map_topic_;
       bool first_map_only_;
@@ -122,6 +128,11 @@ SLNode::SLNode() :
   private_nh_.param("global_frame_id", global_frame_id_, std::string("map"));
   private_nh_.param("min_particles", min_particles_, 100);
   private_nh_.param("max_particles", max_particles_, 5000);
+  private_nh_.param("z_min", z_min_, 0.0);
+  private_nh_.param("z_max", z_max_, 20.0);
+  private_nh_.param("rate_min", rate_min_, 0.0);
+  private_nh_.param("rate_max", rate_max_, 20000.0);
+
 
   /*
   // Uncomment this module when the parameter server has been brought online
@@ -228,7 +239,7 @@ SLNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
   // std::cout<< pf_->sets[0]->samples[2000].state.v[0]  <<std::endl;
 
   // Initialize the filter
-  pf_init(pf_, map_);
+  pf_init(pf_, map_, z_min_, z_max_, rate_min_, rate_max_);
   pf_init_ = false;
   
 
