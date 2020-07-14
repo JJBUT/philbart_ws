@@ -27,7 +27,7 @@ typedef struct
 {
   // The samples
   int sample_count;
-  pf_sample_t samples;
+  pf_sample_t* samples;
 
   // Filter statistics
   pf_vector_t mean;
@@ -48,6 +48,7 @@ typedef struct
   // The sample sets.  We keep two sets and use [current_set]
   // to identify the active set.
   int current_set;
+  //pf_sample_set_t sets[2];
   pf_sample_set_t sets[2];
 
   int converged; 
