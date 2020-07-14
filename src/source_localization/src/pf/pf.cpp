@@ -61,7 +61,10 @@ void pf_init_uniform(std::shared_ptr<pf_t>  pf, std::shared_ptr<map_t> map,  dou
   pf_sample_t* sample;
 
   // Random number engine for uniform distribution
-  std::default_random_engine generator;
+  // Taken from code here https://stackoverflow.com/questions/18880654/why-do-i-get-the-same-sequence-for-every-run-with-stdrandom-device-with-mingw/18880689#18880689
+  // Used ^^ to generate new seed everytime
+  std::random_device rd;
+  std::mt19937 mt(rd());
   std::uniform_real_distribution<double> distribution(0.0,1.0);
 
   set = &(pf->sets[0]);
@@ -69,10 +72,10 @@ void pf_init_uniform(std::shared_ptr<pf_t>  pf, std::shared_ptr<map_t> map,  dou
   {
     // Iterate through the samples and fill out their values with uniform dist value
     sample = &((*set)->samples[i]); 
-    sample->state.v[0] = (map->ros_map.info.origin.position.x - map->width/2.0)+ distribution(generator) * map->width ;
-    sample->state.v[1] = (map->ros_map.info.origin.position.y - map->height/2.0)+ distribution(generator) * map->height ;
-    sample->state.v[2] = z_min + distribution(generator) * (z_max-z_min);
-    sample->state.v[3] = rate_min + distribution(generator) * (rate_max-rate_min);
+    sample->state.v[0] = (map->ros_map.info.origin.position.x - map->width/2.0) + distribution(mt) * map->width ;
+    sample->state.v[1] = (map->ros_map.info.origin.position.y - map->height/2.0) + distribution(mt) * map->height ;
+    sample->state.v[2] = z_min + distribution(mt) * (z_max-z_min);
+    sample->state.v[3] = rate_min + distribution(mt) * (rate_max-rate_min);
   }
 
 
