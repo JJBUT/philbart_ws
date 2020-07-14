@@ -14,6 +14,13 @@
 // Uncomment the model selection section now that we have the param server with defaults up
 */
 
+/*TO DO July 14 2020
+// Link pf_pdf.cpp
+// test pf_pdf.cpp - the unifrom sampler
+// Remove the rests of the uniform sampler code from pf.cpp in pf_init
+// Think about the transform from a oriented map
+*/
+
 /*
 // To watch smart pointer value in debug: <smart_ptr_obj>._M_ptr
 */
@@ -236,13 +243,13 @@ SLNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
   
   
   // How to access state of set 1
-  // std::cout<< pf_->sets[0]->samples[2000].state.v[0]  <<std::endl;
+  // std::cout<< pf_->sets[0]->samples[2000].state.v[0] <<std::endl;
 
   // Initialize the filter
-  pf_init(pf_, map_, z_min_, z_max_, rate_min_, rate_max_);
+  pf_init_uniform(pf_, map_, z_min_, z_max_, rate_min_, rate_max_);
   pf_init_ = false;
-  
 
+ 
   // Instantiate the sensor objects
   // Odometry
   // Laser
