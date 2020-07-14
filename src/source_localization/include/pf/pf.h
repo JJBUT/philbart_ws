@@ -62,7 +62,7 @@ typedef struct
 std::shared_ptr<pf_t> pf_alloc(int min_samples, int max_samples);
 
 // Initialize the filter with a uniform distribution
-void pf_init(std::shared_ptr<pf_t>  pf, std::shared_ptr<map_t> map, double z_min_, double z_max_, double rate_min_, double rate_max_);
+void pf_init_uniform(std::shared_ptr<pf_t>  pf, std::shared_ptr<map_t> map, double z_min_, double z_max_, double rate_min_, double rate_max_);
 
 
 #endif
