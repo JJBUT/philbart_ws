@@ -1,7 +1,9 @@
 #include "cstdlib"
 #include "iostream"
+#include "random"
 
 #include "../include/pf/pf.h"
+
 
 
 
@@ -47,6 +49,37 @@ std::shared_ptr<pf_t> pf_alloc(int min_samples, int max_samples)
       (*set)->mean = pf_vector_zero();
       (*set)->cov = pf_matrix_zero();
     }
-    
+
   return pf;
+}
+
+void pf_init_uniform(std::shared_ptr<pf_t>  pf, std::shared_ptr<map_t> map,  double z_min, double z_max, double rate_min, double rate_max )
+{
+  // Future considerations: add tf ability to map if it had rotation 
+  int i, j;
+  std::unique_ptr<pf_sample_set_t>* set;
+  pf_sample_t* sample;
+
+  // Random number engine for uniform distribution
+  std::default_random_engine generator;
+  std::uniform_real_distribution<double> distribution(0.0,1.0);
+
+  set = &(pf->sets[0]);
+  for (i = 0; i < (*set)->sample_count; i++)
+  {
+    // Iterate through the samples and fill out their values with uniform dist value
+    sample = &((*set)->samples[i]); 
+    sample->state.v[0] = (map->ros_map.info.origin.position.x - map->width/2.0)+ distribution(generator) * map->width ;
+    sample->state.v[1] = (map->ros_map.info.origin.position.y - map->height/2.0)+ distribution(generator) * map->height ;
+    sample->state.v[2] = z_min + distribution(generator) * (z_max-z_min);
+    sample->state.v[3] = rate_min + distribution(generator) * (rate_max-rate_min);
+  }
+
+
+
+  
+
+  //double temp = pf->sets[0]->samples[2000].weight;
+  //double temp1 = map->width;
+
 }
