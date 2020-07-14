@@ -14,6 +14,10 @@
 // Uncomment the model selection section now that we have the param server with defaults up
 */
 
+/*
+// To watch smart pointer value in debug: <smart_ptr_obj>._M_ptr
+*/
+
 
 //Standard library
 #include "iostream"
