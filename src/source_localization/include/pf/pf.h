@@ -60,5 +60,8 @@ typedef struct
 // Create a new filter
 std::shared_ptr<pf_t> pf_alloc(int min_samples, int max_samples);
 
+// Initialize the filter with a uniform distribution
+void pf_init(std::shared_ptr<pf_t>  pf);
+
 
 #endif
