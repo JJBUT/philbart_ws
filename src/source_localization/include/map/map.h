@@ -5,7 +5,9 @@
 
 #include "nav_msgs/OccupancyGrid.h"
 #include "memory"
-
+/*
+// Future functionality: Add tf function based off the maps origin
+*/
 // Structure used to store maps for the pf
 typedef struct
 {
