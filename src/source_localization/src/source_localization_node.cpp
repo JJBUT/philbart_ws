@@ -222,9 +222,9 @@ SLNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
   // Create the particle filter
   pf_ = pf_alloc(min_particles_, max_particles_);
   
-  std::cout<< "hello" <<std::endl;
+  
   // How to access state of set 1
-  // std::cout << pf_->sets[1].samples[1000].state.v[0] <<std::endl;
+  // std::cout<< pf_->sets[0]->samples[2000].state.v[0]  <<std::endl;
 
   // Initialize the filter
   
