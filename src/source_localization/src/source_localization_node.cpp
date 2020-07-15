@@ -46,6 +46,8 @@ Additional work:
 //Custom includes
 #include "../include/map/map.h"
 #include "../include/pf/pf.h"
+#include "../include/sensors/sl_sensor.h" //remove this after testing?
+
 
 
 
@@ -76,6 +78,10 @@ class SLNode
       std::shared_ptr<pf_t> pf_;
       int min_particles_, max_particles_;
       bool pf_init_;
+
+
+      // std::shared_ptr<sl::SLAnemometer> anemometer_;
+
 
       // State space limits
       double z_min_;
@@ -239,21 +245,16 @@ SLNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
   
   map_ = load_map_t(msg);
 
-
   // Create the particle filter
   pf_ = pf_alloc(min_particles_, max_particles_);
   
-  
-  
-  
-  // How to access state of set 1
-  // std::cout<< pf_->sets[0].samples[2000].state.v[0] <<std::endl;
-
   // // Initialize the filter
-  // pf_init_uniform(pf_, map_, z_min_, z_max_, rate_min_, rate_max_);
-  // pf_init_ = false;
-
+  pf_init_uniform(pf_, map_, z_min_, z_max_, rate_min_, rate_max_);
+  pf_init_ = false;
  
+  sl::SLSensor temp;
+ 
+
   // Instantiate the sensor objects
   // Odometry
   // Laser
