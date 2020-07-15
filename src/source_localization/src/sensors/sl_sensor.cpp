@@ -13,6 +13,7 @@ SLSensor::~SLSensor()
 {
 }
 
+
 SLSensorData::SLSensorData()
 {
   return;
