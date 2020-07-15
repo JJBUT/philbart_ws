@@ -3,6 +3,7 @@
 #include "random"
 
 #include "../include/pf/pf.h"
+#include "../include/pf/pf_pdf.h"
 
 
 
@@ -60,23 +61,15 @@ void pf_init_uniform(std::shared_ptr<pf_t>  pf, std::shared_ptr<map_t> map,  dou
   std::unique_ptr<pf_sample_set_t>* set;
   pf_sample_t* sample;
 
+  double x_min= map->ros_map.info.origin.position.x - map->width/2.0 ; double x_max= map->ros_map.info.origin.position.x + map->width/2.0 ;
+  double y_min= map->ros_map.info.origin.position.y - map->height/2.0 ; double y_max= map->ros_map.info.origin.position.y + map->height/2.0 ;
   
   set = &(pf->sets[0]);
   for (i = 0; i < (*set)->sample_count; i++)
   {
-    // Iterate through the samples and fill out their values with uniform dist value
-    sample = &((*set)->samples[i]); 
-    sample->state.v[0] = (map->ros_map.info.origin.position.x - map->width/2.0) + distribution(mt) * map->width ;
-    sample->state.v[1] = (map->ros_map.info.origin.position.y - map->height/2.0) + distribution(mt) * map->height ;
-    sample->state.v[2] = z_min + distribution(mt) * (z_max-z_min);
-    sample->state.v[3] = rate_min + distribution(mt) * (rate_max-rate_min);
+    // Iterate through the samples and fill out their values with uniform dist values within state space bounds
+    sample= &((*set)->samples[i]); 
+    sample->state= pf_pdf_uniform_sample(x_min, x_max, y_min, y_max, z_min, z_max, rate_min, rate_max);
   }
-
-
-
-  
-
-  //double temp = pf->sets[0]->samples[2000].weight;
-  //double temp1 = map->width;
 
 }
