@@ -20,10 +20,6 @@ std::shared_ptr<pf_t> pf_alloc(int min_samples, int max_samples)
     int i, j;
     // The particle filter being instantiated
     std::shared_ptr<pf_t> pf;
-    // A recyclable set structure used to assigned in succession to the pf's two sets
-    pf_sample_set_t* set;
-    // A recyclable sample structure used to fill out the set's thousands of samples
-    pf_sample_t* sample;
 
     pf.reset(new pf_t());  //Allocate the memory for the pf
     pf->min_samples = min_samples;
@@ -32,23 +28,23 @@ std::shared_ptr<pf_t> pf_alloc(int min_samples, int max_samples)
     pf->current_set = 0;
     for (j = 0; j < 2; j++)
     {
-      set = pf->sets + j;
+      //set = pf->sets + j;
   
-      set->sample_count = max_samples;
-      set->samples = std::unique_ptr<pf_sample_t[]> (new pf_sample_t[max_samples]);  // Allocate the memory for the samples
+      pf->sets[j].sample_count = max_samples;
+      pf->sets[j].samples = std::unique_ptr<pf_sample_t[]> (new pf_sample_t[max_samples]);  // Allocate the memory for the samples
 
-      for (i = 0; i < set->sample_count; i++)
+      for (i = 0; i < pf->sets[j].sample_count; i++)
       {
-        sample = &set->samples[i]; // Iterate through the samples and fill out their values
-        sample->state.v[0] = 0.0;
-        sample->state.v[1] = 0.0;
-        sample->state.v[2] = 0.0;
-        sample->state.v[3] = 0.0;
-        sample->weight = 1.0 / max_samples;
+      //   sample = &set->samples[i]; // Iterate through the samples and fill out their values
+        pf->sets[j].samples[i].state.v[0] = i;
+        pf->sets[j].samples[i].state.v[1] = 0.0;
+        pf->sets[j].samples[i].state.v[2] = 0.0;
+        pf->sets[j].samples[i].state.v[3] = 0.0;
+        pf->sets[j].samples[i].weight = 1.0 / max_samples;
       }
 
-        set->mean = pf_vector_zero();
-        set->cov = pf_matrix_zero();
+       pf->sets[j].mean = pf_vector_zero();
+       pf->sets[j].cov = pf_matrix_zero();
     }
 
   return pf;
