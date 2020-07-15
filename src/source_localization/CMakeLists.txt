@@ -25,5 +25,10 @@ target_link_libraries(source_localization_node pf_vector)
 add_library(pf src/pf/pf.cpp)
 target_link_libraries(source_localization_node pf)
 
+add_library(pf_pdf src/pf/pf_pdf.cpp)
+
 ## give pf the zero matrix/vector and other utils
 target_link_libraries(pf pf_vector)
+
+## give pf the pf_pdf utils
+target_link_libraries(pf pf_pdf)
