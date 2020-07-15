@@ -37,7 +37,7 @@ std::shared_ptr<pf_t> pf_alloc(int min_samples, int max_samples)
       for (i = 0; i < pf->sets[j].sample_count; i++)
       {
         // Allocate each sets sample
-        pf->sets[j].samples[i].state.v[0] = i;
+        pf->sets[j].samples[i].state.v[0] = 0.0;
         pf->sets[j].samples[i].state.v[1] = 0.0;
         pf->sets[j].samples[i].state.v[2] = 0.0;
         pf->sets[j].samples[i].state.v[3] = 0.0;
