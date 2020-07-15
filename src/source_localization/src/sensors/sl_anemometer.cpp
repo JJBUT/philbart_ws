@@ -1,4 +1,6 @@
 #include "iostream"
+#include "math.h"
+
 #include "../include/sensors/sl_anemometer.h"
 
 namespace sl{
@@ -15,6 +17,7 @@ SLAnemometer::~SLAnemometer()
 
 void SLAnemometer::calculate_velocity(SLAnemometerData& data)
 {
+  velocity = hypot(std::get<0>(data.velocity_components),std::get<1>(data.velocity_components));
   return;
 }
 
