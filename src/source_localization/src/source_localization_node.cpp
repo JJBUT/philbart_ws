@@ -7,22 +7,24 @@
 // How do shared pointers interact with ros::spin?
 */
 
-/*TO DO July 13 2020
-// Fill out pf.h function declarations 
-// Build pf.cpp (pf_alloc, pf_init etc)
-// Remove pf_vector.h include because it will come with pf.h
-// Uncomment the model selection section now that we have the param server with defaults up
-*/
+/* Workover of the alloc code
+Files used: 
+  -pf.cpp - main code
+  -source_localization_node.cpp -default run and check returned values
+  -pf.h - pf, sample, and sampl_set data structs
 
-/*TO DO July 14 2020
-// Link pf_pdf.cpp
-// test pf_pdf.cpp - the unifrom sampler
-// Remove the rests of the uniform sampler code from pf.cpp in pf_init
-// Think about the transform from a oriented map
+Implementation notes:
+  -Turn the pf sample_sets back into a regular value, not  a pointer
+  -Keep the sample sets samples a smart pointer
+  -Have both set and sample temp objects be raw ptrs in pf.cpp alloc fn
+
+Additional work:
+ -Change pf_init_uniform to handle pf's new structure
+
 */
 
 /*
-// To watch smart pointer value in debug: <smart_ptr_obj>._M_ptr
+// To watch smart pointer value  in debug: <smart_ptr_obj>._M_ptr
 */
 
 
@@ -242,12 +244,14 @@ SLNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
   pf_ = pf_alloc(min_particles_, max_particles_);
   
   
+  
+  
   // How to access state of set 1
-  // std::cout<< pf_->sets[0]->samples[2000].state.v[0] <<std::endl;
+  // std::cout<< pf_->sets[0].samples[2000].state.v[0] <<std::endl;
 
-  // Initialize the filter
-  pf_init_uniform(pf_, map_, z_min_, z_max_, rate_min_, rate_max_);
-  pf_init_ = false;
+  // // Initialize the filter
+  // pf_init_uniform(pf_, map_, z_min_, z_max_, rate_min_, rate_max_);
+  // pf_init_ = false;
 
  
   // Instantiate the sensor objects

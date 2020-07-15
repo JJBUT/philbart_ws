@@ -51,7 +51,7 @@ typedef struct
   // to identify the active set.
   int current_set;
   //pf_sample_set_t sets[2];
-  std::unique_ptr< pf_sample_set_t> sets[2];
+  pf_sample_set_t sets[2];
 
   int converged; 
 
