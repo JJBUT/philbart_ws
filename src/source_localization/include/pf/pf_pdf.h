@@ -4,7 +4,7 @@
 
 #include "../include/pf/pf_vector.h"
 
-pf_vector_t pf_pdf_uniform_sample(x_min, x_max, y_min, y_max, z_min, zmax, rate_min, rate_max);
+pf_vector_t pf_pdf_uniform_sample(double x_min, double x_max, double y_min, double y_max, double z_min, double z_max, double rate_min, double rate_max);
 
 
 #endif
