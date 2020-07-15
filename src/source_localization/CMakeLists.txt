@@ -18,17 +18,16 @@ add_dependencies(source_localization_node source_localization)
 add_library(map src/map/map.cpp)
 target_link_libraries(source_localization_node map)
 
-
-add_library(pf_vector src/pf/pf_vector.cpp)
-target_link_libraries(source_localization_node pf_vector)
-
 add_library(pf src/pf/pf.cpp)
 target_link_libraries(source_localization_node pf)
 
-add_library(pf_pdf src/pf/pf_pdf.cpp)
 
-## give pf the zero matrix/vector and other utils
+add_library(pf_vector src/pf/pf_vector.cpp)
+target_link_libraries(source_localization_node pf_vector)
 target_link_libraries(pf pf_vector)
 
-## give pf the pf_pdf utils
+add_library(pf_pdf src/pf/pf_pdf.cpp)
 target_link_libraries(pf pf_pdf)
+
+add_library(sl_sensor src/sensors/sl_sensor.cpp)
+target_link_libraries(source_localization_node sl_sensor)
