@@ -46,7 +46,7 @@ Additional work:
 //Custom includes
 #include "../include/map/map.h"
 #include "../include/pf/pf.h"
-#include "../include/sensors/sl_sensor.h" //remove this after testing?
+#include "../include/sensors/sl_anemometer.h" //remove this after testing?
 
 
 
@@ -80,7 +80,7 @@ class SLNode
       bool pf_init_;
 
 
-      // std::shared_ptr<sl::SLAnemometer> anemometer_;
+      std::shared_ptr<sl::SLAnemometer> anemometer_;
 
 
       // State space limits
@@ -252,12 +252,12 @@ SLNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
   pf_init_uniform(pf_, map_, z_min_, z_max_, rate_min_, rate_max_);
   pf_init_ = false;
  
-  sl::SLSensor temp;
- 
+  
 
   // Instantiate the sensor objects
-  // Odometry
-  // Laser
+  anemometer_.reset(new sl::SLAnemometer()); 
+  //Gas sensor
+
   
   // In case the initial pose message arrived before the first map,
   // try to apply the initial pose now that the map has arrived.
