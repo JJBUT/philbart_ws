@@ -13,14 +13,14 @@ SLAnemometer::~SLAnemometer()
 {
 }
 
-bool SLAnemometer::calculate_velocity(SLAnemometerData *data)
+void SLAnemometer::calculate_velocity(SLAnemometerData& data)
 {
-  return false;
+  return;
 }
 
-bool SLAnemometer::calculate_azimuth(SLAnemometerData *data)
+void SLAnemometer::calculate_azimuth(SLAnemometerData& data)
 {
-  return false;
+  return;
 }
 
 // Default constructor
@@ -32,6 +32,14 @@ SLAnemometerData::SLAnemometerData()
 SLAnemometerData::~SLAnemometerData()
 {
 }
+
+void SLAnemometerData::set_velocity_components(double x_velocity, double y_velocity)
+{
+  velocity_components= std::make_tuple (x_velocity, y_velocity);
+
+  return;
+}
+
 
 
 }
