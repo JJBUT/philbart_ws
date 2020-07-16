@@ -19,6 +19,11 @@ SLSensor::~SLSensor()
 
 }
 
+void ROSCallback()
+{
+  
+}
+
 bool SLSensor::SetRawData()
 {
 

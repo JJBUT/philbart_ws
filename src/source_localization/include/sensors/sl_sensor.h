@@ -12,7 +12,7 @@ class SLSensor
     public: SLSensor(); 
     public: ~SLSensor(); 
 
-    public: virtual bool ROSCallback();
+    public: virtual void ROSCallback();
 
     public: virtual bool SetRawData();
 
