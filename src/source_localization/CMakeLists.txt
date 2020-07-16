@@ -19,6 +19,7 @@ add_library(map src/map/map.cpp)
 add_library(pf src/pf/pf.cpp)
 add_library(pf_vector src/pf/pf_vector.cpp)
 add_library(pf_pdf src/pf/pf_pdf.cpp)
+add_library(plume src/plume/plume.cpp)
 
 target_link_libraries(pf pf_vector pf_pdf)
-target_link_libraries(source_localization_node map pf pf_vector)
+target_link_libraries(source_localization_node map pf pf_vector plume)
