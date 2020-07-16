@@ -39,15 +39,13 @@ Additional work:
 #include "std_msgs/String.h"
 #include "nav_msgs/OccupancyGrid.h" // Can I remove this becasue it is decalred in map.h?
 #include "nav_msgs/Odometry.h"
-#include "geometry_msgs/Twist.h"
+#include "geometry_msgs/TwistStamped.h"
 #include "std_msgs/Float32.h"
 #include "nav_msgs/GetMap.h"
 
 //Custom includes
 #include "../include/map/map.h"
 #include "../include/pf/pf.h"
-#include "../include/sensors/sl_anemometer.h" //remove this after testing?
-
 
 
 
@@ -80,9 +78,6 @@ class SLNode
       bool pf_init_;
 
 
-      std::shared_ptr<sl::SLAnemometer> anemometer_;
-
-
       // State space limits
       double z_min_;
       double z_max_;
@@ -109,7 +104,7 @@ class SLNode
       ros::Subscriber gas_sensor_sub_;
       
       void mapOdomCB(const nav_msgs::Odometry& msg);
-      void anemometerCB(const geometry_msgs::Twist& msg);
+      void anemometerCB(const geometry_msgs::TwistStamped& msg);
       void gasSensorCB(const std_msgs::Float32& msg);
   
 };
@@ -183,7 +178,7 @@ SLNode::mapOdomCB(const nav_msgs::Odometry& msg)
 }
 
 void 
-SLNode::anemometerCB(const geometry_msgs::Twist& msg)
+SLNode::anemometerCB(const geometry_msgs::TwistStamped& msg)
 {
 
 }
@@ -225,6 +220,7 @@ SLNode::mapReceived(const nav_msgs::OccupancyGridConstPtr& msg)
   handleMapMessage(*msg);
 
   first_map_received_ = true;
+
 }
 
 //Descrip
@@ -253,15 +249,6 @@ SLNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
   pf_init_ = false;
  
   
-
-  // Instantiate the sensor objects
-  anemometer_.reset(new sl::SLAnemometer()); 
-  //Gas sensor
-
-  
-  // In case the initial pose message arrived before the first map,
-  // try to apply the initial pose now that the map has arrived.
-
 
 }
 
