@@ -5,7 +5,7 @@
 #include "tuple"
 #include "../include/sensors/sl_sensor.h"
 
-struct 
+typedef struct 
 {
     double x_velocity;
     double y_velocity;
@@ -13,7 +13,7 @@ struct
     std::string frame;
 } raw_anemometer_data;
 
-struct 
+typedef struct
 {
     double velocity;
     double azimuth;
@@ -36,7 +36,6 @@ class SLAnemometer: public SLSensor
     public: processed_anemometer_data pad;
 
 };
-
 
 }
 
