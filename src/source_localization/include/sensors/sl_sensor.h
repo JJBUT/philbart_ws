@@ -11,10 +11,7 @@ class SLSensor
 {
     // Interface class for sensors (i.e. contains only virtual functions)
     public: SLSensor(); 
-    public: ~SLSensor(); 
-
-    // Calculates derived values and sets processed data
-    private: virtual bool ProcessRawData()= 0;  
+    public: ~SLSensor();  
 
 };
 
