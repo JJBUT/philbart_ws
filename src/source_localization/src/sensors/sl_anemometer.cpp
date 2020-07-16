@@ -15,26 +15,14 @@ SLAnemometer::~SLAnemometer()
 {
 }
 
-void SLAnemometer::ROSCallback(const geometry_msgs::TwistStamped& msg)
-{
-  rad.x_velocity= msg.twist.linear.x;
-  rad.y_velocity= msg.twist.linear.y;
-  rad.time_stamp= msg.header.stamp.sec;
-  rad.frame= msg.header.frame_id;
-
-  bool data_processed= ProcessRawData();
-
-  return;  
-}
-
-bool SLAnemometer::ProcessRawData()
+bool SLAnemometer::ProcessRawData(raw_anemometer_data& data)
 {
   processed_anemometer_data working_pad;
 
-  working_pad.azimuth= atan2 (rad.y_velocity, rad.x_velocity);
-  working_pad.velocity= hypot(rad.x_velocity, rad.y_velocity);
-  working_pad.frame= rad.frame;
-  working_pad.time_stamp= rad.time_stamp;
+  working_pad.azimuth= atan2 (data.y_velocity, data.x_velocity);
+  working_pad.velocity= hypot(data.x_velocity, data.y_velocity);
+  working_pad.frame= data.frame;
+  working_pad.time_stamp= data.time_stamp;
 
   pad= working_pad;
   

@@ -29,24 +29,16 @@ typedef struct
 
 namespace sl{
 
-// Forward declaration
-class SLAnemometerData;
-
 class SLAnemometer: public SLSensor
 {
     public: SLAnemometer();
     public: ~SLAnemometer();
 
-    private: raw_anemometer_data rad;
-
     private: processed_anemometer_data pad;
 
-    public: void ROSCallback(const geometry_msgs::TwistStamped& msg); // i.e SetRawData()
-
-    private: bool ProcessRawData();
+    public: bool ProcessRawData(raw_anemometer_data& data);
 
     public: processed_anemometer_data GetProcessedData();
-
 
 
 };
