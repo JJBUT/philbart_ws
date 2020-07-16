@@ -13,13 +13,12 @@ class SLSensor
     public: SLSensor(); 
     public: ~SLSensor(); 
 
-    public: virtual void ROSCallback()= 0; // Pure virtual 
-
+    // Remove data from incoming sensor msg and place into custom struct
     private: virtual bool SetRawData()= 0;
 
-    private: virtual bool ProcessRawData()= 0;
+    // Calculates derived values and sets processed data
+    private: virtual bool ProcessRawData()= 0;  
 
-    public: virtual bool GetProcessedData()= 0;
 };
 
 
