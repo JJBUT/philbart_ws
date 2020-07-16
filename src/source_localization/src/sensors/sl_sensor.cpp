@@ -18,22 +18,12 @@ SLSensor::~SLSensor()
 
 }
 
-void ROSCallback()
-{
-  
-}
-
 bool SLSensor::SetRawData()
 {
 
 }
 
 bool  SLSensor::ProcessRawData()
-{
-
-}
-
-bool  SLSensor::GetProcessedData()
 {
 
 }
