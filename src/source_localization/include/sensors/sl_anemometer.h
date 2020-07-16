@@ -5,7 +5,21 @@
 #include "tuple"
 #include "../include/sensors/sl_sensor.h"
 
-//put data struct here
+struct 
+{
+    double x_velocity;
+    double y_velocity;
+    double time_stamp;
+    std::string frame;
+} raw_anemometer_data;
+
+struct 
+{
+    double velocity;
+    double azimuth;
+    double time_stamp;
+    std::string frame;
+} processed_anemometer_data;
 
 namespace sl{
 
@@ -17,17 +31,10 @@ class SLAnemometer: public SLSensor
     public: SLAnemometer();
     public: ~SLAnemometer();
 
-    // The magnitude of the wind velocity
-    public: double velocity;
+    private: raw_anemometer_data rad;
 
-    // The azimuth of the wind velocity with respect to the "anemometer_link" frame
-    public: double azimuth;
+    public: processed_anemometer_data pad;
 
-    // Calculate the magnitude of the velocity
-    public: void calculate_velocity();
-
-    // Calculate the azimuth of the wind
-    public: void calculate_azimuth();
 };
 
 
