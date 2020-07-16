@@ -12,10 +12,11 @@ class SLSensor
     public: SLSensor(); 
     public: ~SLSensor(); 
 
-    //Virtual inherit data
-    //Virtual inherit set raw data
-    //virtual inherit process raw data
-    //virtual inherit get processed data
+    public: virtual bool SetRawData();
+
+    public: virtual bool ProcessRawData();
+
+    public: virtual bool GetProcessedData();
 };
 
 

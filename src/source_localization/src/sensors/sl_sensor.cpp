@@ -16,6 +16,22 @@ SLSensor::SLSensor()
 // Default destructor
 SLSensor::~SLSensor()
 {
+
+}
+
+bool SLSensor::SetRawData()
+{
+
+}
+
+bool  SLSensor::ProcessRawData()
+{
+
+}
+
+bool  SLSensor::GetProcessedData()
+{
+
 }
 
 
