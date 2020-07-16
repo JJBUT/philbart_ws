@@ -1,9 +1,15 @@
 #ifndef SL_ANEMOMETER_H
 #define SL_ANEMOMETER_H
 
-
+// Standard
 #include "tuple"
+
+// ROS
+#include "geometry_msgs/Twist.h"
+
+// Custom
 #include "../include/sensors/sl_sensor.h"
+
 
 typedef struct 
 {
@@ -35,13 +41,13 @@ class SLAnemometer: public SLSensor
 
     public: processed_anemometer_data pad;
 
-    public: void ROSCallback();
+    public: void ROSCallback(const geometry_msgs::Twist& msg);
 
     private: bool SetRawData();
 
     private: bool ProcessRawData();
 
-    public: bool GetProcessedData();
+    public: processed_anemometer_data GetProcessedData();
 
 
 

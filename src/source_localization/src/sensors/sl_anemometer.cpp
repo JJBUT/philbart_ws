@@ -15,9 +15,9 @@ SLAnemometer::~SLAnemometer()
 {
 }
 
-void SLAnemometer::ROSCallback()
+void SLAnemometer::ROSCallback(const geometry_msgs::Twist& msg)
 {
-
+  std::cout << "SLAnemometer::ROSCallback"<< std::endl;
 }
 
 bool SLAnemometer::SetRawData()
@@ -30,7 +30,7 @@ bool SLAnemometer::ProcessRawData()
   
 }
 
-bool SLAnemometer::GetProcessedData()
+processed_anemometer_data SLAnemometer::GetProcessedData()
 {
   
 }
