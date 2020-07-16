@@ -46,7 +46,7 @@ Additional work:
 //Custom includes
 #include "../include/map/map.h"
 #include "../include/pf/pf.h"
-#include "../include/plume/plume.h"
+#include "../include/plume/prediction.h"
 
 
 
@@ -77,6 +77,9 @@ class SLNode
       std::shared_ptr<pf_t> pf_;
       int min_particles_, max_particles_;
       bool pf_init_;
+
+      // Plume
+      std::shared_ptr<prediction_set> pred_;
 
 
       // State space limits
@@ -248,6 +251,8 @@ SLNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
   // // Initialize the filter
   pf_init_uniform(pf_, map_, z_min_, z_max_, rate_min_, rate_max_);
   pf_init_ = false;
+
+  
  
   
 
