@@ -9,16 +9,17 @@ namespace sl
 
 class SLSensor
 {
+    // Interface class for sensors (i.e. contains only virtual functions)
     public: SLSensor(); 
     public: ~SLSensor(); 
 
-    public: virtual void ROSCallback();
+    public: virtual void ROSCallback()= 0; // Pure virtual 
 
-    public: virtual bool SetRawData();
+    private: virtual bool SetRawData()= 0;
 
-    public: virtual bool ProcessRawData();
+    private: virtual bool ProcessRawData()= 0;
 
-    public: virtual bool GetProcessedData();
+    public: virtual bool GetProcessedData()= 0;
 };
 
 
