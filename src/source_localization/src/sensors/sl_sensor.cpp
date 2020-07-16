@@ -19,21 +19,4 @@ SLSensor::~SLSensor()
 }
 
 
-SLSensorData::SLSensorData()
-{
-  return;
-}
-
-// Default destructor
-SLSensorData::~SLSensorData()
-{
-}
-
-void SLSensorData::set_time_stamp(double time)
-{
-  time_stamp= time;
-
-  return;
-}
-
 }

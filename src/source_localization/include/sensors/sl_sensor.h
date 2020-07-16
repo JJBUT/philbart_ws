@@ -12,19 +12,12 @@ class SLSensor
     public: SLSensor(); 
     public: ~SLSensor(); 
 
-    public: std::string frame;
-
+    //Virtual inherit data
+    //Virtual inherit set raw data
+    //virtual inherit process raw data
+    //virtual inherit get processed data
 };
 
-class SLSensorData
-{
-    public: SLSensorData();
-    public: ~SLSensorData();
-
-    private: double time_stamp;
-
-    public: void set_time_stamp(double time_stamp);
-};
 
 }
 
