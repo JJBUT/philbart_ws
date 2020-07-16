@@ -35,6 +35,16 @@ class SLAnemometer: public SLSensor
 
     public: processed_anemometer_data pad;
 
+    public: void ROSCallback();
+
+    private: bool SetRawData();
+
+    private: bool ProcessRawData();
+
+    public: bool GetProcessedData();
+
+
+
 };
 
 }
