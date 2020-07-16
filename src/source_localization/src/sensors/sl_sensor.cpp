@@ -18,11 +18,6 @@ SLSensor::~SLSensor()
 
 }
 
-bool SLSensor::SetRawData()
-{
-
-}
-
 bool  SLSensor::ProcessRawData()
 {
 

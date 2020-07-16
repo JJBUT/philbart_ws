@@ -13,9 +13,6 @@ class SLSensor
     public: SLSensor(); 
     public: ~SLSensor(); 
 
-    // Remove data from incoming sensor msg and place into custom struct
-    private: virtual bool SetRawData()= 0;
-
     // Calculates derived values and sets processed data
     private: virtual bool ProcessRawData()= 0;  
 

@@ -41,9 +41,7 @@ class SLAnemometer: public SLSensor
 
     public: processed_anemometer_data pad;
 
-    public: void ROSCallback(const geometry_msgs::TwistStamped& msg);
-
-    private: bool SetRawData();
+    public: void ROSCallback(const geometry_msgs::TwistStamped& msg); // i.e SetRawData()
 
     private: bool ProcessRawData();
 

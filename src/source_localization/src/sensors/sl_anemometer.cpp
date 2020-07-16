@@ -24,11 +24,6 @@ void SLAnemometer::ROSCallback(const geometry_msgs::TwistStamped& msg)
   
 }
 
-bool SLAnemometer::SetRawData()
-{
-
-}
-
 bool SLAnemometer::ProcessRawData()
 {
   
