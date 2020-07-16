@@ -1,8 +1,7 @@
 #include "../include/sensors/sl_sensor.h"
 
 /* July 15 2020 Note
-// Think about turning the set functions into something more driven by
-// ROS functionality/callbacks
+// Because it is just an interface file I think I only need the header and not this hmm?
 */
 
 namespace sl{
