@@ -22,7 +22,7 @@ typedef struct
 typedef struct
 {
     //The source position (i.e. the particle state)
-    pf_vector_t source_state;
+    pf_vector_t *source_state;
     //Store the predicted concentration produced by that sample
     double predicted_concentration;
     

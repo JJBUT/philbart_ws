@@ -250,8 +250,10 @@ SLNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
   
   // // Initialize the filter
   pf_init_uniform(pf_, map_, z_min_, z_max_, rate_min_, rate_max_);
-  pf_init_ = false;
+  pf_init_= false;
 
+  pred_= prediction_alloc(pf_);
+  
   
  
   
