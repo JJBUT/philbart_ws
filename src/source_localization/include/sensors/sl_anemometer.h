@@ -5,7 +5,7 @@
 #include "tuple"
 
 // ROS
-#include "geometry_msgs/Twist.h"
+#include "geometry_msgs/TwistStamped.h"
 
 // Custom
 #include "../include/sensors/sl_sensor.h"
@@ -41,7 +41,7 @@ class SLAnemometer: public SLSensor
 
     public: processed_anemometer_data pad;
 
-    public: void ROSCallback(const geometry_msgs::Twist& msg);
+    public: void ROSCallback(const geometry_msgs::TwistStamped& msg);
 
     private: bool SetRawData();
 

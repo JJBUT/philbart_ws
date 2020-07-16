@@ -15,9 +15,13 @@ SLAnemometer::~SLAnemometer()
 {
 }
 
-void SLAnemometer::ROSCallback(const geometry_msgs::Twist& msg)
+void SLAnemometer::ROSCallback(const geometry_msgs::TwistStamped& msg)
 {
-  std::cout << "SLAnemometer::ROSCallback"<< std::endl;
+  rad.x_velocity= msg.twist.linear.x;
+  rad.y_velocity= msg.twist.linear.y;
+  rad.time_stamp= msg.header.stamp.sec;
+  rad.frame= msg.header.frame_id;
+  
 }
 
 bool SLAnemometer::SetRawData()
