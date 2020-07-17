@@ -132,7 +132,6 @@ int main(int argc, char** argv)
 }
 
 SLNode::SLNode() :
-        //map_(NULL),
         first_map_received_(false)
 {
   // Get all parameters off of the parameter server
@@ -146,22 +145,17 @@ SLNode::SLNode() :
   private_nh_.param("z_max", z_max_, 20.0);
   private_nh_.param("rate_min", rate_min_, 0.0);
   private_nh_.param("rate_max", rate_max_, 20000.0);
-
-
-  /*
-  // Uncomment this module when the parameter server has been brought online
-  //Future proofing the node for adding transport models later
   std::string tmp_model_type;
   private_nh_.param("transport_model_type", tmp_model_type, std::string("gaussian_plume"));
+
   if(tmp_model_type == "gaussian_plume")
   {
     transport_model_type_ = "GAUSSIAN_PLUME";
-  }else
-  {
+  }else{
     ROS_WARN("Unknown transport model type \"%s\"; defaulting to gaussian_plume model", tmp_model_type.c_str());
     transport_model_type_ = "GAUSSIAN_PLUME";
   }
-  */
+  
   if(use_map_topic_){ //line 490
     map_sub_ = nh_.subscribe(map_topic_, 1, &SLNode::mapReceived, this);
     ROS_INFO("Subscribed to map topic.");
@@ -252,9 +246,6 @@ SLNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
   pf_init_uniform(pf_, map_, z_min_, z_max_, rate_min_, rate_max_);
   pf_init_= false;
 
-  pred_= prediction_alloc(pf_);
-  
-  
  
   
 
