@@ -30,7 +30,8 @@ void pf_alloc(std::shared_ptr<pf_t>& pf, int min_samples, int max_samples)
     {
       // Allocate the two k and k+1 sets  
       pf->sets[j].sample_count = max_samples;
-      pf->sets[j].samples = std::unique_ptr<pf_sample_t[]> (new pf_sample_t[max_samples]);  // Allocate the memory for the samples
+      // Allocate the memory for the set's sample vector
+      pf->sets[j].samples.reserve(max_samples);
 
       for (i = 0; i < pf->sets[j].sample_count; i++)
       {

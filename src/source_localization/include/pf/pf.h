@@ -28,9 +28,8 @@ typedef struct
 {
   // The samples
   int sample_count;
-  //pf_sample_t * samples;
-  //std::unique_ptr<pf_sample_t[]> samples;
   
+  std::vector<pf_sample_t> samples;
 
   // Filter statistics
   pf_vector_t mean;
