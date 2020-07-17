@@ -113,7 +113,7 @@ class SLNode
   
 };
 
-std::shared_ptr<SLNode> sl_node_ptr;
+std::unique_ptr<SLNode> sl_node_ptr;
 
 int main(int argc, char** argv)
 {
@@ -241,13 +241,10 @@ SLNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
 
   // Create the particle filter
   pf_alloc(pf_, min_particles_, max_particles_);
-  
-  // // Initialize the filter
-  // pf_init_uniform(pf_, map_, z_min_, z_max_, rate_min_, rate_max_);
-  // pf_init_= false;
 
-//  std::cout<<pf_->sets[0].samples[4].state.v[3]<<std::endl;
-
+  // Initialize the filter
+  pf_init_uniform(pf_, map_, z_min_, z_max_, rate_min_, rate_max_);
+  pf_init_= false;
 
 }
 
