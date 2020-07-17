@@ -240,14 +240,14 @@ SLNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
   map_ = load_map_t(msg);
 
   // Create the particle filter
-  pf_ = pf_alloc(min_particles_, max_particles_);
+  pf_alloc(pf_, min_particles_, max_particles_);
   
   // // Initialize the filter
-  pf_init_uniform(pf_, map_, z_min_, z_max_, rate_min_, rate_max_);
-  pf_init_= false;
+  // pf_init_uniform(pf_, map_, z_min_, z_max_, rate_min_, rate_max_);
+  // pf_init_= false;
 
- 
-  
+//  std::cout<<pf_->sets[0].samples[4].state.v[3]<<std::endl;
+
 
 }
 

@@ -9,7 +9,7 @@
 
 
 // Create a new filter
-std::shared_ptr<pf_t> pf_alloc(int min_samples, int max_samples)
+void pf_alloc(std::shared_ptr<pf_t>& pf, int min_samples, int max_samples)
 {
     // The pf has two sets, each set has a couple thousand particles
     // This function is responsible for allocating the memory (with zeros)
@@ -18,8 +18,6 @@ std::shared_ptr<pf_t> pf_alloc(int min_samples, int max_samples)
     // should never actually change.
 
     int i, j;
-    // The particle filter being instantiated
-    std::shared_ptr<pf_t> pf;
 
     // Allocate and take ownership of the pf's memory
     pf.reset(new pf_t());  
@@ -36,7 +34,7 @@ std::shared_ptr<pf_t> pf_alloc(int min_samples, int max_samples)
 
       for (i = 0; i < pf->sets[j].sample_count; i++)
       {
-        // Allocate each sets sample
+        // Allocate each sets samples
         pf->sets[j].samples[i].state.v[0] = 0.0;
         pf->sets[j].samples[i].state.v[1] = 0.0;
         pf->sets[j].samples[i].state.v[2] = 0.0;
@@ -48,7 +46,7 @@ std::shared_ptr<pf_t> pf_alloc(int min_samples, int max_samples)
        pf->sets[j].cov = pf_matrix_zero();
     }
 
-  return pf;
+  return;
 }
 
 void pf_init_uniform(std::shared_ptr<pf_t>  pf, std::shared_ptr<map_t> map,  double z_min, double z_max, double rate_min, double rate_max )
