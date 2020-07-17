@@ -46,7 +46,8 @@ Additional work:
 //Custom includes
 #include "../include/map/map.h"
 #include "../include/pf/pf.h"
-#include "../include/plume/prediction.h"
+#include "../include/data/data_structs.h"
+
 
 
 
@@ -78,15 +79,18 @@ class SLNode
       int min_particles_, max_particles_;
       bool pf_init_;
 
-      // Plume
-      std::shared_ptr<prediction_set> pred_;
-
-
       // State space limits
       double z_min_;
       double z_max_;
       double rate_min_;
       double rate_max_;
+
+      // Data
+      int max_data_age_;
+      anemometer_data ad_;
+      // Odom
+      // Gas sensor
+
 
       std::string base_frame_id_;
       std::string global_frame_id_; 
@@ -144,9 +148,10 @@ SLNode::SLNode() :
   private_nh_.param("z_min", z_min_, 0.0);
   private_nh_.param("z_max", z_max_, 20.0);
   private_nh_.param("rate_min", rate_min_, 0.0);
-  private_nh_.param("rate_max", rate_max_, 20000.0);
+  private_nh_.param("rate_max", max_data_age_, 5);
   std::string tmp_model_type;
   private_nh_.param("transport_model_type", tmp_model_type, std::string("gaussian_plume"));
+  private_nh_.param("data_age_max", rate_max_, 20000.0);
 
   if(tmp_model_type == "gaussian_plume")
   {
@@ -178,7 +183,23 @@ SLNode::mapOdomCB(const nav_msgs::Odometry& msg)
 void 
 SLNode::anemometerCB(const geometry_msgs::TwistStamped& msg)
 {
+  //NOTE:: rostopic pub -s -r  1 /anemometer/data geometry_msgs/TwistStamped "header: auto twist:
+  ad_.msgs.push_back(msg);
 
+  u_int32_t now= ros::Time::now().sec;
+
+  // Keep the most recent measurements received within the last max_data_age_ seconds
+  for (auto it = ad_.msgs.begin(); it != ad_.msgs.end(); ++it) 
+  { 
+    if (now - (*it).header.stamp.sec > max_data_age_) 
+    { 
+      ad_.msgs.erase(it); 
+      it--; 
+    } 
+  } 
+
+  ad_.msg_count= ad_.msgs.size();
+  ad_.msg_freq= double(ad_.msg_count) / double(max_data_age_);
 }
 
 void 
