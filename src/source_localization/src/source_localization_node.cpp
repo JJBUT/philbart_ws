@@ -78,6 +78,7 @@ class SLNode
       std::shared_ptr<pf_t> pf_;
       int min_particles_, max_particles_;
       bool pf_init_;
+      
 
       // State space limits
       double z_min_;
@@ -86,8 +87,9 @@ class SLNode
       double rate_max_;
 
       // Data
-      int max_data_age_;
+      double max_data_age_;
       anemometer_data ad_;
+      double filter_frequency_;
       // Odom
       // Gas sensor
 
@@ -110,10 +112,13 @@ class SLNode
       ros::Subscriber map_pose_sub_;
       ros::Subscriber anemometer_sub_;
       ros::Subscriber gas_sensor_sub_;
+      ros::Timer execute_filter_;
       
       void mapOdomCB(const nav_msgs::Odometry& msg);
       void anemometerCB(const geometry_msgs::TwistStamped& msg);
       void gasSensorCB(const std_msgs::Float32& msg);
+
+      void runFilterCB(const ros::TimerEvent& event);
   
 };
 
@@ -148,10 +153,11 @@ SLNode::SLNode() :
   private_nh_.param("z_min", z_min_, 0.0);
   private_nh_.param("z_max", z_max_, 20.0);
   private_nh_.param("rate_min", rate_min_, 0.0);
-  private_nh_.param("rate_max", max_data_age_, 5);
+  private_nh_.param("rate_max", rate_max_, 20000.0);
   std::string tmp_model_type;
   private_nh_.param("transport_model_type", tmp_model_type, std::string("gaussian_plume"));
-  private_nh_.param("data_age_max", rate_max_, 20000.0);
+  private_nh_.param("data_age_max", max_data_age_, 5.0);
+  private_nh_.param("filter_frequency", filter_frequency_, 0.2);
 
   if(tmp_model_type == "gaussian_plume")
   {
@@ -171,6 +177,7 @@ SLNode::SLNode() :
   map_pose_sub_ = nh_.subscribe(odom_topic_, 2, &SLNode::mapOdomCB, this);
   anemometer_sub_ = nh_.subscribe(anemometer_topic_, 2, &SLNode::anemometerCB, this);
   gas_sensor_sub_ = nh_.subscribe(gas_sensor_topic_, 2, &SLNode::gasSensorCB, this);
+  execute_filter_ = nh_.createTimer(ros::Duration(filter_frequency_), &SLNode::runFilterCB, this);
 
 }
 
@@ -267,5 +274,10 @@ SLNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
   pf_init_uniform(pf_, map_, z_min_, z_max_, rate_min_, rate_max_);
   pf_init_= false;
 
+}
+
+void SLNode::runFilterCB(const ros::TimerEvent& event)
+{
+  std::cout<<"Run filter"<<std::endl;
 }
 
