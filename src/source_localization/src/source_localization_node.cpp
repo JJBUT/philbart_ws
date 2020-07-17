@@ -3,34 +3,22 @@
 */
 
 /*Big Picture Questions
-// Do I need std::mutex functionality
-// How do shared pointers interact with ros::spin?
+
 */
 
-/* Workover of the alloc code
-Files used: 
-  -pf.cpp - main code
-  -source_localization_node.cpp -default run and check returned values
-  -pf.h - pf, sample, and sampl_set data structs
-
-Implementation notes:
-  -Turn the pf sample_sets back into a regular value, not  a pointer
-  -Keep the sample sets samples a smart pointer
-  -Have both set and sample temp objects be raw ptrs in pf.cpp alloc fn
-
-Additional work:
- -Change pf_init_uniform to handle pf's new structure
-
+/* 
 */
 
 /*
 // To watch smart pointer value  in debug: <smart_ptr_obj>._M_ptr
+// rostopic pub -s -r  1 /anemometer/data geometry_msgs/TwistStamped "header: auto twist:"
 */
 
 
 //Standard library
 #include "iostream"
 #include "memory" //smart pointers
+#include "mutex"
 
 //roscpp
 #include "ros/ros.h"
@@ -49,12 +37,6 @@ Additional work:
 #include "../include/data/data_structs.h"
 
 
-
-
-// Maybe once we import the header files this error will do away
-// using namespace sl; 
-
-//Pose hypothesis
 static const std::string node_name_ = "sl";
 
 static const std::string map_topic_ = "map";
@@ -73,6 +55,11 @@ class SLNode
       void mapReceived(const nav_msgs::OccupancyGridConstPtr& msg);
       void requestMap();
 
+      //Mutex
+      std::mutex odom_mutex_;
+      std::mutex ad_mutex_;
+      std::mutex gsd_mutex_;
+      
 
       // Particle filter
       std::shared_ptr<pf_t> pf_;
@@ -131,10 +118,11 @@ int main(int argc, char** argv)
 
   sl_node_ptr.reset(new SLNode());
   
-  //Run using ROS, may add .bag file functionality later
+  ros::MultiThreadedSpinner spinner(4);
+
   if (1)
   {
-    ros::spin();
+    spinner.spin();
   }
 
   return(0);
@@ -177,7 +165,7 @@ SLNode::SLNode() :
   map_pose_sub_ = nh_.subscribe(odom_topic_, 2, &SLNode::mapOdomCB, this);
   anemometer_sub_ = nh_.subscribe(anemometer_topic_, 2, &SLNode::anemometerCB, this);
   gas_sensor_sub_ = nh_.subscribe(gas_sensor_topic_, 2, &SLNode::gasSensorCB, this);
-  execute_filter_ = nh_.createTimer(ros::Duration(filter_frequency_), &SLNode::runFilterCB, this);
+  execute_filter_ = nh_.createTimer(ros::Duration(1.0/filter_frequency_), &SLNode::runFilterCB, this);
 
 }
 
@@ -190,7 +178,8 @@ SLNode::mapOdomCB(const nav_msgs::Odometry& msg)
 void 
 SLNode::anemometerCB(const geometry_msgs::TwistStamped& msg)
 {
-  //NOTE:: rostopic pub -s -r  1 /anemometer/data geometry_msgs/TwistStamped "header: auto twist:
+  const std::lock_guard<std::mutex> lock(ad_mutex_);
+
   ad_.msgs.push_back(msg);
 
   u_int32_t now= ros::Time::now().sec;
@@ -207,6 +196,8 @@ SLNode::anemometerCB(const geometry_msgs::TwistStamped& msg)
 
   ad_.msg_count= ad_.msgs.size();
   ad_.msg_freq= double(ad_.msg_count) / double(max_data_age_);
+
+  return;
 }
 
 void 
@@ -278,6 +269,9 @@ SLNode::handleMapMessage(const nav_msgs::OccupancyGrid& msg)
 
 void SLNode::runFilterCB(const ros::TimerEvent& event)
 {
-  std::cout<<"Run filter"<<std::endl;
-}
+  anemometer_data ad_instance;
 
+  ad_mutex_.lock();
+  ad_instance=ad_;
+  ad_mutex_.unlock();
+}
