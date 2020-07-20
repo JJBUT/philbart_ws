@@ -6,7 +6,7 @@
 //3D position
 struct position
 {
-    double p[3];
+    double pos[3];
 };
 
 
@@ -14,8 +14,7 @@ struct position
 struct state
 {
     // Global 3D position and emission rate (x,y,z,q)
-    position pos;
-    double rate; 
+    double s[4];
 };
 
 struct particle
@@ -51,11 +50,14 @@ struct state_space
 };
 
 
-
-
+namespace sl{
 //Return transform of test point into source local (source being the particle) frame
 position transform(const position& source, const position& test_point, const transformation& tf);
 
+// Return a 
+std::vector<double> uniform_dist(int count);
+
+}
 
 
 #endif
