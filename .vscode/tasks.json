@@ -13,10 +13,8 @@
             "args": [
                 "-g",
                 "-std=c++11",
-                "-I${workspaceFolder}/src/source_localization/include/",
+                "-I${workspaceFolder}/src/source_localization/particle_filter/include/",
                 "${file}",
-                "${workspaceFolder}/src/source_localization/src/sensors/sl_anemometer.cpp",
-                "${workspaceFolder}/src/source_localization/src/sensors/sl_sensor.cpp",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],
