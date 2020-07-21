@@ -17,18 +17,20 @@ struct state
     double s[4];
 };
 
+// A single weighted sample
 struct particle
 {
     state p;
     double weight;
 };
-
+// Structured grouping of particles
 struct set
 {
     int particle_count;
     std::vector<particle> particles;
 };
 
+// Primary particle filter structure
 struct filter_state
 {
     int current_set;
@@ -36,11 +38,13 @@ struct filter_state
     set sets[2];
 };
 
+// Linear offset and 2D rotational yaw
 struct transformation
 {
     double xyz_yaw[4];
 };
 
+// The fixed bounds on the 4D state space
 struct state_space
 {
     double x[2];
@@ -51,10 +55,10 @@ struct state_space
 
 
 namespace sl{
-//Return transform of test point into source local (source being the particle) frame
+// Return a test point transformed into a source local (source being the particle of concern) frame
 position transform(const position& source, const position& test_point, const transformation& tf);
 
-// Return a 
+// Return a 1D vector of uniform random numbers from 0 to 1
 std::vector<double> uniform_dist(int count);
 
 }
