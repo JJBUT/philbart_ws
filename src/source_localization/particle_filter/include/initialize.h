@@ -33,7 +33,7 @@ public:
     // functions - they often return smart pointer to base type or vector of smart pointers.
     
     // Return unique pointer to the most critical filter infrastructure
-    std::unique_ptr<filter_state> GetFilter();
+    std::unique_ptr<filter_state> getFilter();
    
 };
 

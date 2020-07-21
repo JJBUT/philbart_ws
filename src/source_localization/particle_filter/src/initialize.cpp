@@ -44,7 +44,7 @@ bool Initialize::fill()
 }
 
 
-std::unique_ptr<filter_state> Initialize::GetFilter()
+std::unique_ptr<filter_state> Initialize::getFilter()
 {
     if (is_allocated == true && is_filled == true)
     {
