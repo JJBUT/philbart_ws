@@ -1,15 +1,16 @@
 #include "initialize.h"
 
-Initialize::Initialize(int np, state_space bounds)
+Initialize::Initialize(int np, state_space bounds): 
+    num_particles{np}, 
+    ss{bounds}
 {
-    num_particles = np;
-    ss= bounds;
-
-    bool is_allocated = allocate();
-    bool is_filled = fill();
+    is_allocated= allocate();
+    is_filled= fill();
 }
 
+
 Initialize::~Initialize() {}
+
 
 bool Initialize::allocate()
 {
@@ -21,7 +22,7 @@ bool Initialize::allocate()
     for (size_t i = 0; i < 2; i++)
     {
         filter->sets[i].particle_count = num_particles;
-        filter->sets[i].particles.reserve(num_particles);
+        filter->sets[i].particles.resize(num_particles);
     }
     
     return true;
@@ -29,6 +30,15 @@ bool Initialize::allocate()
 
 bool Initialize::fill()
 {
+    for (size_t i = 0; i < filter->sets[0].particle_count; i++)
+    {
+        std::vector<double> rnv= sl::uniform_dist(4); // "random number vector"
+        filter->sets[0].particles[i].p.s[0]=ss.x[0]+rnv[0]*(ss.x[1]-ss.x[0]);
+        filter->sets[0].particles[i].p.s[1]=ss.y[0]+rnv[1]*(ss.y[1]-ss.y[0]);
+        filter->sets[0].particles[i].p.s[2]=ss.z[0]+rnv[2]*(ss.z[1]-ss.z[0]);
+        filter->sets[0].particles[i].p.s[3]=ss.rate[0]+rnv[3]*(ss.rate[1]-ss.rate[0]);
+        filter->sets[0].particles[i].weight=1.0/filter->sets[0].particle_count;
+    }
     
     return true;
 }
