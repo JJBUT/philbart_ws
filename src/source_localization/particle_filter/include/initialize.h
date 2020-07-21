@@ -9,7 +9,6 @@
 
 class Initialize
 {
-private:
     bool is_allocated;
     bool is_filled;
 
@@ -28,9 +27,11 @@ public:
     Initialize(int np, state_space bounds);
     ~Initialize();
 
+
     // You may return std::unique_ptr<T> to express that the function creates 
     // an object and immediately gives the ownership of it to the caller. Very typical for factory 
     // functions - they often return smart pointer to base type or vector of smart pointers.
+    
     // Return unique pointer to the most critical filter infrastructure
     std::unique_ptr<filter_state> GetFilter();
    
