@@ -38,12 +38,6 @@ struct filter_state
     set sets[2];
 };
 
-// Linear offset and 2D rotational yaw
-struct transformation
-{
-    double xyz_yaw[4];
-};
-
 // The fixed bounds on the 4D state space
 struct state_space
 {
@@ -74,7 +68,7 @@ struct measurement
 
 namespace sl{
 // Return a test point transformed into a source local (source being the particle of concern) frame
-position transform(const position& source, const position& test_point, const transformation& tf);
+position transform(const position& source, const position& test_point, const double yaw);
 
 // Return a 1D vector of uniform random numbers from 0 to 1
 std::vector<double> uniform_dist(int count);
