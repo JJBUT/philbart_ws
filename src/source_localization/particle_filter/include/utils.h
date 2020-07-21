@@ -66,6 +66,7 @@ struct measurement
     double az;
     double vel;
     double conc;
+    int time_stamp;
 };
 
 
