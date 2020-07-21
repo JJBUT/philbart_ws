@@ -53,6 +53,23 @@ struct state_space
     double rate[2];
 };
 
+// Wind model per the Gaussian Plume model classifications
+struct wind_model
+{
+    double sy[3];
+    double sz[3];
+};
+
+// Wind velocity and azimuth plus gas concentration
+struct measurement
+{
+    double az;
+    double vel;
+    double conc;
+};
+
+
+
 
 namespace sl{
 // Return a test point transformed into a source local (source being the particle of concern) frame
