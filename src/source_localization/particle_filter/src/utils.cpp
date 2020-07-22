@@ -22,14 +22,14 @@ std::vector<double> uniform_dist(int count)
     return rnv;
 }
 
-position transform(const position& source, const position& test_point, const double yaw)
+position transform(const state& source, const position& test_point, const double yaw)
 {
     position temp_local;
 
     // Translation
-    temp_local.pos[0]= test_point.pos[0] - source.pos[0];
-    temp_local.pos[1]= test_point.pos[1] - source.pos[1];
-    temp_local.pos[2]= test_point.pos[2] - source.pos[2];
+    temp_local.pos[0]= test_point.pos[0] - source.s[0];
+    temp_local.pos[1]= test_point.pos[1] - source.s[1];
+    temp_local.pos[2]= test_point.pos[2] - source.s[2];
 
     // Rotation
     double R[3][3]= {};
@@ -48,7 +48,6 @@ position transform(const position& source, const position& test_point, const dou
             local.pos[i]+= temp_local.pos[j] * R[j][i];
         }
     }
-
     return local;
 }
 
