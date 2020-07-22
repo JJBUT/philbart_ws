@@ -21,7 +21,7 @@ public:
     Predict(const filter_state& filt, wind_model wm );
     ~Predict();
 
-    // Calculate the individually concentration the GP model predicts at some test point from each particle
+    // Calculate individually the concentration the GP model predicts at some test point from each particle
     void predictConcentration(const measurement& meas, const position& test_point);
     // Get the predicted concentration
     std::vector<double> getPredictedConcentrations();
