@@ -41,6 +41,9 @@ struct filter_state
 // The fixed bounds on the 4D state space
 struct state_space
 {
+    state_space(double x_min, double x_max, double y_min, double y_max, double z_min, double z_max, double rate_min, double rate_max)
+        :x{x_min, x_max}, y{y_min, y_max}, z{z_min, z_max}, rate{rate_min, rate_max}
+        {};
     double x[2];
     double y[2];
     double z[2];
@@ -50,8 +53,15 @@ struct state_space
 // Wind model per the Gaussian Plume model classifications
 struct wind_model
 {
+    
+    wind_model(double sya, double syb, double syc, double sza, double szb, double szc )
+        :sy{sya,syb,syc},sz{sza,szb,szc}
+        {
+
+        };
     double sy[3];
     double sz[3];
+    
 };
 
 // Wind velocity and azimuth plus gas concentration
