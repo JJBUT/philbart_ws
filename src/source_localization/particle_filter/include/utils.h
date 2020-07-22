@@ -6,7 +6,7 @@
 //3D position
 struct position
 {
-    double pos[3];
+    double pos[3]={0};  //Is this the best solution to make sure vars dont hold dangerous non zero values? i.e. position local; in sl::transform?
 };
 
 
@@ -14,7 +14,7 @@ struct position
 struct state
 {
     // Global 3D position and emission rate (x,y,z,q)
-    double s[4];
+    double s[4]={0};
 };
 
 // A single weighted sample
@@ -64,9 +64,12 @@ struct wind_model
     
 };
 
-// Wind velocity and azimuth plus gas concentration
+// Azimuth, Velocity, Concentration, time stamp
 struct measurement
 {
+    measurement(double azimuth, double velocity, double concentration, int time_stamp)
+        : az{azimuth}, vel{velocity}, conc{concentration}, time_stamp{time_stamp}
+        {};
     double az;
     double vel;
     double conc;
@@ -78,7 +81,7 @@ struct measurement
 
 namespace sl{
 // Return a test point transformed into a source local (source being the particle of concern) frame
-position transform(const position& source, const position& test_point, const double yaw);
+position transform(const state& source, const position& test_point, const double yaw);
 
 // Return a 1D vector of uniform random numbers from 0 to 1
 std::vector<double> uniform_dist(int count);
