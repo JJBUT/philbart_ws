@@ -23,7 +23,7 @@ void Predict::predictConcentration(const measurement& meas, const position& test
         
         if (test_point_source_local.pos[0]<0.0)
         {
-            predicted_concentration[i]=0;
+            predicted_concentration[i]=0; //Downwind sources cannot produce concentration at upwind locations
         }else
         {
             double sy= sigma(wm.sy, test_point_source_local);
@@ -36,11 +36,10 @@ void Predict::predictConcentration(const measurement& meas, const position& test
             double expz= std::exp((std::pow(-test_point_source_local.pos[2],2))/(2*std::pow(test_point_source_local.pos[2],2)));
             double norm= ((rate/speed)/(2*M_PI*sy*sz));
 
-            double C= norm*expy*expz; 
-
-            predicted_concentration[i]=C;
+            predicted_concentration[i]=norm*expy*expz;
         }
    }
+   return;
 }
 
 std::vector<double> Predict::getPredictedConcentrations() {return predicted_concentration;}
