@@ -16,19 +16,31 @@ Predict::~Predict(){}
 
 void Predict::predictConcentration(const measurement& meas, const position& test_point)
 {
-    //Questions: is the tf fn. a potential inline candidate?
-    //For particle in set 0, 
-        //Convert the test point into a particle local frame using the azimuth and position data
-        //Calculate the concentration that we predict we should sense at our curerent location
-    std::cout<<"test point "<< test_point.pos[0]<<" "<< test_point.pos[1]<<" "<< test_point.pos[2]<<"\n"; 
     for (size_t i = 0; i < filter.sets[0].particle_count; i++)
     {
-        position test_point_source_local= sl::transform(filter.sets[0].particles[i].p, test_point, meas.az);
+        state source = filter.sets[0].particles[i].p;
+        position test_point_source_local= sl::transform(source, test_point, meas.az);
+        
+        if (test_point_source_local.pos[0]<0.0)
+        {
+            predicted_concentration[i]=0;
+        }else
+        {
+            double sy= sigma(wm.sy, test_point_source_local);
+            double sz= sigma(wm.sz, test_point_source_local);
 
-        std::cout<<"source position: "<< filter.sets[0].particles[i].p.s[0]<<" "<<filter.sets[0].particles[i].p.s[1]<<" "<<filter.sets[0].particles[i].p.s[2]<<"\n";
-        std::cout<<"test point source local: "<< test_point_source_local.pos[0]<<" "<<test_point_source_local.pos[1]<<" "<<test_point_source_local.pos[2]<<"\n";
-    }
-    
+            double rate= source.s[3];
+            double speed= meas.vel;
+
+            double expy= std::exp((std::pow(-test_point_source_local.pos[1],2))/(2*std::pow(test_point_source_local.pos[1],2)));
+            double expz= std::exp((std::pow(-test_point_source_local.pos[2],2))/(2*std::pow(test_point_source_local.pos[2],2)));
+            double norm= ((rate/speed)/(2*M_PI*sy*sz));
+
+            double C= norm*expy*expz; 
+
+            predicted_concentration[i]=C;
+        }
+   }
 }
 
 std::vector<double> Predict::getPredictedConcentrations() {return predicted_concentration;}
