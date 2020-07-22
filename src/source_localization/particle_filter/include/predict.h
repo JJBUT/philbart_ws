@@ -9,20 +9,22 @@
 
 class Predict
 {
-//Classes are private by default :)
-    const filter_state& filter; //By being  a referencce is the filter autmatically updated?
+    const filter_state& filter; 
     wind_model wm;
 
     std::vector<double> predicted_concentration;
+    
+    // Calculate the vertical and horizontal dispersion as a function of downwind distance
+    double sigma(const double wm_i[3], const position& local_test_point);
 
 public:
-    //If you want the function to use the pointee, pass a reference to it. 
-    // There's no reason to tie the function to work only with some kind of smart pointer
     Predict(const filter_state& filt, wind_model wm );
     ~Predict();
 
-    void PredictConcentration(const measurement& meas, const position& test_point);
-    std::vector<double> GetPredictedConcentrations();
+    // Calculate the individually concentration the GP model predicts at some test point from each particle
+    void predictConcentration(const measurement& meas, const position& test_point);
+    // Get the predicted concentration
+    std::vector<double> getPredictedConcentrations();
 };
 
 
