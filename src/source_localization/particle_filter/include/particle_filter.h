@@ -58,7 +58,8 @@ struct measurement
 
 
 class ParticleFilter{
-    void initialize(int); //For filter that has been constructed with params
+    // Initialize a filter for an instance given the ss and wm parameters in the constructor
+    void initialize(int); //DONE 
     void predict();
     void reweight();
     void resample();
@@ -70,15 +71,19 @@ class ParticleFilter{
     bool initialized;
     
 public:
-    ParticleFilter();
-    void initialize(int, state_space, wind_model); //For filter that is not constructed with params
-
-    ParticleFilter(int, state_space, wind_model);
-
+    // Default constructor
+    ParticleFilter(); //DONE 
+    // Paramaterized (complete) constructor
+    ParticleFilter(int, state_space, wind_model); //DONE 
+    // Default destructor
     ~ParticleFilter();
 
-    void updateFilter(measurement); //Execute predict,reweight,resample
-    void getFilter();
+    // Initialize a filter for an instance NOT given the ss and wm parameters in the constructor
+    void initialize(int, state_space, wind_model); //DONE 
+    
+    //Execute predict,reweight,resample when provided a measurement
+    void updateFilter(measurement); 
+    void getFilter();   
     void printStatistics();
     
     
