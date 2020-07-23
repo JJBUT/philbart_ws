@@ -30,7 +30,7 @@
             "name": "Debug C++",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/src/source_localization/particle_filter/src/main",
+            "program": "${workspaceFolder}/src/source_localization/particle_filter/src/particle_filter",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
