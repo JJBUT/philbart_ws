@@ -14,6 +14,7 @@ struct particle{
 };
 struct particle_set{
     std::vector<particle> particles;
+    int np;
 };
 struct state_space{
     // Default constructor
@@ -57,13 +58,7 @@ struct measurement
 
 
 class ParticleFilter{
-    ParticleFilter();
-    ParticleFilter(int, state_space, wind_model);
-
-    ~ParticleFilter();
-
-    void initialize(int, state_space, wind_model); //For filter that is not constructed with params
-    void initialize(); //For filter that has been constructed with params
+    void initialize(int); //For filter that has been constructed with params
     void predict();
     void reweight();
     void resample();
@@ -71,13 +66,29 @@ class ParticleFilter{
     particle_set ps;
     state_space ss_;
     wind_model wm_;
+
+    bool initialized;
     
 public:
+    ParticleFilter();
+    void initialize(int, state_space, wind_model); //For filter that is not constructed with params
+
+    ParticleFilter(int, state_space, wind_model);
+
+    ~ParticleFilter();
+
     void updateFilter(measurement); //Execute predict,reweight,resample
     void getFilter();
     void printStatistics();
     
     
 };
+
+//utils
+namespace pf{
+    // Generates a uniformly distributed random number vector of length count
+    std::vector<double> uniform_rnv(int count);
+
+} //END of pf namespace
 
 #endif
