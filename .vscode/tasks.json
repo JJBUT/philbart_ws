@@ -15,9 +15,6 @@
                 "-std=c++11",
                 "-I${workspaceFolder}/src/source_localization/particle_filter/include/",
                 "${file}",
-                "${workspaceFolder}/src/source_localization/particle_filter/src/utils.cpp",
-                "${workspaceFolder}/src/source_localization/particle_filter/src/initialize.cpp",
-                "${workspaceFolder}/src/source_localization/particle_filter/src/predict.cpp",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],
