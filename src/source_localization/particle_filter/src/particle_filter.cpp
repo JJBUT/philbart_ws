@@ -54,24 +54,52 @@ void ParticleFilter::initialize(int np){
     return;
 };
 
+void ParticleFilter::updateFilter(measurement z){
+    predict(z);
+    //reweight();
+    //resample();
+}
+
+void ParticleFilter::predict(measurement z){
+    double source_local_test_point[3];
+
+    for(auto& p: ps.particles){
+        pf::transform(source_local_test_point, z.location, p.position, z.az);
+    }
+    return;
+}
+void ParticleFilter::reweight(){
+    for(auto& p: ps.particles){
+        std::cout<<"Reweight\n";      
+    }
+    return;
+}
+void ParticleFilter::resample(){
+    for(auto& p: ps.particles){
+        std::cout<<"Resample\n";      
+    }
+    return;
+}
 
 
 int main(){
     wind_model fake_wind_model;
     state_space fake_state_space(-10,10,-10,10,-10,10,0.0,500);
-    measurement fake_measurement;
+    measurement fake_measurement(0.0,1.0,45.5,11199000);
+    fake_measurement.location[0]=2;
+    fake_measurement.location[1]=0;
+    fake_measurement.location[2]=2.5;
 
-    //ParticleFilter fake_particle_filter(20, fake_state_space, fake_wind_model);
-    ParticleFilter fake_particle_filter;
-    fake_particle_filter.initialize(10, fake_state_space, fake_wind_model);
+    ParticleFilter fake_particle_filter(20, fake_state_space, fake_wind_model);
+    
+    fake_particle_filter.updateFilter(fake_measurement);
     
     return 0;
 }
 
 
 namespace pf{
-std::vector<double> uniform_rnv(int count)
-{   
+std::vector<double> uniform_rnv(int count){   
     std::random_device rnd_device;
     std::mt19937 mersenne_engine {rnd_device()};  // Generates random doubles
     std::uniform_real_distribution<double> dist (0, 1.0);
@@ -82,4 +110,32 @@ std::vector<double> uniform_rnv(int count)
 
     return rnv;
 }
+
+void transform(double source_local_test_point[3], const double test_point[3], const double source[3], const double rotation){
+    double temp_local[3];
+
+    // Translation
+    temp_local[0]= test_point[0] - source[0];
+    temp_local[1]= test_point[1] - source[1];
+    temp_local[2]= test_point[2] - source[2];
+
+    // Rotation
+    double R[3][3]= {};
+    R[0][0]= cos(rotation);
+    R[0][1]= -sin(rotation);
+    R[1][0]= sin(rotation);
+    R[1][1]= cos(rotation);
+    R[2][2]= 1;
+
+    // Recreate np.dot(local,R)
+    source_local_test_point={0};
+    for (size_t i = 0; i < 3; i++){ // Traverse the vector
+        for (size_t j = 0; j < 3; j++){ //Traverse the columns of the matrix
+            source_local_test_point[i]+= temp_local[j] * R[j][i];
+        }
+    }
+
+    return;
+}
+
 } //END of pf namespace

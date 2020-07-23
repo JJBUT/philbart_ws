@@ -60,7 +60,7 @@ struct measurement
 class ParticleFilter{
     // Initialize a filter for an instance given the ss and wm parameters in the constructor
     void initialize(int); //DONE 
-    void predict();
+    void predict(measurement);
     void reweight();
     void resample();
 
@@ -80,7 +80,7 @@ public:
 
     // Initialize a filter for an instance NOT given the ss and wm parameters in the constructor
     void initialize(int, state_space, wind_model); //DONE 
-    
+
     //Execute predict,reweight,resample when provided a measurement
     void updateFilter(measurement); 
     void getFilter();   
@@ -93,7 +93,8 @@ public:
 namespace pf{
     // Generates a uniformly distributed random number vector of length count
     std::vector<double> uniform_rnv(int count);
-
+    // Transform measurement location (passed by reference) into source local test_point
+    void transform(double, const double, const double, const double);
 } //END of pf namespace
 
 #endif
