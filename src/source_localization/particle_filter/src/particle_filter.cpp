@@ -26,7 +26,7 @@ void ParticleFilter::initialize(int np, state_space ss, wind_model wm){
 
         for(auto& p: ps.particles){
             p.weight=1.0/np;
-            auto rnv= pf::uniform_rnv(4);
+            auto rnv= pf::uniform_rn(4);
             p.position[0]= ss_.x[0]+rnv[0]*(ss_.x[1]-ss_.x[0]);
             p.position[1]= ss_.y[0]+rnv[1]*(ss_.y[1]-ss_.y[0]);
             p.position[2]= ss_.z[0]+rnv[2]*(ss_.z[1]-ss_.z[0]);
@@ -44,7 +44,7 @@ void ParticleFilter::initialize(int np){
 
     for(auto& p: ps.particles){
         p.weight=1.0/np;
-        auto rnv= pf::uniform_rnv(4);
+        auto rnv= pf::uniform_rn(4);
         p.position[0]= ss_.x[0]+rnv[0]*(ss_.x[1]-ss_.x[0]);
         p.position[1]= ss_.y[0]+rnv[1]*(ss_.y[1]-ss_.y[0]);
         p.position[2]= ss_.z[0]+rnv[2]*(ss_.z[1]-ss_.z[0]);
@@ -59,7 +59,7 @@ void ParticleFilter::updateFilter(measurement z){
     predict(z);
     reweight(z);
     // if Neff<.5;{
-        // //resample();
+    resample();
     // }
     
 }
@@ -112,9 +112,22 @@ void ParticleFilter::reweight(measurement z){
 }
 
 void ParticleFilter::resample(){
-    for(auto& p: ps.particles){
-        std::cout<<"Resample\n";      
+    particle_set new_ps;
+    new_ps.particles.resize(ps.np);
+    new_ps.np= ps.np;
+    new_ps.Neff= ps.Neff;
+    new_ps.R= ps.R;
+    
+    std::vector<double> weight_sum{0.0};
+    for(const auto& p: ps.particles){
+        weight_sum.push_back(weight_sum.back()+p.weight); 
     }
+
+    for(auto& new_p: new_ps.particles){
+        double pick= pf::uniform_rn();
+         
+    }
+
     return;
 }
 
@@ -136,7 +149,7 @@ int main(){
 
 
 namespace pf{
-std::vector<double> uniform_rnv(int count){   
+std::vector<double> uniform_rn(int count){   
     std::random_device rnd_device;
     std::mt19937 mersenne_engine {rnd_device()};  // Generates random doubles
     std::uniform_real_distribution<double> dist (0, 1.0);
@@ -146,6 +159,14 @@ std::vector<double> uniform_rnv(int count){
     std::generate(rnv.begin(), rnv.end(), gen);
 
     return rnv;
+}
+
+double uniform_rn(){   
+    std::random_device rnd_device;
+    std::mt19937 mersenne_engine {rnd_device()};  // Generates random doubles
+    std::uniform_real_distribution<double> dist (0, 1.0);
+    
+    return dist(mersenne_engine);
 }
 
 void transform(double source_local_test_point[3], const double test_point[3], const double source[3], const double& rotation){
