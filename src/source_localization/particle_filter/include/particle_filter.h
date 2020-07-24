@@ -1,5 +1,5 @@
 #ifndef PARTICLE_FILTER_H
-#define PARTICLE_FILTER__H
+#define PARTICLE_FILTER_H
 
 #include "vector"
 
@@ -15,6 +15,7 @@ struct particle{
 struct particle_set{
     std::vector<particle> particles;
     int np;
+    double Neff;
 };
 struct state_space{
     // Default constructor
@@ -60,7 +61,7 @@ struct measurement
 class ParticleFilter{
     // Initialize a filter for an instance given the ss and wm parameters in the constructor
     void initialize(int); //DONE 
-    void predict(measurement);
+    void predict(measurement);  //DONE
     void reweight();
     void resample();
 
