@@ -1,6 +1,7 @@
 #include "random"
 #include "algorithm" //std::generate()
 #include "iostream"
+#include "cmath"
 
 #include "particle_filter.h"
 
@@ -65,6 +66,20 @@ void ParticleFilter::predict(measurement z){
     
     for(auto& p: ps.particles){
         pf::transform(source_local_test_point, z.location, p.position, z.az);
+        
+        if(source_local_test_point[0]<0){
+            p.downwind_concentration=0.0;
+        }else{
+            double sy= wm_.sy[0]*source_local_test_point[0]*std::pow(1+wm_.sy[1]*source_local_test_point[0],-wm_.sy[2]);;
+            double sz= wm_.sz[0]*source_local_test_point[0]*std::pow(1+wm_.sz[1]*source_local_test_point[0],-wm_.sz[2]);;
+
+            double expy= std::exp((std::pow(-source_local_test_point[1],2))/(2*std::pow(source_local_test_point[1],2)));
+            double expz= std::exp((std::pow(-source_local_test_point[2],2))/(2*std::pow(source_local_test_point[2],2)));
+
+            double norm= ((p.rate/z.vel)/(2*M_PI*sy*sz));
+
+            p.downwind_concentration= norm*expy*expz;
+        }
     }
     return;
 }
