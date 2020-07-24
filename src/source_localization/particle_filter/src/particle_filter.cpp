@@ -57,7 +57,7 @@ void ParticleFilter::initialize(int np){
 
 void ParticleFilter::updateFilter(measurement z){
     predict(z);
-    reweight();
+    reweight(z);
     // if Neff<.5;{
         // //resample();
     // }
@@ -71,7 +71,7 @@ void ParticleFilter::predict(measurement z){
         pf::transform(source_local_test_point, z.location, p.position, z.az);
 
         if(source_local_test_point[0]<0){
-            p.downwind_concentration=0.0;
+            p.downwind_conc=0.0;
         }else{
             double sy= wm_.sy[0]*source_local_test_point[0]*std::pow(1+wm_.sy[1]*source_local_test_point[0], -wm_.sy[2]);;
             double sz= wm_.sz[0]*source_local_test_point[0]*std::pow(1+wm_.sz[1]*source_local_test_point[0], -wm_.sz[2]);;
@@ -81,15 +81,32 @@ void ParticleFilter::predict(measurement z){
 
             double norm= ((p.rate/z.vel)/(2*M_PI*sy*sz));
 
-            p.downwind_concentration= norm*expy*expz;
+            p.downwind_conc= norm*expy*expz;
         }
     }
     return;
 }
 
-void ParticleFilter::reweight(){
+void ParticleFilter::reweight(measurement z){
+
+    double max_weight=0.0;
+    // Reweight using a gaussian and find the max weight value
     for(auto& p: ps.particles){
-        std::cout<<"Reweight\n";      
+        std::cout<<"Reweight\n";
+        p.weight= p.weight*pf::gaussian(p.downwind_conc, z.conc, ps.R);
+        if(p.weight>max_weight) max_weight = p.weight;
+    }
+
+    // Calculate exponential of max weight adjusted log weight
+    double weight_sum=0;
+    for(auto& p: ps.particles){
+        p.weight= std::exp(std::log(p.weight)-max_weight);
+        weight_sum+=p.weight; 
+    }
+
+    // Renormalize the cdf to 1
+    for(auto& p: ps.particles){
+        p.weight/=weight_sum;
     }
     return;
 }
@@ -157,6 +174,10 @@ void transform(double source_local_test_point[3], const double test_point[3], co
     }
 
     return;
+}
+
+double gaussian(double x, double mu, double sigma){
+    return (1/(std::sqrt(2*M_PI)*sigma))*std::exp(-0.5*std::pow((x-mu)/sigma, 2));
 }
 
 } //END of pf namespace
