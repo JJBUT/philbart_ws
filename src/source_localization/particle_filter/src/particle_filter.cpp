@@ -125,8 +125,13 @@ void ParticleFilter::resample(){
 
     for(auto& new_p: new_ps.particles){
         double pick= pf::uniform_rn();
-         
+        for(int i=0; i<ps.np; i++){
+            if(pick>weight_sum[i] && pick< weight_sum[i+1]){
+                new_p= ps.particles[i];
+            }
+        }
     }
+    ps= new_ps;
 
     return;
 }
