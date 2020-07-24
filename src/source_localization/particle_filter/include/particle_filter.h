@@ -64,10 +64,10 @@ struct measurement
 
 class ParticleFilter{
     // Initialize a filter for an instance given the ss and wm parameters in the constructor
-    void initialize(int); //DONE 
+    void initialize(int); // Change Neff and R to params
     void predict(measurement);  //DONE
-    void reweight(measurement);
-    void resample();
+    void reweight(measurement); //DONE
+    void resample(); //DONE
 
     particle_set ps;
     state_space ss_;
@@ -84,7 +84,7 @@ public:
     ~ParticleFilter();
 
     // Initialize a filter for an instance NOT given the ss and wm parameters in the constructor
-    void initialize(int, state_space, wind_model); //DONE 
+    void initialize(int, state_space, wind_model); // Change Neff and R to params 
 
     //Execute predict,reweight,resample when provided a measurement
     void updateFilter(measurement); 
