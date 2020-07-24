@@ -7,7 +7,7 @@ struct particle{
     //Fraction of the probability distribution
     double weight;
     //Concentration produced by the particle at some downwind test point
-    double downwind_concentration;
+    double downwind_conc;
     //The state which we are trying to predict is the combination of position and rate
     double position[3];
     double rate;
@@ -15,7 +15,11 @@ struct particle{
 struct particle_set{
     std::vector<particle> particles;
     int np;
+
+    // Number of "effective" particles
     double Neff;
+    // Measurement noise
+    double R;
 };
 struct state_space{
     // Default constructor
@@ -62,7 +66,7 @@ class ParticleFilter{
     // Initialize a filter for an instance given the ss and wm parameters in the constructor
     void initialize(int); //DONE 
     void predict(measurement);  //DONE
-    void reweight();
+    void reweight(measurement);
     void resample();
 
     particle_set ps;
@@ -93,9 +97,13 @@ public:
 //utils
 namespace pf{
     // Generates a uniformly distributed random number vector of length count
-    std::vector<double> uniform_rnv(int count);
+    std::vector<double> uniform_rn(int count);
+    // Generates a uniformly distributed random number 
+    double uniform_rn();
     // Transform measurement location (passed by reference) into source local test_point
     void transform(double*, const double*, const double*, const double&);
+    //Generate a sample at a point x given a distribution with mean mu and standard deviation sigma
+    double gaussian(double, double, double);
 } //END of pf namespace
 
 #endif
