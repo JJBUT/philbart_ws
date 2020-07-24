@@ -94,7 +94,7 @@ namespace pf{
     // Generates a uniformly distributed random number vector of length count
     std::vector<double> uniform_rnv(int count);
     // Transform measurement location (passed by reference) into source local test_point
-    void transform(double, const double, const double, const double);
+    void transform(double*, const double*, const double*, const double&);
 } //END of pf namespace
 
 #endif

@@ -62,7 +62,7 @@ void ParticleFilter::updateFilter(measurement z){
 
 void ParticleFilter::predict(measurement z){
     double source_local_test_point[3];
-
+    
     for(auto& p: ps.particles){
         pf::transform(source_local_test_point, z.location, p.position, z.az);
     }
@@ -88,7 +88,7 @@ int main(){
     measurement fake_measurement(0.0,1.0,45.5,11199000);
     fake_measurement.location[0]=2;
     fake_measurement.location[1]=0;
-    fake_measurement.location[2]=2.5;
+    fake_measurement.location[2]=0;
 
     ParticleFilter fake_particle_filter(20, fake_state_space, fake_wind_model);
     
@@ -111,7 +111,7 @@ std::vector<double> uniform_rnv(int count){
     return rnv;
 }
 
-void transform(double source_local_test_point[3], const double test_point[3], const double source[3], const double rotation){
+void transform(double source_local_test_point[3], const double test_point[3], const double source[3], const double& rotation){
     double temp_local[3];
 
     // Translation
@@ -128,8 +128,9 @@ void transform(double source_local_test_point[3], const double test_point[3], co
     R[2][2]= 1;
 
     // Recreate np.dot(local,R)
-    source_local_test_point={0};
+    
     for (size_t i = 0; i < 3; i++){ // Traverse the vector
+        source_local_test_point[i]=0;
         for (size_t j = 0; j < 3; j++){ //Traverse the columns of the matrix
             source_local_test_point[i]+= temp_local[j] * R[j][i];
         }
