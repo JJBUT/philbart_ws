@@ -20,10 +20,13 @@ ParticleFilter::~ParticleFilter(){
 void ParticleFilter::initialize(int np, state_space ss, wind_model wm){
     if(initialized == false){
         ps.particles.resize(np);
-        ps.np= np;
         ss_= ss;
         wm_= wm;
 
+        ps.np= np;
+        ps.Neff= 0.5;
+        ps.R= 10.0;
+    
         for(auto& p: ps.particles){
             p.weight=1.0/np;
             auto rnv= pf::uniform_rn(4);
@@ -41,6 +44,8 @@ void ParticleFilter::initialize(int np, state_space ss, wind_model wm){
 void ParticleFilter::initialize(int np){
     ps.particles.resize(np);
     ps.np= np;
+    ps.Neff= 0.5;
+    ps.R= 10.0;
 
     for(auto& p: ps.particles){
         p.weight=1.0/np;
@@ -73,8 +78,8 @@ void ParticleFilter::predict(measurement z){
         if(source_local_test_point[0]<0){
             p.downwind_conc=0.0;
         }else{
-            double sy= wm_.sy[0]*source_local_test_point[0]*std::pow(1+wm_.sy[1]*source_local_test_point[0], -wm_.sy[2]);;
-            double sz= wm_.sz[0]*source_local_test_point[0]*std::pow(1+wm_.sz[1]*source_local_test_point[0], -wm_.sz[2]);;
+            double sy= wm_.sy[0]*source_local_test_point[0]*std::pow(1.0+wm_.sy[1]*source_local_test_point[0], -wm_.sy[2]);;
+            double sz= wm_.sz[0]*source_local_test_point[0]*std::pow(1.0+wm_.sz[1]*source_local_test_point[0], -wm_.sz[2]);;
 
             double expy= std::exp((std::pow(-source_local_test_point[1], 2))/(2*std::pow(source_local_test_point[1], 2)));
             double expz= std::exp((std::pow(-source_local_test_point[2], 2))/(2*std::pow(source_local_test_point[2], 2)));
@@ -92,7 +97,6 @@ void ParticleFilter::reweight(measurement z){
     double max_weight=0.0;
     // Reweight using a gaussian and find the max weight value
     for(auto& p: ps.particles){
-        std::cout<<"Reweight\n";
         p.weight= p.weight*pf::gaussian(p.downwind_conc, z.conc, ps.R);
         if(p.weight>max_weight) max_weight = p.weight;
     }
@@ -100,7 +104,7 @@ void ParticleFilter::reweight(measurement z){
     // Calculate exponential of max weight adjusted log weight
     double weight_sum=0;
     for(auto& p: ps.particles){
-        p.weight= std::exp(std::log(p.weight)-max_weight);
+        p.weight= std::exp(std::log(p.weight/max_weight));
         weight_sum+=p.weight; 
     }
 
@@ -128,22 +132,22 @@ void ParticleFilter::resample(){
         for(int i=0; i<ps.np; i++){
             if(pick>weight_sum[i] && pick< weight_sum[i+1]){
                 new_p= ps.particles[i];
+                new_p.weight=1.0/ps.np;
             }
         }
     }
     ps= new_ps;
-
     return;
 }
 
 
 int main(){
-    wind_model fake_wind_model;
-    state_space fake_state_space(-10,10,-10,10,-10,10,0.0,500);
-    measurement fake_measurement(0.0,1.0,45.5,11199000);
-    fake_measurement.location[0]=2;
-    fake_measurement.location[1]=0;
-    fake_measurement.location[2]=0;
+    wind_model fake_wind_model(0.11, 0.0001, 0.50, 0.08, 0.0002, 0.5);
+    state_space fake_state_space(-10.0,10.0,-10.0,10.0,-10.0,10.0,0.0,1000.0);
+    measurement fake_measurement(0.0,1.0,500,11199000);
+    fake_measurement.location[0]=2.0;
+    fake_measurement.location[1]=0.0;
+    fake_measurement.location[2]=0.0;
 
     ParticleFilter fake_particle_filter(20, fake_state_space, fake_wind_model);
     
