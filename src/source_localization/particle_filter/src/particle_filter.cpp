@@ -26,8 +26,9 @@ void ParticleFilter::initialize(int np, state_space ss, wind_model wm){
         wm_= wm;
 
         ps.np= np;
-        ps.Neff_lim= 0.5;
-        ps.R= 10.0;
+        ps.Neff_lim= 0.8;
+        ps.R= 1.0;
+        ps.Q= 1.0;
     
         for(auto& p: ps.particles){
             p.weight=1.0/np;
@@ -46,8 +47,9 @@ void ParticleFilter::initialize(int np, state_space ss, wind_model wm){
 void ParticleFilter::initialize(int np){
     ps.particles.resize(np);
     ps.np= np;
-    ps.Neff_lim= 0.5;
-    ps.R= 10.0;
+    ps.Neff_lim= 0.8;
+    ps.R= 1.0;
+    ps.Q= 1.0;
 
     for(auto& p: ps.particles){
         p.weight=1.0/np;
@@ -67,13 +69,12 @@ void ParticleFilter::updateFilter(measurement z){
     reweight(z);
     if ( ifNeff() ){
         resample();
-    }
-    // }
-    
+    }    
 }
 
 void ParticleFilter::predict(measurement z){
-    double source_local_test_point[3];
+    std::cout<<"measured concentration: "<<z.conc<<" ";
+    double source_local_test_point[3]={0};
     
     for(auto& p: ps.particles){
         pf::transform(source_local_test_point, z.location, p.position, z.az);
@@ -84,8 +85,8 @@ void ParticleFilter::predict(measurement z){
             double sy= wm_.sy[0]*source_local_test_point[0]*std::pow(1.0+wm_.sy[1]*source_local_test_point[0], -wm_.sy[2]);;
             double sz= wm_.sz[0]*source_local_test_point[0]*std::pow(1.0+wm_.sz[1]*source_local_test_point[0], -wm_.sz[2]);;
 
-            double expy= std::exp((std::pow(-source_local_test_point[1], 2))/(2*std::pow(source_local_test_point[1], 2)));
-            double expz= std::exp((std::pow(-source_local_test_point[2], 2))/(2*std::pow(source_local_test_point[2], 2)));
+            double expy= std::exp(-std::pow(source_local_test_point[1], 2)/(2*std::pow(sy, 2)));
+            double expz= std::exp(-std::pow(source_local_test_point[2], 2)/(2*std::pow(sz, 2)));
 
             double norm= ((p.rate/z.vel)/(2*M_PI*sy*sz));
 
@@ -136,6 +137,10 @@ void ParticleFilter::resample(){
             if(pick>weight_sum[i] && pick< weight_sum[i+1]){
                 new_p= ps.particles[i];
                 new_p.weight= 1.0/ps.np;
+
+                new_p.position[0]+=pf::uniform_rn()*ps.Q;
+                new_p.position[1]+=pf::uniform_rn()*ps.Q;
+                new_p.position[2]+=pf::uniform_rn()*ps.Q;
             }
         }
     }
@@ -143,25 +148,26 @@ void ParticleFilter::resample(){
     return;
 }
 
-bool ParticleFilter::ifNeff(){
-    double sum;
+bool ParticleFilter::ifNeff() const{
+    double sum= 0;
     for(auto& p: ps.particles){
         sum+=std::pow(p.weight,2);
     }
-    if(1.0/sum < ps.Neff_lim){
+    if(1.0/sum < ps.Neff_lim*ps.np){
         return true;
     }
     return false;
 }
 
-void ParticleFilter::printStatistics(){
-    std::vector<double> mean(3,0);
+void ParticleFilter::printStatistics() const{
+    std::vector<double> mean(4,0);
     for(auto& p: ps.particles){
         mean[0]+=p.position[0]/ps.np;
         mean[1]+=p.position[1]/ps.np;
         mean[2]+=p.position[2]/ps.np;
+        mean[3]+=p.rate/ps.np;
     }
-    std::cout<<"x_mean: "<< mean[0] <<" y_mean: "<< mean[1] <<" z_mean: "<< mean[2]<<"\n";
+    std::cout<<" x_mean: "<< mean[0] <<" y_mean: "<< mean[1] <<" z_mean: "<< mean[2]<<" rate: "<< mean[3]<<"\n";
 }
 /////////////Playpen Start/////////////
 std::vector< std::vector<double> > read_data( std::string input_file_path ){
@@ -185,12 +191,12 @@ std::vector< std::vector<double> > read_data( std::string input_file_path ){
 
 int main(){
     wind_model fake_wind_model( 0.22, 0.0001, 0.5, 0.20, 0.0, 0.0 );
-    state_space fake_state_space( -100.0, 100.0, -100.0, 100.0, -100.0, 1.0, -1.0, 20000.0 );
+    state_space fake_state_space( -50.0, 50.0, -50.0, 50.0, -1.0, 1.0, 0.0, 20000.0 );
     measurement fake_measurement( 0.0, 1.0, 500, 11199000 );
     fake_measurement.location[0]= 2.0;
     fake_measurement.location[1]= 0.0;
     fake_measurement.location[2]= 0.0;
-    ParticleFilter fake_particle_filter( 1000, fake_state_space, fake_wind_model );
+    ParticleFilter fake_particle_filter( 10000, fake_state_space, fake_wind_model );
     
 
 
@@ -200,9 +206,9 @@ int main(){
         fake_measurement.location[0]= m[0];
         fake_measurement.location[1]= m[1];
         fake_measurement.location[2]= m[2];
-
-        fake_particle_filter.updateFilter(fake_measurement);
         fake_particle_filter.printStatistics();
+        fake_particle_filter.updateFilter(fake_measurement);
+        
         
     }
     return 0;
