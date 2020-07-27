@@ -20,6 +20,8 @@ struct particle_set{
     double Neff_lim;
     // Measurement noise
     double R;
+    // Resampling noise
+    double Q;
 };
 struct state_space{
     // Default constructor
@@ -69,7 +71,7 @@ class ParticleFilter{
     void reweight(measurement); //DONE
     void resample(); //DONE
 
-    bool ifNeff();
+    bool ifNeff() const;
 
     particle_set ps;
     state_space ss_;
@@ -91,7 +93,7 @@ public:
     //Execute predict,reweight,resample when provided a measurement
     void updateFilter(measurement); 
     //void getFilter(); Build proper 3/5/0 rule type class  
-    void printStatistics();
+    void printStatistics() const;
     
     
 };
