@@ -17,7 +17,7 @@ struct particle_set{
     int np;
 
     // Number of "effective" particles
-    double Neff;
+    double Neff_lim;
     // Measurement noise
     double R;
 };
@@ -69,6 +69,8 @@ class ParticleFilter{
     void reweight(measurement); //DONE
     void resample(); //DONE
 
+    bool ifNeff();
+
     particle_set ps;
     state_space ss_;
     wind_model wm_;
@@ -88,7 +90,7 @@ public:
 
     //Execute predict,reweight,resample when provided a measurement
     void updateFilter(measurement); 
-    void getFilter();   
+    //void getFilter(); Build proper 3/5/0 rule type class  
     void printStatistics();
     
     
