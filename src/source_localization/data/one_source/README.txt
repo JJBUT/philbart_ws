@@ -1,0 +1,2 @@
+read robot data with path::: "C:\Users\Jack\OneDrive\UT SPRING 2020\LAB\code\data_sets\one_source\one_source_x_data.json"
+read one source data with path:: C:\Users\Jack\OneDrive\UT SPRING 2020\LAB\code\data_sets\one_source\one_source.json"

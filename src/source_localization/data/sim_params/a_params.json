@@ -1,0 +1,15 @@
+{"frame":{
+ 	"x": [-50.0, 50.0],
+ 	"y": [-50.0, 50.0],
+ 	"z": [0.0, 10.0]
+ 	},
+ "wind_params":{
+ 	"azimuth":-2.0,
+ 	"speed": 1.0,
+ 	"stability":{
+ 		"class": "extremely unstable",
+ 		"sigy": [0.22, 0.0001, 0.5],
+ 		"sigz": [0.20, 0.0, 0.0]		
+  		}
+  	}
+}
