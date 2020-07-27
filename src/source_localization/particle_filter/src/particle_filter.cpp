@@ -2,6 +2,8 @@
 #include "algorithm" //std::generate()
 #include "iostream"
 #include "cmath"
+#include "fstream"
+#include "regex"
 
 #include "particle_filter.h"
 
@@ -129,34 +131,55 @@ void ParticleFilter::resample(){
 
     for(auto& new_p: new_ps.particles){
         double pick= pf::uniform_rn();
-        for(int i=0; i<ps.np; i++){
+        for(int i= 0; i<ps.np; i++){
             if(pick>weight_sum[i] && pick< weight_sum[i+1]){
                 new_p= ps.particles[i];
-                new_p.weight=1.0/ps.np;
+                new_p.weight= 1.0/ps.np;
             }
         }
     }
     ps= new_ps;
     return;
 }
+/////////////Playpen Start/////////////
+std::vector< std::vector<double> > read_data( std::string input_file_path ){
+    std::vector< std::vector<double> > measurements;
 
-
-int main(){
-    wind_model fake_wind_model(0.11, 0.0001, 0.50, 0.08, 0.0002, 0.5);
-    state_space fake_state_space(-10.0,10.0,-10.0,10.0,-10.0,10.0,0.0,1000.0);
-    measurement fake_measurement(0.0,1.0,500,11199000);
-    fake_measurement.location[0]=2.0;
-    fake_measurement.location[1]=0.0;
-    fake_measurement.location[2]=0.0;
-
-    ParticleFilter fake_particle_filter(20, fake_state_space, fake_wind_model);
-    
-    fake_particle_filter.updateFilter(fake_measurement);
-    
-    return 0;
+    std::ifstream filein(input_file_path);
+    if ( filein.is_open() ){
+        std::string line; 
+        while(std::getline(filein, line)){
+            std::istringstream buffer(line);
+            std::vector<double> line{std::istream_iterator<double>(buffer),
+                                     std::istream_iterator<double>()};
+            measurements.push_back(line);
+        }
+        filein.close();
+        return measurements;
+    }
+    std::cout<<"read_data() provided bad file handle ;/\n";
 }
 
 
+int main(){
+    // wind_model fake_wind_model( 0.11, 0.0001, 0.50, 0.08, 0.0002, 0.5 );
+    // state_space fake_state_space( -10.0, 10.0, -10.0, 10.0, -10.0, 10.0, 0.0, 1000.0 );
+    // measurement fake_measurement( 0.0, 1.0, 500, 11199000 );
+    // fake_measurement.location[0]= 2.0;
+    // fake_measurement.location[1]= 0.0;
+    // fake_measurement.location[2]= 0.0;
+    // ParticleFilter fake_particle_filter( 20, fake_state_space, fake_wind_model );
+    // fake_particle_filter.updateFilter(fake_measurement);
+
+
+    std::vector< std::vector<double> > measurements= read_data("/home/jacksubuntu/philbart_ws/src/source_localization/data/one_source/a_data_matlab.txt");
+    for(auto& m: measurements){
+        std::cout<<"I am ready to update this filter after I fill in wind model and state space stuff!\n";
+    }
+    return 0;
+}
+
+/////////////Playpen End/////////////
 namespace pf{
 std::vector<double> uniform_rn(int count){   
     std::random_device rnd_device;
