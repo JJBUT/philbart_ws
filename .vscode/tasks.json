@@ -13,10 +13,13 @@
             "args": [
                 "-g",
                 "-std=c++11",
-                "-I${workspaceFolder}/src/source_localization/particle_filter/include/",
+                "-I${workspaceFolder}/src/anemometer/include/",
+                "-I/usr/local/include/modbus",
                 "${file}",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "${fileDirname}/${fileBasenameNoExtension}",
+                "-L/usr/local/lib/",
+                "-lmodbus"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"

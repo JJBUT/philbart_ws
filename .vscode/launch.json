@@ -27,10 +27,52 @@
             "avoidWindowsConsoleRedirection": true
         },
         {
-            "name": "Debug C++",
+            "name": "Debug C++ Particle Filter",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/src/source_localization/particle_filter/src/particle_filter",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "miDebuggerPath": "/usr/bin/gdb",
+            "avoidWindowsConsoleRedirection": false
+        },
+        {
+            "name": "Debug C++ Playpen",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/source_localization/particle_filter/playpen/main_playpen",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "miDebuggerPath": "/usr/bin/gdb",
+            "avoidWindowsConsoleRedirection": false
+        },
+        {
+            "name": "Debug C++ Anemometer",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/anemometer/src/anemometer",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
