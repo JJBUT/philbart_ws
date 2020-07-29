@@ -5,3 +5,15 @@ src/rviz_satellite
 src/sick_scan
 .catkin_tools/profiles/default/packages/source_localization/devel_manifest.txt
 .catkin_tools/profiles/default/devel_collisions.txt
+
+src/gmx200_anemometer/src/anemometer.pyc
+src/source_localization/particle_filter/include/particle_filter
+
+.catkin_tools/profiles/default/packages/anemometer/devel_manifest.txt
+.catkin_tools/profiles/default/packages/gmx200_anemometer/devel_manifest.txt
+.catkin_tools/profiles/default/packages/source_localization/devel_manifest.txt
+src/gmx200_anemometer/src/anemometer_modbus.pyc
+src/source_localization/particle_filter/playpen/main_playpen
+src/source_localization/particle_filter/src/particle_filter
+src/source_localization/particle_filter/src/main
+
