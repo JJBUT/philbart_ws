@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="tf" type="static_transform_publisher" name="anemometer_link_broadcaster" args="1 0 0 0 0 0 1 base_link anemometer_link 100" />
+
+    <node pkg="gmx200_anemometer" name="anemometer_node" type="anemometer_node.py" output="screen">
+        <param name="port" value="/dev/ttyUSB0" />
+        <param name="baudrate" type="double" value="19200" />
+        <param name="mode" value="RTU" />
+        <param name="timeout" type="int" value="1" />
+        <param name="parity" value="NONE" />
+    </node>
+</launch>

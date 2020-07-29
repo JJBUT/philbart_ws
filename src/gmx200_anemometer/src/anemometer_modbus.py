@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# license removed for brevity
 from minimalmodbus import Instrument
 from minimalmodbus import MODE_RTU
 from minimalmodbus import MODE_ASCII
@@ -31,18 +30,10 @@ class ModbusConnection:
         # Status: start: register 26; length: 1; read_long()
         # Date: start: register 8;  length: 7; read_string()
 
-        direction_deg = self.instrument.read_float(2, number_of_registers=2)
-        direction_rad = radians(direction_deg)
+        azimuth_deg = self.instrument.read_float(2, number_of_registers=2)
+        azimuth_rad = radians(azimuth_deg)
         speed = self.instrument.read_float(4, number_of_registers=2)
+        return(azimuth_rad, speed)
 
-        return(direction_rad, speed)
-
-if __name__ == '__main__':
-    connection = ModbusConnection("/dev/ttyUSB0", 19200, "RTU", 1, "NONE")
-    while True:
-        direction, speed = connection.readAnemometerRegisters()
-        print(direction, speed)
-        
-        
 
 
