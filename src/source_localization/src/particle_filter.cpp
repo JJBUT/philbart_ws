@@ -196,7 +196,7 @@ int main(){
     fake_measurement.location[0]= 2.0;
     fake_measurement.location[1]= 0.0;
     fake_measurement.location[2]= 0.0;
-    ParticleFilter fake_particle_filter( 10000, fake_state_space, fake_wind_model );
+    ParticleFilter fake_particle_filter( 5000, fake_state_space, fake_wind_model );
     
 
 

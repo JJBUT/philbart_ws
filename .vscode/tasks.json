@@ -13,13 +13,10 @@
             "args": [
                 "-g",
                 "-std=c++11",
-                "-I${workspaceFolder}/src/anemometer/include/",
-                "-I/usr/local/include/modbus",
+                "-I${workspaceFolder}/src/source_localization/include/",
                 "${file}",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}",
-                "-L/usr/local/lib/",
-                "-lmodbus"
+                "${fileDirname}/${fileBasenameNoExtension}"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"

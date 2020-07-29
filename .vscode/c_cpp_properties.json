@@ -4,8 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/opt/ros/kinetic/**",
-                "/usr/local/include/modbus"
+                "/opt/ros/kinetic/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
