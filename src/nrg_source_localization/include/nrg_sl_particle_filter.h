@@ -25,18 +25,22 @@ struct particle_set{
 };
 struct state_space{
     /**
-    * @brief 
-    * @param 
-    * @param 
-    * @return 
+    * @brief Construct default zero paramaterized state space
+    * @return Zero intialized state_space 
     */
     state_space():x{0.0, 0.0}, y{0.0, 0.0}, z{0.0, 0.0}, rate{0.0, 0.0} {};
 
     /**
-    * @brief 
-    * @param 
-    * @param 
-    * @return 
+    * @brief Construct input initialized state space
+    * @param x_min The x-dimension lower bound (m)
+    * @param x_max The x-dimension upper bound (m)
+    * @param y_min The y-dimension lower bound (m)
+    * @param y_max The y-dimension upper bound (m)
+    * @param z_min The z-dimension lower bound (m)
+    * @param z_max The z-dimension upper bound (m)
+    * @param rate_min The rate lower bound (?)
+    * @param rate_max The rate upper bound (?)
+    * @return Input initialized state_space
     */
     state_space(double x_min, double x_max, double y_min, double y_max, double z_min, double z_max, double rate_min, double rate_max)
         :x{x_min, x_max}, y{y_min, y_max}, z{z_min, z_max}, rate{rate_min, rate_max}
@@ -49,18 +53,18 @@ struct state_space{
 };
 struct wind_model{
     /**
-    * @brief 
-    * @param 
-    * @param 
-    * @return 
+    * @brief Construct default zero paramaterized wind model
+    * @param sy Horizontal dispersion parameters ()
+    * @param sz Vertical dispersion parameters ()
+    * @return Zero initialized wind_model
     */
     wind_model(): sy{0, 0, 0}, sz{0, 0, 0} {};
 
     /**
-    * @brief 
-    * @param 
-    * @param 
-    * @return 
+    * @brief Construct input initialized wind model
+    * @param sy Horizontal dispersion parameters ()
+    * @param sz Vertical dispersion parameters ()
+    * @return Input initialized wind_model
     */
     wind_model(double sya, double syb, double syc, double sza, double szb, double szc)
         :sy{sya,syb,syc},sz{sza,szb,szc}
@@ -72,37 +76,41 @@ struct wind_model{
 struct measurement
 {
     /**
-    * @brief 
-    * @param 
-    * @param 
-    * @return 
+    * @brief Construct default zero paramaterized measurement
+    * @param az Azimuth of wind velocity (rad)
+    * @param vel Wind velocity (m/s)
+    * @param conc Gas concentration (?)
+    * @param time_stamp Measurement time (s)
+    * @param location XYZ location of measurement (m, m, m)
+    * @return Zero intialized measurement
     */
     measurement(): az{0}, vel{0}, conc{0}, time_stamp{0} {};
 
     /**
-    * @brief 
-    * @param 
-    * @param 
-    * @return 
+    * @brief Construct input initialized measurement
+    * @param az Azimuth of wind velocity (rad)
+    * @param vel Wind velocity (m/s)
+    * @param conc Gas concentration (?)
+    * @param time_stamp Measurement time (s)
+    * @param location XYZ location of measurement (m, m, m)
+    * @return Input initialized measurement
     */
     measurement(double azimuth, double velocity, double concentration, int time_stamp)
         : az{azimuth}, vel{velocity}, conc{concentration}, time_stamp{time_stamp}
         {};
-
-    double location[3];
     double az;
     double vel;
     double conc;
     int time_stamp;
+    double location[3];
 };
 
 
 class ParticleFilter{
     /**
-    * @brief 
-    * @param 
-    * @param 
-    * @return 
+    * @brief Initialize an already paramaterized filter's particle set
+    * @param int The number of particles to generate
+    * @return void
     */
     void initialize(int); // Change Neff and R to params
 
@@ -110,7 +118,7 @@ class ParticleFilter{
     * @brief 
     * @param 
     * @param 
-    * @return 
+    * @return void
     */
     void predict(measurement);  //DONE
 
@@ -118,7 +126,7 @@ class ParticleFilter{
     * @brief 
     * @param 
     * @param 
-    * @return 
+    * @return  void
     */
     void reweight(measurement); //DONE
 
@@ -134,7 +142,7 @@ class ParticleFilter{
     * @brief 
     * @param 
     * @param 
-    * @return 
+    * @return bool True if the particle set is degenerate and Neff< Neff_lim
     */
     bool ifNeff() const;
 
@@ -162,26 +170,25 @@ public:
     ParticleFilter(int, state_space, wind_model); //DONE 
     
     /**
-    * @brief 
-    * @param 
-    * @param 
-    * @return 
+    * @brief Initialize an unparameterized filter's particle set
+    * @param int The number of particles to generates
+    * @param state_space The filter's state space
+    * @param wind_model The filter's gaussian plume wind model dispersion parameters
+    * @return void
     */
     void initialize(int, state_space, wind_model); // Change Neff and R to params 
 
     /**
-    * @brief 
-    * @param 
-    * @param 
-    * @return 
+    * @brief Call predict reweight and resample to process a measuremnt and update the filter
+    * @param measurement A new measuremnt 
+    * @return void
+    
     */
     void updateFilter(measurement); 
 
     /**
-    * @brief 
-    * @param 
-    * @param 
-    * @return 
+    * @brief Print the filter's particle set mean
+    * @return void
     */
     void printStatistics() const;
     
