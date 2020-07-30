@@ -14,10 +14,6 @@ ParticleFilter::ParticleFilter(int np, state_space ss, wind_model wm): ss_{ss}, 
     initialize(np);
 };
 
-ParticleFilter::~ParticleFilter(){
-};  
-
-
 
 void ParticleFilter::initialize(int np, state_space ss, wind_model wm){
     if(initialized == false){

@@ -24,9 +24,20 @@ struct particle_set{
     double Q;
 };
 struct state_space{
-    // Default constructor
+    /**
+    * @brief 
+    * @param 
+    * @param 
+    * @return 
+    */
     state_space():x{0.0, 0.0}, y{0.0, 0.0}, z{0.0, 0.0}, rate{0.0, 0.0} {};
 
+    /**
+    * @brief 
+    * @param 
+    * @param 
+    * @return 
+    */
     state_space(double x_min, double x_max, double y_min, double y_max, double z_min, double z_max, double rate_min, double rate_max)
         :x{x_min, x_max}, y{y_min, y_max}, z{z_min, z_max}, rate{rate_min, rate_max}
         {};
@@ -37,9 +48,20 @@ struct state_space{
     double rate[2];
 };
 struct wind_model{
-    // Default constructor
+    /**
+    * @brief 
+    * @param 
+    * @param 
+    * @return 
+    */
     wind_model(): sy{0, 0, 0}, sz{0, 0, 0} {};
 
+    /**
+    * @brief 
+    * @param 
+    * @param 
+    * @return 
+    */
     wind_model(double sya, double syb, double syc, double sza, double szb, double szc)
         :sy{sya,syb,syc},sz{sza,szb,szc}
         {};
@@ -49,9 +71,20 @@ struct wind_model{
 };
 struct measurement
 {
-    // Default constructor
+    /**
+    * @brief 
+    * @param 
+    * @param 
+    * @return 
+    */
     measurement(): az{0}, vel{0}, conc{0}, time_stamp{0} {};
 
+    /**
+    * @brief 
+    * @param 
+    * @param 
+    * @return 
+    */
     measurement(double azimuth, double velocity, double concentration, int time_stamp)
         : az{azimuth}, vel{velocity}, conc{concentration}, time_stamp{time_stamp}
         {};
@@ -65,12 +98,44 @@ struct measurement
 
 
 class ParticleFilter{
-    // Initialize a filter for an instance given the ss and wm parameters in the constructor
+    /**
+    * @brief 
+    * @param 
+    * @param 
+    * @return 
+    */
     void initialize(int); // Change Neff and R to params
+
+    /**
+    * @brief 
+    * @param 
+    * @param 
+    * @return 
+    */
     void predict(measurement);  //DONE
+
+    /**
+    * @brief 
+    * @param 
+    * @param 
+    * @return 
+    */
     void reweight(measurement); //DONE
+
+    /**
+    * @brief 
+    * @param 
+    * @param 
+    * @return 
+    */
     void resample(); //DONE
 
+    /**
+    * @brief 
+    * @param 
+    * @param 
+    * @return 
+    */
     bool ifNeff() const;
 
     particle_set ps;
@@ -80,19 +145,44 @@ class ParticleFilter{
     bool initialized;
     
 public:
-    // Default constructor
+    /**
+    * @brief 
+    * @param 
+    * @param 
+    * @return 
+    */
     ParticleFilter(); //DONE 
-    // Paramaterized (complete) constructor
+    
+    /**
+    * @brief 
+    * @param 
+    * @param 
+    * @return 
+    */
     ParticleFilter(int, state_space, wind_model); //DONE 
-    // Default destructor
-    ~ParticleFilter();
-
-    // Initialize a filter for an instance NOT given the ss and wm parameters in the constructor
+    
+    /**
+    * @brief 
+    * @param 
+    * @param 
+    * @return 
+    */
     void initialize(int, state_space, wind_model); // Change Neff and R to params 
 
-    //Execute predict,reweight,resample when provided a measurement
+    /**
+    * @brief 
+    * @param 
+    * @param 
+    * @return 
+    */
     void updateFilter(measurement); 
-    //void getFilter(); Build proper 3/5/0 rule type class  
+
+    /**
+    * @brief 
+    * @param 
+    * @param 
+    * @return 
+    */
     void printStatistics() const;
     
     
@@ -100,13 +190,36 @@ public:
 
 //utils
 namespace pf{
-    // Generates a uniformly distributed random number vector of length count
+    /**
+    * @brief 
+    * @param 
+    * @param 
+    * @return 
+    */
     std::vector<double> uniform_rn(int count);
-    // Generates a uniformly distributed random number 
+    
+    /**
+    * @brief 
+    * @param 
+    * @param 
+    * @return 
+    */
     double uniform_rn();
-    // Transform measurement location (passed by reference) into source local test_point
+    
+    /**
+    * @brief 
+    * @param 
+    * @param 
+    * @return 
+    */
     void transform(double*, const double*, const double*, const double&);
-    //Generate a sample at a point x given a distribution with mean mu and standard deviation sigma
+    
+    /**
+    * @brief 
+    * @param 
+    * @param 
+    * @return 
+    */
     double gaussian(double, double, double);
 } //END of pf namespace
 
