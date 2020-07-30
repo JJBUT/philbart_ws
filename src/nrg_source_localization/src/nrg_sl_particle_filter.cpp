@@ -15,7 +15,7 @@ ParticleFilter::ParticleFilter(int np, state_space ss, wind_model wm): ss_{ss}, 
 };
 
 ParticleFilter::~ParticleFilter(){
-};
+};  
 
 
 
@@ -200,7 +200,7 @@ int main(){
     
 
 
-    std::vector< std::vector<double> > measurements= read_data("/home/jacksubuntu/philbart_ws/src/source_localization/data/one_source/a_data_matlab.txt");
+    std::vector< std::vector<double> > measurements= read_data("/home/jacksubuntu/philbart_ws/src/nrg_source_localization/data/one_source/a_data_matlab.txt");
     for(auto& m: measurements){
         measurement fake_measurement( m[5], m[4], m[3], 0 );
         fake_measurement.location[0]= m[0];
