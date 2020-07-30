@@ -1,5 +1,5 @@
-#ifndef PARTICLE_FILTER_H
-#define PARTICLE_FILTER_H
+#ifndef NRG_SL_PARTICLE_FILTER_H
+#define NRG_SL_PARTICLE_FILTER_H
 
 #include "vector"
 

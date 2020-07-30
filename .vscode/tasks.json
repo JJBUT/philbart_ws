@@ -13,7 +13,7 @@
             "args": [
                 "-g",
                 "-std=c++11",
-                "-I${workspaceFolder}/src/source_localization/include/",
+                "-I${workspaceFolder}/src/nrg_source_localization/include/",
                 "${file}",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"

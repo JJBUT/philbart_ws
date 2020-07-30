@@ -5,7 +5,7 @@
 #include "fstream"
 #include "regex"
 
-#include "particle_filter.h"
+#include "nrg_sl_particle_filter.h"
 
 ParticleFilter::ParticleFilter(): initialized{false}{
 };
