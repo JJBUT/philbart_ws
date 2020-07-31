@@ -3,6 +3,14 @@
 
 #include "vector"
 
+/**
+* @note The state we are predicting is the location and emission rate of a fugitive gas emission source (x,y,z,q)
+*
+* @brief Each particle represents a weighted state hypothesis 
+* @param double downwind_conc The concentration produced at some location by the source represented by the particle 
+* @param double position[3] The global location of the source
+* @param double rate The emission rate of the source 
+*/
 struct particle{
     //Fraction of the probability distribution
     double weight;
@@ -12,17 +20,25 @@ struct particle{
     double position[3];
     double rate;
 };
+
+/**
+* @brief The state and statistical characterization of the filter
+* @param std::vector<particle> particles The particle set the filter use to represent the probability distribution of the state
+* @param int np The number of particles 
+* @param double R The measurement model noise
+* @param double Q The resampling noise introduced to prevent single particle state collapse when resampling
+*/
 struct particle_set{
     std::vector<particle> particles;
     int np;
 
-    // Number of "effective" particles
     double Neff_lim;
     // Measurement noise
     double R;
     // Resampling noise
     double Q;
 };
+
 struct state_space{
     /**
     * @brief Construct default zero paramaterized state space
@@ -51,6 +67,7 @@ struct state_space{
     double z[2];
     double rate[2];
 };
+
 struct wind_model{
     /**
     * @brief Construct default zero paramaterized wind model
@@ -73,6 +90,7 @@ struct wind_model{
     double sy[3];
     double sz[3];
 };
+
 struct measurement
 {
     /**
@@ -98,13 +116,13 @@ struct measurement
     measurement(double azimuth, double velocity, double concentration, int time_stamp)
         : az{azimuth}, vel{velocity}, conc{concentration}, time_stamp{time_stamp}
         {};
+
     double az;
     double vel;
     double conc;
     int time_stamp;
     double location[3];
 };
-
 
 class ParticleFilter{
     /**
@@ -115,33 +133,27 @@ class ParticleFilter{
     void initialize(int); // Change Neff and R to params
 
     /**
-    * @brief 
-    * @param 
-    * @param 
+    * @brief Predict the concentration at the measurement location from each particle
+    * @param measurement 
     * @return void
     */
-    void predict(measurement);  //DONE
+    void predict(measurement);  
 
     /**
-    * @brief 
-    * @param 
-    * @param 
-    * @return  void
+    * @brief Update the filter's particle set weights
+    * @param measurement 
+    * @return void
     */
-    void reweight(measurement); //DONE
+    void reweight(measurement); 
 
     /**
-    * @brief 
-    * @param 
-    * @param 
-    * @return 
+    * @brief If Neff<Neff_lim then resample to prevent degeneracy
+    * @return void
     */
-    void resample(); //DONE
+    void resample(); 
 
     /**
-    * @brief 
-    * @param 
-    * @param 
+    * @brief Check if the particle set is degenerate
     * @return bool True if the particle set is degenerate and Neff< Neff_lim
     */
     bool ifNeff() const;
@@ -154,32 +166,31 @@ class ParticleFilter{
     
 public:
     /**
-    * @brief 
-    * @param 
-    * @param 
-    * @return 
+    * @brief Construct an unparameterized filter
+    * @return ParticleFilter
     */
-    ParticleFilter(); //DONE 
+    ParticleFilter(); 
     
     /**
-    * @brief 
-    * @param 
-    * @param 
-    * @return 
+    * @brief Construct a parameterized filter
+    * @param int The number of particlces 
+    * @param state_space The state space bounds
+    * @param wind_model The wind model parameters
+    * @return ParticleFilter 
     */
-    ParticleFilter(int, state_space, wind_model); //DONE 
+    ParticleFilter(int, state_space, wind_model); 
     
     /**
-    * @brief Initialize an unparameterized filter's particle set
+    * @brief Initialize an unparameterized filter
     * @param int The number of particles to generates
     * @param state_space The filter's state space
     * @param wind_model The filter's gaussian plume wind model dispersion parameters
     * @return void
     */
-    void initialize(int, state_space, wind_model); // Change Neff and R to params 
+    void initialize(int, state_space, wind_model); //TODO Change Neff and R to params 
 
     /**
-    * @brief Call predict reweight and resample to process a measuremnt and update the filter
+    * @brief Call predict, reweight, and resample to process a measuremnt and update the filter
     * @param measurement A new measuremnt 
     * @return void
     
@@ -191,41 +202,42 @@ public:
     * @return void
     */
     void printStatistics() const;
-    
-    
 };
 
 //utils
 namespace pf{
     /**
-    * @brief 
-    * @param 
-    * @param 
-    * @return 
+    * @brief Generate a vector of uniformly distributed random numbers from 0 to 1
+    * @param int How many independent random numbers you want 
+    * @return std::vector<double> A vector of length int holding unique uniformly distributed random numbers from 0 to 1 
     */
-    std::vector<double> uniform_rn(int count);
+    std::vector<double> uniform_rn(int);
     
     /**
-    * @brief 
-    * @param 
-    * @param 
-    * @return 
+    * @brief Generate a single uniformly distributed random number from 0 to 1
+    * @return double A single uniformly distributed random number from 0 to 1
     */
     double uniform_rn();
     
     /**
-    * @brief 
-    * @param 
-    * @param 
+    * @note The global origin is always referenced at ( 0,0,0 )
+    * @note The global zero azimuth is to the east (positive global x-axis)
+    * 
+    * @brief Transform a test point into the source local frame
+    * @param double* The source local test point which will be generated
+    * @param const double* The global test point, most often the location of a measurement
+    * @param const double* The global source point, most often the location of a particle
+    * @param const double& The rotation, most often the azimuth of the wind
     * @return 
     */
     void transform(double*, const double*, const double*, const double&);
     
     /**
-    * @brief 
-    * @param 
-    * @param 
-    * @return 
+    * @brief Generate a value from a gaussian distribution
+    * @param double The test point
+    * @param double The mean of the distribution
+    * @param double The standard deviation of the distribution
+    * @return double g(x) the value of the gaussian at the test point
     */
     double gaussian(double, double, double);
 } //END of pf namespace
