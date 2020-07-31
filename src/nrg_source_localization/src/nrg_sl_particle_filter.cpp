@@ -22,7 +22,7 @@ void ParticleFilter::initialize(int np, state_space ss, wind_model wm){
         wm_= wm;
 
         ps.np= np;
-        ps.Neff_lim= 0.8;
+        ps.Neff_lim= 0.8;   //TODO initialize these(Neff_lim, R and Q) somewhere programmatically (probably from ROS launch params)
         ps.R= 1.0;
         ps.Q= 1.0;
     
@@ -61,54 +61,53 @@ void ParticleFilter::initialize(int np){
 };
 
 void ParticleFilter::updateFilter(measurement z){
-    predict(z);
-    reweight(z);
-    if ( ifNeff() ){
-        resample();
-    }    
+    if (initialized == true){
+        predict(z);
+        reweight(z);
+        if ( ifNeff() ){
+            resample();
+        }    
+        return;
+    }
+    throw "ParticleFilter::updateFilter(measurement z) ERROR: Asked for update of un-initialized filter";
+    return;
 }
 
 void ParticleFilter::predict(measurement z){
     std::cout<<"measured concentration: "<<z.conc<<" ";
-    double source_local_test_point[3]={0};
-    
+    double source_local_test_point[3] = { 0, 0, 0 };
     for(auto& p: ps.particles){
         pf::transform(source_local_test_point, z.location, p.position, z.az);
 
         if(source_local_test_point[0]<0){
-            p.downwind_conc=0.0;
+            //Downwind concentration is zero if test point is not downwind of source
+            p.downwind_conc = 0.0;
         }else{
-            double sy= wm_.sy[0]*source_local_test_point[0]*std::pow(1.0+wm_.sy[1]*source_local_test_point[0], -wm_.sy[2]);;
-            double sz= wm_.sz[0]*source_local_test_point[0]*std::pow(1.0+wm_.sz[1]*source_local_test_point[0], -wm_.sz[2]);;
-
-            double expy= std::exp(-std::pow(source_local_test_point[1], 2)/(2*std::pow(sy, 2)));
-            double expz= std::exp(-std::pow(source_local_test_point[2], 2)/(2*std::pow(sz, 2)));
-
-            double norm= ((p.rate/z.vel)/(2*M_PI*sy*sz));
-
-            p.downwind_conc= norm*expy*expz;
+            double sy = wm_.sy[0]*source_local_test_point[0]*std::pow( 1.0+wm_.sy[1]*source_local_test_point[0], -wm_.sy[2] );;
+            double sz = wm_.sz[0]*source_local_test_point[0]*std::pow( 1.0+wm_.sz[1]*source_local_test_point[0], -wm_.sz[2] );;
+            double expy = std::exp(-std::pow( source_local_test_point[1], 2 )/( 2*std::pow(sy, 2) ));
+            double expz = std::exp(-std::pow( source_local_test_point[2], 2 )/( 2*std::pow(sz, 2) ));
+            double norm = ((p.rate/z.vel)/(2*M_PI*sy*sz));
+            p.downwind_conc = norm*expy*expz;
         }
     }
     return;
 }
 
 void ParticleFilter::reweight(measurement z){
-
     double max_weight=0.0;
-    // Reweight using a gaussian and find the max weight value
+    // Reweight particles based on similarity between measured concentration and predicted concentration
     for(auto& p: ps.particles){
         p.weight= p.weight*pf::gaussian(p.downwind_conc, z.conc, ps.R);
         if(p.weight>max_weight) max_weight = p.weight;
     }
-
-    // Calculate exponential of max weight adjusted log weight
+    // Log-likelihood reweight to prevent numerical underflow
     double weight_sum=0;
     for(auto& p: ps.particles){
         p.weight= std::exp(std::log(p.weight/max_weight));
         weight_sum+=p.weight; 
     }
-
-    // Renormalize the cdf to 1
+    // Normalize the cdf to 1
     for(auto& p: ps.particles){
         p.weight/=weight_sum;
     }
@@ -121,22 +120,21 @@ void ParticleFilter::resample(){
     new_ps.np= ps.np;
     new_ps.Neff_lim= ps.Neff_lim;
     new_ps.R= ps.R;
-    
+
+    // See Multinomial Resampling in: "Particle filters and resampling techniques: Importance in computational complexity analysis" IEEE 2013
     std::vector<double> weight_sum{0.0};
     for(const auto& p: ps.particles){
         weight_sum.push_back( weight_sum.back()+p.weight ); 
     }
-
     for( auto& new_p: new_ps.particles ){
         double pick= pf::uniform_rn();
-        for(int i= 0; i<ps.np; i++){
-            if(pick>weight_sum[i] && pick< weight_sum[i+1]){
-                new_p= ps.particles[i];
-                new_p.weight= 1.0/ps.np;
-
-                new_p.position[0]+=pf::uniform_rn()*ps.Q;
-                new_p.position[1]+=pf::uniform_rn()*ps.Q;
-                new_p.position[2]+=pf::uniform_rn()*ps.Q;
+        for(int i = 0; i<ps.np; i++){
+            if( pick>weight_sum[i] && pick< weight_sum[i+1] ){
+                new_p = ps.particles[i];
+                new_p.weight = 1.0/ps.np;
+                new_p.position[0] += pf::uniform_rn()*ps.Q;
+                new_p.position[1] += pf::uniform_rn()*ps.Q;
+                new_p.position[2] += pf::uniform_rn()*ps.Q;
             }
         }
     }
@@ -145,13 +143,15 @@ void ParticleFilter::resample(){
 }
 
 bool ParticleFilter::ifNeff() const{
-    double sum= 0;
+    double sum = 0;
     for(auto& p: ps.particles){
-        sum+=std::pow(p.weight,2);
+        sum += std::pow(p.weight,2);
     }
     if(1.0/sum < ps.Neff_lim*ps.np){
+        // Degenerate
         return true;
     }
+    // Not degenerate
     return false;
 }
 
@@ -192,7 +192,7 @@ int main(){
     fake_measurement.location[0]= 2.0;
     fake_measurement.location[1]= 0.0;
     fake_measurement.location[2]= 0.0;
-    ParticleFilter fake_particle_filter( 5000, fake_state_space, fake_wind_model );
+    ParticleFilter fake_particle_filter(5000, fake_state_space, fake_wind_model);
     
 
 
