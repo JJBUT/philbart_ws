@@ -15,19 +15,16 @@ ParticleFilter::ParticleFilter(pf_params pfp, state_space ss, wind_model wm): pf
 };
 
 
-void ParticleFilter::initialize(int np, state_space ss, wind_model wm){
+void ParticleFilter::initialize(pf_params pfp, state_space ss, wind_model wm){
     if(initialized == false){
-        ps.particles.resize(np);
-        ss_= ss;
-        wm_= wm;
+        pfp_ = pfp;
+        ss_ = ss;
+        wm_ = wm;
+        ps.particles.resize(pfp_.np);
 
-        ps.np= np;
-        ps.Neff_lim= 0.8;   //TODO initialize these(Neff_lim, R and Q) somewhere programmatically (probably from ROS launch params)
-        ps.R= 1.0;
-        ps.Q= 1.0;
     
         for(auto& p: ps.particles){
-            p.weight=1.0/np;
+            p.weight=1.0/pfp_.np;
             auto rnv= pf::uniform_rn(4);
             p.position[0]= ss_.x[0]+rnv[0]*(ss_.x[1]-ss_.x[0]);
             p.position[1]= ss_.y[0]+rnv[1]*(ss_.y[1]-ss_.y[0]);
@@ -42,10 +39,6 @@ void ParticleFilter::initialize(int np, state_space ss, wind_model wm){
 
 void ParticleFilter::initialize(){
     ps.particles.resize(pfp_.np);
-    ps.np= pfp_.np;
-    ps.Neff_lim= pfp_.Neff_lim;
-    ps.R= pfp_.R;
-    ps.Q= pfp_.Q;
 
     for(auto& p: ps.particles){
         p.weight=1.0/pfp_.np;
@@ -98,7 +91,7 @@ void ParticleFilter::reweight(measurement z){
     double max_weight=0.0;
     // Reweight particles based on similarity between measured concentration and predicted concentration
     for(auto& p: ps.particles){
-        p.weight= p.weight*pf::gaussian(p.downwind_conc, z.conc, ps.R);
+        p.weight= p.weight*pf::gaussian(p.downwind_conc, z.conc, pfp_.R);
         if(p.weight>max_weight) max_weight = p.weight;
     }
     // Log-likelihood reweight to prevent numerical underflow
@@ -116,10 +109,8 @@ void ParticleFilter::reweight(measurement z){
 
 void ParticleFilter::resample(){
     particle_set new_ps;
-    new_ps.particles.resize(ps.np);
-    new_ps.np= ps.np;
-    new_ps.Neff_lim= ps.Neff_lim;
-    new_ps.R= ps.R;
+    new_ps.particles.resize(pfp_.np);
+
 
     // See Multinomial Resampling in: "Particle filters and resampling techniques: Importance in computational complexity analysis" IEEE 2013
     std::vector<double> weight_sum{0.0};
@@ -128,13 +119,13 @@ void ParticleFilter::resample(){
     }
     for( auto& new_p: new_ps.particles ){
         double pick= pf::uniform_rn();
-        for(int i = 0; i<ps.np; i++){
+        for(int i = 0; i<pfp_.np; i++){
             if( pick>weight_sum[i] && pick< weight_sum[i+1] ){
                 new_p = ps.particles[i];
-                new_p.weight = 1.0/ps.np;
-                new_p.position[0] += pf::uniform_rn()*ps.Q;
-                new_p.position[1] += pf::uniform_rn()*ps.Q;
-                new_p.position[2] += pf::uniform_rn()*ps.Q;
+                new_p.weight = 1.0/pfp_.np;
+                new_p.position[0] += pf::uniform_rn()*pfp_.Q;
+                new_p.position[1] += pf::uniform_rn()*pfp_.Q;
+                new_p.position[2] += pf::uniform_rn()*pfp_.Q;
             }
         }
     }
@@ -147,7 +138,7 @@ bool ParticleFilter::ifNeff() const{
     for(auto& p: ps.particles){
         sum += std::pow(p.weight,2);
     }
-    if(1.0/sum < ps.Neff_lim*ps.np){
+    if(1.0/sum < pfp_.Neff_lim*pfp_.np){
         // Degenerate
         return true;
     }
@@ -158,10 +149,10 @@ bool ParticleFilter::ifNeff() const{
 void ParticleFilter::printStatistics() const{
     std::vector<double> mean(4,0);
     for(auto& p: ps.particles){
-        mean[0]+=p.position[0]/ps.np;
-        mean[1]+=p.position[1]/ps.np;
-        mean[2]+=p.position[2]/ps.np;
-        mean[3]+=p.rate/ps.np;
+        mean[0]+=p.position[0]/pfp_.np;
+        mean[1]+=p.position[1]/pfp_.np;
+        mean[2]+=p.position[2]/pfp_.np;
+        mean[3]+=p.rate/pfp_.np;
     }
     std::cout<<" x_mean: "<< mean[0] <<" y_mean: "<< mean[1] <<" z_mean: "<< mean[2]<<" rate: "<< mean[3]<<"\n";
 }
@@ -197,7 +188,7 @@ int main(){
     fake_pf_params.np = 3000;
     fake_pf_params.Neff_lim = 0.8;
     fake_pf_params.R = 1.0;
-    fake_pf_params.Q = 1.0;
+    fake_pf_params.Q = 0.1;
 
     ParticleFilter fake_particle_filter(fake_pf_params, fake_state_space, fake_wind_model);
     

@@ -39,13 +39,6 @@ struct particle{
 */
 struct particle_set{
     std::vector<particle> particles;
-    int np;
-
-    double Neff_lim;
-    // Measurement noise
-    double R;
-    // Resampling noise
-    double Q;
 };
 
 struct state_space{
@@ -198,7 +191,7 @@ public:
     * @param wind_model The filter's gaussian plume wind model dispersion parameters
     * @return void
     */
-    void initialize(int, state_space, wind_model); //TODO Change Neff and R to params 
+    void initialize(pf_params, state_space, wind_model); //TODO Change Neff and R to params 
 
     /**
     * @brief Call predict, reweight, and resample to process a measuremnt and update the filter
