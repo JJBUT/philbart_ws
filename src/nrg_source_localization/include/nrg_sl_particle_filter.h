@@ -5,7 +5,7 @@
 
 struct pf_params{
     int np; 
-    int np_min;
+    double Neff_lim;
     //Measurement noise
     double R;
     //Resampling lubricant
@@ -139,7 +139,7 @@ class ParticleFilter{
     * @param int The number of particles to generate
     * @return void
     */
-    void initialize(int); // Change Neff and R to params
+    void initialize(); // Change Neff and R to params
 
     /**
     * @brief Predict the concentration at the measurement location from each particle
@@ -167,11 +167,13 @@ class ParticleFilter{
     */
     bool ifNeff() const;
 
-    particle_set ps;
+    
+    pf_params pfp_;
     state_space ss_;
     wind_model wm_;
 
     bool initialized;
+    particle_set ps;
     
 public:
     /**
@@ -187,7 +189,7 @@ public:
     * @param wind_model The wind model parameters
     * @return ParticleFilter 
     */
-    ParticleFilter(int, state_space, wind_model); 
+    ParticleFilter(pf_params, state_space, wind_model); 
     
     /**
     * @brief Initialize an unparameterized filter

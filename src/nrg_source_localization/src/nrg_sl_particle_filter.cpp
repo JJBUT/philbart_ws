@@ -10,8 +10,8 @@
 ParticleFilter::ParticleFilter(): initialized{false}{
 };
 
-ParticleFilter::ParticleFilter(int np, state_space ss, wind_model wm): ss_{ss}, wm_{wm} {
-    initialize(np);
+ParticleFilter::ParticleFilter(pf_params pfp, state_space ss, wind_model wm): pfp_{pfp}, ss_{ss}, wm_{wm} {
+    initialize();
 };
 
 
@@ -40,15 +40,15 @@ void ParticleFilter::initialize(int np, state_space ss, wind_model wm){
     return;
 };
 
-void ParticleFilter::initialize(int np){
-    ps.particles.resize(np);
-    ps.np= np;
-    ps.Neff_lim= 0.8;
-    ps.R= 1.0;
-    ps.Q= 1.0;
+void ParticleFilter::initialize(){
+    ps.particles.resize(pfp_.np);
+    ps.np= pfp_.np;
+    ps.Neff_lim= pfp_.Neff_lim;
+    ps.R= pfp_.R;
+    ps.Q= pfp_.Q;
 
     for(auto& p: ps.particles){
-        p.weight=1.0/np;
+        p.weight=1.0/pfp_.np;
         auto rnv= pf::uniform_rn(4);
         p.position[0]= ss_.x[0]+rnv[0]*(ss_.x[1]-ss_.x[0]);
         p.position[1]= ss_.y[0]+rnv[1]*(ss_.y[1]-ss_.y[0]);
@@ -194,7 +194,12 @@ int main(){
     fake_measurement.location[2]= 0.0;
 
     pf_params fake_pf_params;
-    ParticleFilter fake_particle_filter(5000, fake_state_space, fake_wind_model);
+    fake_pf_params.np = 3000;
+    fake_pf_params.Neff_lim = 0.8;
+    fake_pf_params.R = 1.0;
+    fake_pf_params.Q = 1.0;
+
+    ParticleFilter fake_particle_filter(fake_pf_params, fake_state_space, fake_wind_model);
     
 
 
