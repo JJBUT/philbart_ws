@@ -4,12 +4,6 @@
 #include "vector"
 
 struct pf_params{
-    pf_params()
-    :np{2000}, Neff_lim{0.8}, R{1.0}, Q{1.0}
-    {};
-    pf_params(int number_of_particles,  double number_of_effective_particles_limit, double measurement_noise, double resampling_noise)
-    :np{number_of_particles}, Neff_lim{number_of_effective_particles_limit}, R{measurement_noise}, Q{resampling_noise}
-    {};
     int np; 
     double Neff_lim;
     double R;
