@@ -69,7 +69,7 @@ void ParticleFilter::updateFilter(measurement z){
         }    
         return;
     }
-    throw "ParticleFilter::updateFilter(measurement z) ERROR: Asked for update of un-initialized filter";
+    throw "ParticleFilter::updateFilter()";
     return;
 }
 
@@ -192,6 +192,8 @@ int main(){
     fake_measurement.location[0]= 2.0;
     fake_measurement.location[1]= 0.0;
     fake_measurement.location[2]= 0.0;
+
+    pf_params fake_pf_params
     ParticleFilter fake_particle_filter(5000, fake_state_space, fake_wind_model);
     
 
