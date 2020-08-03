@@ -5,10 +5,12 @@
 
 struct pf_params{
     int np; 
-    double Neff_lim;
+    int np_min;
+    //Measurement noise
     double R;
+    //Resampling lubricant
     double Q;
-}
+};
 
 /**
 * @note The state we are predicting is the location and emission rate of a fugitive gas emission source (x,y,z,q)
