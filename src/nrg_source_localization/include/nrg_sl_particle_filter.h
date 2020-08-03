@@ -5,10 +5,12 @@
 
 struct pf_params{
     int np; 
-    double Neff_lim;
+    int np_min;
+    //Measurement noise
     double R;
+    //Resampling noise
     double Q;
-}
+};
 
 /**
 * @note The state we are predicting is the location and emission rate of a fugitive gas emission source (x,y,z,q)
@@ -37,13 +39,6 @@ struct particle{
 */
 struct particle_set{
     std::vector<particle> particles;
-    int np;
-
-    double Neff_lim;
-    // Measurement noise
-    double R;
-    // Resampling noise
-    double Q;
 };
 
 struct state_space{
@@ -137,7 +132,7 @@ class ParticleFilter{
     * @param int The number of particles to generate
     * @return void
     */
-    void initialize(int); // Change Neff and R to params
+    void initialize(); // Change Neff and R to params
 
     /**
     * @brief Predict the concentration at the measurement location from each particle
@@ -166,6 +161,7 @@ class ParticleFilter{
     bool ifNeff() const;
 
     particle_set ps;
+    pf_params pfp_;
     state_space ss_;
     wind_model wm_;
 
@@ -185,7 +181,7 @@ public:
     * @param wind_model The wind model parameters
     * @return ParticleFilter 
     */
-    ParticleFilter(int, state_space, wind_model); 
+    ParticleFilter(pf_params, state_space, wind_model); 
     
     /**
     * @brief Initialize an unparameterized filter
@@ -194,7 +190,7 @@ public:
     * @param wind_model The filter's gaussian plume wind model dispersion parameters
     * @return void
     */
-    void initialize(int, state_space, wind_model); //TODO Change Neff and R to params 
+    void initialize(pf_params, state_space, wind_model); //TODO Change Neff and R to params 
 
     /**
     * @brief Call predict, reweight, and resample to process a measuremnt and update the filter
