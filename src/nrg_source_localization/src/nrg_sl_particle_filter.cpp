@@ -111,7 +111,6 @@ void ParticleFilter::resample(){
     particle_set new_ps;
     new_ps.particles.resize(pfp_.np);
 
-
     // See Multinomial Resampling in: "Particle filters and resampling techniques: Importance in computational complexity analysis" IEEE 2013
     std::vector<double> weight_sum{0.0};
     for(const auto& p: ps.particles){
