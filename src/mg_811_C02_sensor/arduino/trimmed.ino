@@ -13,7 +13,6 @@ Note:    This piece of source code is supposed to be used as a demonstration ONL
 
 /************************Hardware Related Macros************************************/
 #define         MG_PIN                       (A0)     //define which analog input channel you are going to use
-#define         BOOL_PIN                     (2)
 #define         DC_GAIN                      (8.5)   //define the DC gain of amplifier
 
 /***********************Software Related Macros************************************/
@@ -37,10 +36,6 @@ float           CO2Curve[3]  =  {2.602,ZERO_POINT_VOLTAGE,(REACTION_VOLTGAE/(2.6
 void setup()
 {
     Serial.begin(9600);                              //UART setup, baudrate = 9600bps
-    pinMode(BOOL_PIN, INPUT);                        //set pin to input
-    digitalWrite(BOOL_PIN, HIGH);                    //turn on pullup resistors
-
-   Serial.print("MG-811 Demostration\n");
 }
 
 void loop()
@@ -64,13 +59,6 @@ void loop()
     Serial.print( "ppm" );
     Serial.print("\n");
 
-    if (digitalRead(BOOL_PIN) ){
-        Serial.print( "=====BOOL is HIGH======" );
-    } else {
-        Serial.print( "=====BOOL is LOW======" );
-    }
-
-    Serial.print("\n");
 
     delay(500);
 }
