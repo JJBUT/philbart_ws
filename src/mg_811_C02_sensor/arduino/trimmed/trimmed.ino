@@ -12,21 +12,24 @@ Note:    This piece of source code is supposed to be used as a demonstration ONL
 ************************************************************************************/
 
 /************************Hardware Related Macros************************************/
-#define         MG_PIN                       (A0)     //define which analog input channel you are going to use
-#define         DC_GAIN                      (8.5)   //define the DC gain of amplifier
+#define MG_PIN A0 //define which analog input channel you are going to use
+#define DC_GAIN 8.5 //define the DC gain of amplifier
 
 /***********************Software Related Macros************************************/
-#define         READ_SAMPLE_INTERVAL         (50)    //define how many samples you are going to take in normal operation
-#define         READ_SAMPLE_TIMES            (5)     //define the time interval(in milisecond) between each samples in
+#define READ_SAMPLE_INTERVAL 50 //define how many samples you are going to take in normal operation
+#define READ_SAMPLE_TIMES 5 //define the time interval(in milisecond) between each samples in
                                                      //normal operation
+
+#define DEBUG false //print more structured serial monitor output
+   
 
 /**********************Application Related Macros**********************************/
 //These two values differ from sensor to sensor. user should determine this value.
-#define         ZERO_POINT_VOLTAGE           (0.220) //define the output of the sensor in volts when the concentration of CO2 is 400PPM
-#define         REACTION_VOLTGAE             (0.030) //define the voltage drop of the sensor when move the sensor from air into 1000ppm CO2
+#define ZERO_POINT_VOLTAGE 2.20/DC_GAIN //Numerator is the o utput of the sensor in volts when the concentration of CO2 is 400PPM (atmospheric concentration)
+#define REACTION_VOLTGAE 0.030 //define the voltage drop of the sensor when move the sensor from air into 1000ppm CO2
 
 /*****************************Globals***********************************************/
-float           CO2Curve[3]  =  {2.602,ZERO_POINT_VOLTAGE,(REACTION_VOLTGAE/(2.602-3))};
+float CO2Curve[3]  =  {2.602,ZERO_POINT_VOLTAGE,(REACTION_VOLTGAE/(2.602-3))};
                                                      //two points are taken from the curve.
                                                      //with these two points, a line is formed which is
                                                      //"approximately equivalent" to the original curve.
@@ -35,30 +38,30 @@ float           CO2Curve[3]  =  {2.602,ZERO_POINT_VOLTAGE,(REACTION_VOLTGAE/(2.6
 
 void setup()
 {
-    Serial.begin(9600);                              //UART setup, baudrate = 9600bps
+    Serial.begin(9600); //Default baudrate 9600
 }
 
 void loop()
 {
-    int percentage;
-    float volts;
-
-    volts = MGRead(MG_PIN);
-    Serial.print( "SEN0159:" );
-    Serial.print(volts);
-    Serial.print( "V           " );
-
-    percentage = MGGetPercentage(volts,CO2Curve);
-    Serial.print("CO2:");
-    if (percentage == -1) {
-        Serial.print( "<400" );
-    } else {
-        Serial.print(percentage);
+    float volts = MGRead(MG_PIN);
+    if (DEBUG == true){
+      Serial.print( "SEN0159:" );
+      Serial.print(volts);
+      Serial.print( "V           " );
+      Serial.print("CO2:");
     }
-
+    
+    int percentage = MGGetPercentage(volts,CO2Curve);
+    if(percentage == -1 && DEBUG == true){
+      Serial.print( "<400" );
+    }else{
+      Serial.print(percentage);
+    }
+   
+    if(DEBUG == true){
     Serial.print( "ppm" );
+    }
     Serial.print("\n");
-
 
     delay(500);
 }
