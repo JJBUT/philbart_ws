@@ -3,9 +3,9 @@
 Author:  Tiequan Shao: tiequan.shao@sandboxelectronics.com
          Peng Wei:     peng.wei@sandboxelectronics.com
 
-Lisence: Attribution-NonCommercial-ShareAlike 3.0 Unported (CC BY-NC-SA 3.0)
+License: Attribution-NonCommercial-ShareAlike 3.0 Unsupported (CC BY-NC-SA 3.0)
 
-Note:    This piece of source code is supposed to be used as a demostration ONLY. More
+Note:    This piece of source code is supposed to be used as a demonstration ONLY. More
          sophisticated calibration is required for industrial field application.
 
                                                     Sandbox Electronics    2012-05-31
@@ -22,7 +22,7 @@ Note:    This piece of source code is supposed to be used as a demostration ONLY
                                                      //normal operation
 
 /**********************Application Related Macros**********************************/
-//These two values differ from sensor to sensor. user should derermine this value.
+//These two values differ from sensor to sensor. user should determine this value.
 #define         ZERO_POINT_VOLTAGE           (0.220) //define the output of the sensor in volts when the concentration of CO2 is 400PPM
 #define         REACTION_VOLTGAE             (0.030) //define the voltage drop of the sensor when move the sensor from air into 1000ppm CO2
 
