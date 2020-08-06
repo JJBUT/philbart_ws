@@ -1,7 +1,8 @@
 #ifndef NRG_SL_UTILS_H
 #define NRG_SL_UTILS_H
 
-#include "vector"
+#include <vector>
+#include <string>
 
 namespace pf{
     /**
@@ -38,6 +39,8 @@ namespace pf{
     * @return double g(x) the value of the gaussian at the test point
     */
     double gaussian(double, double, double);
+
+    std::vector< std::vector<double> > read_data( std::string );
 } //END of pf namespace
 
 #endif

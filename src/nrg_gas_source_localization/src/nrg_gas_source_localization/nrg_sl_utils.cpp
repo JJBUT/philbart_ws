@@ -1,7 +1,10 @@
-#include "nrg_gas_source_localization/nrg_sl_utils.h"
+#include <nrg_gas_source_localization/nrg_sl_utils.h>
 
-#include "random"
-#include "algorithm" 
+#include <random>
+#include <algorithm>
+#include <iostream>
+#include <fstream>
+#include <regex>
 
 namespace pf{
 std::vector<double> uniform_rn(int count){   
@@ -53,6 +56,24 @@ void transform(double source_local_test_point[3], const double test_point[3], co
 
 double gaussian(double x, double mu, double sigma){
     return (1/(std::sqrt(2*M_PI)*sigma))*std::exp(-0.5*std::pow((x-mu)/sigma, 2));
+}
+
+std::vector< std::vector<double> > read_data( std::string input_file_path ){
+    std::vector< std::vector<double> > measurements;
+
+    std::ifstream filein( input_file_path );
+    if ( filein.is_open() ){
+        std::string line; 
+        while(std::getline( filein, line )){
+            std::istringstream buffer(line);
+            std::vector<double> line{std::istream_iterator<double>( buffer ),
+                                     std::istream_iterator<double>()};
+            measurements.push_back(line);
+        }
+        filein.close();
+        return measurements;
+    }
+    std::cout<<"read_data() provided bad file handle ;/\n";
 }
 
 } //END of pf namespace
