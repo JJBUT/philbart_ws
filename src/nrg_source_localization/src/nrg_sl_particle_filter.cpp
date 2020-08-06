@@ -1,3 +1,5 @@
+#include "nrg_sl_particle_filter.h"
+
 #include "random"
 #include "algorithm" //std::generate()
 #include "iostream"
@@ -5,7 +7,6 @@
 #include "fstream"
 #include "regex"
 
-#include "nrg_sl_particle_filter.h"
 
 ParticleFilter::ParticleFilter(): initialized{false}{
 };
@@ -68,7 +69,8 @@ void ParticleFilter::updateFilter(measurement z){
 
 void ParticleFilter::predict(measurement z){
     std::cout<<"measured concentration: "<<z.conc<<" ";
-    double source_local_test_point[3] = { 0, 0, 0 };
+    double source_local_test_point[3] = { 0, 0, 0 };    //Measurement location in source particle frame //TODO fix up comment
+    
     for(auto& p: ps.particles){
         pf::transform(source_local_test_point, z.location, p.position, z.az);
 
@@ -76,11 +78,11 @@ void ParticleFilter::predict(measurement z){
             //Downwind concentration is zero if test point is not downwind of source
             p.downwind_conc = 0.0;
         }else{
-            double sy = wm_.sy[0]*source_local_test_point[0]*std::pow( 1.0+wm_.sy[1]*source_local_test_point[0], -wm_.sy[2] );;
-            double sz = wm_.sz[0]*source_local_test_point[0]*std::pow( 1.0+wm_.sz[1]*source_local_test_point[0], -wm_.sz[2] );;
+            double sy = wm_.sy[0]*source_local_test_point[0]*std::pow( 1.0+wm_.sy[1]*source_local_test_point[0], -wm_.sy[2] );
+            double sz = wm_.sz[0]*source_local_test_point[0]*std::pow( 1.0+wm_.sz[1]*source_local_test_point[0], -wm_.sz[2] );
             double expy = std::exp(-std::pow( source_local_test_point[1], 2 )/( 2*std::pow(sy, 2) ));
             double expz = std::exp(-std::pow( source_local_test_point[2], 2 )/( 2*std::pow(sz, 2) ));
-            double norm = ((p.rate/z.vel)/(2*M_PI*sy*sz));
+            double norm = ( p.rate/z.vel )/( 2*M_PI*sy*sz );
             p.downwind_conc = norm*expy*expz;
         }
     }
@@ -91,18 +93,18 @@ void ParticleFilter::reweight(measurement z){
     double max_weight=0.0;
     // Reweight particles based on similarity between measured concentration and predicted concentration
     for(auto& p: ps.particles){
-        p.weight= p.weight*pf::gaussian(p.downwind_conc, z.conc, pfp_.R);
+        p.weight *= pf::gaussian(p.downwind_conc, z.conc, pfp_.R);    //TODO check multiply equal
         if(p.weight>max_weight) max_weight = p.weight;
     }
     // Log-likelihood reweight to prevent numerical underflow
     double weight_sum=0;
     for(auto& p: ps.particles){
-        p.weight= std::exp(std::log(p.weight/max_weight));
-        weight_sum+=p.weight; 
+        p.weight = std::exp(std::log(p.weight/max_weight));
+        weight_sum += p.weight; 
     }
     // Normalize the cdf to 1
     for(auto& p: ps.particles){
-        p.weight/=weight_sum;
+        p.weight /= weight_sum;
     }
     return;
 }
@@ -117,7 +119,7 @@ void ParticleFilter::resample(){
         weight_sum.push_back( weight_sum.back()+p.weight ); 
     }
     for( auto& new_p: new_ps.particles ){
-        double pick= pf::uniform_rn();
+        double pick = pf::uniform_rn();
         for(int i = 0; i<pfp_.np; i++){
             if( pick>weight_sum[i] && pick< weight_sum[i+1] ){
                 new_p = ps.particles[i];
@@ -128,7 +130,7 @@ void ParticleFilter::resample(){
             }
         }
     }
-    ps= new_ps;
+    ps = new_ps;
     return;
 }
 
@@ -137,7 +139,7 @@ bool ParticleFilter::ifNeff() const{
     for(auto& p: ps.particles){
         sum += std::pow(p.weight,2);
     }
-    if(1.0/sum < pfp_.Neff_lim*pfp_.np){
+    if(1.0/sum < pfp_.Neff_lim*pfp_.np){    //TODO make np_min instead of Neff_lim
         // Degenerate
         return true;
     }
@@ -246,7 +248,6 @@ void transform(double source_local_test_point[3], const double test_point[3], co
     R[2][2]= 1;
 
     // Recreate np.dot(local,R)
-    
     for (size_t i = 0; i < 3; i++){ // Traverse the vector
         source_local_test_point[i]=0;
         for (size_t j = 0; j < 3; j++){ //Traverse the columns of the matrix

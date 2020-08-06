@@ -38,7 +38,7 @@ struct particle{
 * @param double Q The resampling noise introduced to prevent single particle state collapse when resampling
 */
 struct particle_set{
-    std::vector<particle> particles;
+    std::vector<particle> particles; //TODO think about typedef
 };
 
 struct state_space{
@@ -158,7 +158,7 @@ class ParticleFilter{
     * @brief Check if the particle set is degenerate
     * @return bool True if the particle set is degenerate and Neff< Neff_lim
     */
-    bool ifNeff() const;
+    bool ifNeff() const; //TODO make name more descriptive about return condition
 
     
     pf_params pfp_;
@@ -191,7 +191,7 @@ public:
     * @param wind_model The filter's gaussian plume wind model dispersion parameters
     * @return void
     */
-    void initialize(pf_params, state_space, wind_model); //TODO Change Neff and R to params 
+    void initialize(pf_params, state_space, wind_model);
 
     /**
     * @brief Call predict, reweight, and resample to process a measuremnt and update the filter
