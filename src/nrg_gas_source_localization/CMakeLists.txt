@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(nrg_source_localization)
+project(nrg_gas_source_localization)
 
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
