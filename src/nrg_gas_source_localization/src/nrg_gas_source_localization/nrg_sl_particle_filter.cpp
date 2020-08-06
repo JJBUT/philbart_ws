@@ -1,12 +1,10 @@
-#include "nrg_sl_particle_filter.h"
-#include "nrg_sl_utils.h"
+#include "nrg_gas_source_localization/nrg_sl_particle_filter.h"
+#include "nrg_gas_source_localization/nrg_sl_utils.h"
 
-
-
-#include "iostream"
-#include "cmath"
-#include "fstream"
-#include "regex"
+#include <iostream>
+#include <cmath>
+#include <fstream>
+#include <regex>
 
 
 ParticleFilter::ParticleFilter(): initialized{false}{

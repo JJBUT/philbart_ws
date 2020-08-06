@@ -11,8 +11,8 @@ catkin_package()
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 
-add_executable(nrg_sl_particle_filter src/nrg_sl_particle_filter.cpp)   #TODO this is the node
+add_executable(nrg_sl_particle_filter src/nrg_gas_source_localization/nrg_sl_particle_filter.cpp)   #TODO this is the node
 target_link_libraries(nrg_sl_particle_filter ${catkin_LIBRARIES})
 
-add_library(nrg_sl_utils src/nrg_sl_utils.cpp)
+add_library(nrg_sl_utils src/nrg_gas_source_localization/nrg_sl_utils.cpp)
 target_link_libraries(nrg_sl_particle_filter nrg_sl_utils)

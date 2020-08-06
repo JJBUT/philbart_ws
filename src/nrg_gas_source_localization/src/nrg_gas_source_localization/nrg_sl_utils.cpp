@@ -1,4 +1,4 @@
-#include "nrg_sl_utils.h"
+#include "nrg_gas_source_localization/nrg_sl_utils.h"
 
 #include "random"
 #include "algorithm" 
