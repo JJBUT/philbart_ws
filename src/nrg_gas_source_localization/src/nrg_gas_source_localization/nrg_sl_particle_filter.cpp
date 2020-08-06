@@ -1,11 +1,8 @@
-#include "nrg_gas_source_localization/nrg_sl_particle_filter.h"
-#include "nrg_gas_source_localization/nrg_sl_utils.h"
+#include <nrg_gas_source_localization/nrg_sl_particle_filter.h>
+#include <nrg_gas_source_localization/nrg_sl_utils.h>
 
-#include <iostream>
+
 #include <cmath>
-#include <fstream>
-#include <regex>
-
 
 ParticleFilter::ParticleFilter(): initialized{false}{
 };
@@ -67,7 +64,6 @@ void ParticleFilter::updateFilter(measurement z){
 }
 
 void ParticleFilter::predict(measurement z){
-    std::cout<<"measured concentration: "<<z.conc<<" ";
     double source_local_test_point[3] = { 0, 0, 0 };    //Measurement location in source particle frame //TODO fix up comment
     
     for(auto& p: ps.particles){
@@ -154,58 +150,33 @@ void ParticleFilter::printStatistics() const{
         mean[2]+=p.position[2]/pfp_.np;
         mean[3]+=p.rate/pfp_.np;
     }
-    std::cout<<" x_mean: "<< mean[0] <<" y_mean: "<< mean[1] <<" z_mean: "<< mean[2]<<" rate: "<< mean[3]<<"\n";
 }
 /////////////Playpen Start/////////////
-std::vector< std::vector<double> > read_data( std::string input_file_path ){
-    std::vector< std::vector<double> > measurements;
-
-    std::ifstream filein( input_file_path );
-    if ( filein.is_open() ){
-        std::string line; 
-        while(std::getline( filein, line )){
-            std::istringstream buffer(line);
-            std::vector<double> line{std::istream_iterator<double>( buffer ),
-                                     std::istream_iterator<double>()};
-            measurements.push_back(line);
-        }
-        filein.close();
-        return measurements;
-    }
-    std::cout<<"read_data() provided bad file handle ;/\n";
-}
 
 
-int main(){
-    wind_model fake_wind_model( 0.22, 0.0001, 0.5, 0.20, 0.0, 0.0 );
-    state_space fake_state_space( -50.0, 50.0, -50.0, 50.0, -1.0, 1.0, 0.0, 20000.0 );
-    measurement fake_measurement( 0.0, 1.0, 500, 11199000 );
-    fake_measurement.location[0]= 2.0;
-    fake_measurement.location[1]= 0.0;
-    fake_measurement.location[2]= 0.0;
-
-    pf_params fake_pf_params;
-    fake_pf_params.np = 3000;
-    fake_pf_params.Neff_lim = 0.8;
-    fake_pf_params.R = 1.0;
-    fake_pf_params.Q = 0.1;
-
-    ParticleFilter fake_particle_filter(fake_pf_params, fake_state_space, fake_wind_model);
-    
+    // wind_model fake_wind_model( 0.22, 0.0001, 0.5, 0.20, 0.0, 0.0 );
+    // state_space fake_state_space( -50.0, 50.0, -50.0, 50.0, -1.0, 1.0, 0.0, 20000.0 );
+    // measurement fake_measurement( 0.0, 1.0, 500, 11199000 );
+    // fake_measurement.location[0]= 2.0;
+    // fake_measurement.location[1]= 0.0;
+    // fake_measurement.location[2]= 0.0;
+    // pf_params fake_pf_params;
+    // fake_pf_params.np = 3000;
+    // fake_pf_params.Neff_lim = 0.8;
+    // fake_pf_params.R = 1.0;
+    // fake_pf_params.Q = 0.1;
 
 
-    std::vector< std::vector<double> > measurements= read_data("/home/jacksubuntu/philbart_ws/src/nrg_gas_source_localization/data/one_source/a_data_matlab.txt");
-    for(auto& m: measurements){
-        measurement fake_measurement( m[5], m[4], m[3], 0 );
-        fake_measurement.location[0]= m[0];
-        fake_measurement.location[1]= m[1];
-        fake_measurement.location[2]= m[2];
-        fake_particle_filter.printStatistics();
-        fake_particle_filter.updateFilter(fake_measurement);
-        
-        
-    }
-    return 0;
-}
+    // std::vector< std::vector<double> > measurements= read_data("/home/jacksubuntu/philbart_ws/src/nrg_gas_source_localization/data/one_source/a_data_matlab.txt");
+    // for(auto& m: measurements){
+    //     measurement fake_measurement( m[5], m[4], m[3], 0 );
+    //     fake_measurement.location[0]= m[0];
+    //     fake_measurement.location[1]= m[1];
+    //     fake_measurement.location[2]= m[2];
+    //     fake_particle_filter.printStatistics();
+    //     fake_particle_filter.updateFilter(fake_measurement);
+    // }
+
+
 
 /////////////Playpen End/////////////
