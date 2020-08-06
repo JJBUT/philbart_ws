@@ -8,7 +8,6 @@ from gmx200_anemometer.msg import AnemometerMsg
 
 def talker():
     frame = rospy.get_param('frame', "anemometer_link")
-
     port = rospy.get_param('port', '/dev/ttyUSB0')
     baudrate = rospy.get_param('baudrate', 19200)
     mode = rospy.get_param('mode', 'RTU')
