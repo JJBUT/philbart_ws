@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>mg_811_c02_sensor</name>
+  <name>mg_811_co2_sensor</name>
   <version>0.3.4</version>
   <description>philbart_tools</description>
 
@@ -11,6 +11,10 @@
 
   
   <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>message_generation</build_depend>
+  <build_depend>roslaunch</build_depend>
+  <run_depend>message_runtime</run_depend>
+  
   <export>
   </export>
 </package>

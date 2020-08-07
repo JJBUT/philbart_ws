@@ -10,7 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 add_message_files(
   FILES
-  #AnemometerMsg.msg
+  MG811Msg.msg
 )
 
 generate_messages(
