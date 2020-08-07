@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="nrg_gas_source_localization" name="nrg_sl_node" type="nrg_sl_node" output="screen">
+
+    </node>
+</launch>
