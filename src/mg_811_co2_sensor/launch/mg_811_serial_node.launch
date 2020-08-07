@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="mg_811_co2_sensor" name="gas_sensor_node" type="mg_811_serial_node.py" output="screen">
+    </node>
+</launch>
