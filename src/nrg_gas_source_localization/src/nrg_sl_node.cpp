@@ -2,26 +2,48 @@
 
 #include <ros/ros.h>
 #include <message_filters/subscriber.h>
-#include <message_filters/time_synchronizer.h>
+#include <message_filters/synchronizer.h>
+#include <message_filters/sync_policies/approximate_time.h>
 
-#include <boost/bind.hpp>
+#include <memory>
+#include <iostream>
 
+//https://answers.ros.org/question/280856/synchronizer-with-approximate-time-policy-in-a-class-c/
 using namespace gmx200_anemometer;
 
-void callback(const AnemometerMsg& msg_1, const AnemometerMsg& msg_2)
+
+class Node
 {
-  // Solve all of perception here...
-}
+public:
+  Node():
+    p_nh{"~"}
+  {
+    sub1.subscribe(nh, "in1", 10);
+    sub2.subscribe(nh, "in2", 10);
+  }
+  void callback(const AnemometerMsg &in1, const AnemometerMsg &in2)
+  {
+    std::cout<<"Msg one at time: "<<in1.header.stamp.sec<<" Msg two at time: "<<in2.header.stamp.sec<<std::endl;
+  } 
+
+
+private:
+    ros::NodeHandle nh;
+    ros::NodeHandle p_nh;
+    message_filters::Subscriber<AnemometerMsg> sub1;
+    message_filters::Subscriber<AnemometerMsg> sub2;
+    typedef message_filters::sync_policies::ApproximateTime<AnemometerMsg, AnemometerMsg> MySyncPolicy;
+    typedef message_filters::Synchronizer<MySyncPolicy> Sync;
+    std::shared_ptr<Sync> sync;
+};
+
+
 
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "amcl");
-  ros::NodeHandle nh;
+  Node synchronizer;
 
-  message_filters::Subscriber<AnemometerMsg> sub_1(nh, "chanell_1", 1);
-  message_filters::Subscriber<AnemometerMsg> sub_2(nh, "channel_2", 1);
-  message_filters::TimeSynchronizer<AnemometerMsg, AnemometerMsg> sync(sub_1, sub_2, 10);
-  //sync.registerCallback(boost::bind(&callback, _1, _2));
   ros::spin();
   
   return(0);
