@@ -4,7 +4,8 @@ project(nrg_gas_source_localization)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 ## Find catkin and any catkin packages
-find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs genmsg)
+find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs genmsg gmx200_anemometer message_filters)
+
 
 ## Declare a catkin package
 catkin_package()

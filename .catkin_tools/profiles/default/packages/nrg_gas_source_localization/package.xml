@@ -11,6 +11,8 @@
 
   
   <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>gmx200_anemometer</build_depend>
+  <build_depend>message_filters</build_depend>
   <export>
   </export>
 </package>
