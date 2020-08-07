@@ -10,7 +10,7 @@ NRGSLNode::NRGSLNode()
   sync->registerCallback(boost::bind(&NRGSLNode::callback, this, _1, _2));
 }
 
-void NRGSLNode::callback(const AnemometerMsgConstPtr &in1, const AnemometerMsgConstPtr &in2)
+void NRGSLNode::callback(const AnemometerMsgConstPtr &in1, const MG811MsgConstPtr &in2)
 {
 } 
 
