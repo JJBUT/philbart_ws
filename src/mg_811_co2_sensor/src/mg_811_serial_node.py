@@ -3,7 +3,7 @@
 import rospy
 from mg_811_serial import SerialConnection
 
-from mg_811_C02_sensor.msg import MG811Msg
+from mg_811_co2_sensor.msg import MG811Msg
 
 def talker():
     frame = rospy.get_param( 'frame', "mg_811_link" )

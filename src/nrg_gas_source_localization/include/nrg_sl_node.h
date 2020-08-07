@@ -10,7 +10,6 @@
 #include <message_filters/synchronizer.h>
 #include <message_filters/sync_policies/approximate_time.h>
 
-//using AnemometerMsg = gmx200_anemometer::AnemometerMsg;
 typedef gmx200_anemometer::AnemometerMsg AnemometerMsg;
 typedef gmx200_anemometer::AnemometerMsgConstPtr AnemometerMsgConstPtr;
 
@@ -21,6 +20,8 @@ class NRGSLNode{
     typedef message_filters::sync_policies::ApproximateTime<AnemometerMsg, AnemometerMsg> MySyncPolicy;
     typedef message_filters::Synchronizer<MySyncPolicy> Sync;
     boost::shared_ptr<Sync> sync;
+
+
 public:
     NRGSLNode();
     void callback(const AnemometerMsgConstPtr &msg1, const AnemometerMsgConstPtr &msg2);
