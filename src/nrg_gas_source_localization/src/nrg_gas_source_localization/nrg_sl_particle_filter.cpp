@@ -18,11 +18,12 @@ void ParticleFilter::initialize(pf_params pfp, state_space ss, wind_model wm){
         pfp_ = pfp;
         ss_ = ss;
         wm_ = wm;
+
         ps.particles.resize(pfp_.np);
-    
         for(auto& p: ps.particles)
         {
             p.weight = 1.0/pfp_.np;
+
             auto rnv = pf::uniform_rn(4);
             p.position[0] = ss_.x[0] + rnv[0]*(ss_.x[1] - ss_.x[0]);
             p.position[1] = ss_.y[0] + rnv[1]*(ss_.y[1] - ss_.y[0]);
@@ -37,9 +38,10 @@ void ParticleFilter::initialize(pf_params pfp, state_space ss, wind_model wm){
 void ParticleFilter::initialize(){
     ps.particles.resize( pfp_.np );
 
-    for( auto& p: ps.particles )
+    for( auto &p: ps.particles )
     {
         p.weight = 1.0/pfp_.np;
+        
         auto rnv = pf::uniform_rn(4);
         p.position[0] = ss_.x[0] + rnv[0]*(ss_.x[1] - ss_.x[0]);
         p.position[1] = ss_.y[0] + rnv[1]*(ss_.y[1] - ss_.y[0]);
@@ -54,7 +56,7 @@ void ParticleFilter::updateFilter(measurement z){
     if (initialized == true){
         predict(z);
         reweight(z);
-        if ( ifNeff() ){    //TODO change ifNeff to "isDegenerate"
+        if ( isDegenerate() ){ 
             resample();
         }    
         return;
@@ -63,22 +65,22 @@ void ParticleFilter::updateFilter(measurement z){
     return;
 }
 
-void ParticleFilter::predict(measurement z){
-    double source_local_test_point[3] = { 0, 0, 0 };    //Measurement location in source particle frame //TODO fix up comment
+void ParticleFilter::predict( measurement z ){
+    double source_local_measurement_point[3] = { 0, 0, 0 };    //Measurement location in source particle frame //TODO fix up comment
     
-    for(auto& p: ps.particles)
+    for(auto &p: ps.particles)
     {
-        pf::transform(source_local_test_point, z.location, p.position, z.az);
+        pf::transform(source_local_measurement_point, z.location, p.position, z.az);
 
-        if(source_local_test_point[0]<0)
+        if(source_local_measurement_point[0]<0)
         {
             //Downwind concentration is zero if test point is not downwind of source
             p.downwind_conc = 0.0;
         }else{
-            double sy = wm_.sy[0]*source_local_test_point[0]*std::pow( 1.0+wm_.sy[1]*source_local_test_point[0], -wm_.sy[2] );
-            double sz = wm_.sz[0]*source_local_test_point[0]*std::pow( 1.0+wm_.sz[1]*source_local_test_point[0], -wm_.sz[2] );
-            double expy = std::exp(-std::pow( source_local_test_point[1], 2 )/( 2*std::pow(sy, 2) ));
-            double expz = std::exp(-std::pow( source_local_test_point[2], 2 )/( 2*std::pow(sz, 2) ));
+            double sy = wm_.sy[0]*source_local_measurement_point[0]*std::pow( 1.0+wm_.sy[1]*source_local_measurement_point[0], -wm_.sy[2] );
+            double sz = wm_.sz[0]*source_local_measurement_point[0]*std::pow( 1.0+wm_.sz[1]*source_local_measurement_point[0], -wm_.sz[2] );
+            double expy = std::exp(-std::pow( source_local_measurement_point[1], 2 )/( 2*std::pow(sy, 2) ));
+            double expz = std::exp(-std::pow( source_local_measurement_point[2], 2 )/( 2*std::pow(sz, 2) ));
             double norm = ( p.rate/z.vel )/( 2*M_PI*sy*sz );
             p.downwind_conc = norm*expy*expz;
         }
@@ -89,7 +91,7 @@ void ParticleFilter::predict(measurement z){
 void ParticleFilter::reweight(measurement z){
     double max_weight = 0.0;
     // Reweight particles based on similarity between measured concentration and predicted concentration
-    for(auto& p: ps.particles)
+    for(auto &p: ps.particles)
     {
         p.weight *= pf::gaussian( p.downwind_conc, z.conc, pfp_.R );    //TODO check multiply equal
         if( p.weight > max_weight ) max_weight = p.weight;
@@ -97,14 +99,14 @@ void ParticleFilter::reweight(measurement z){
     
     // Log-likelihood reweight to prevent numerical underflow
     double weight_sum = 0;
-    for( auto& p: ps.particles )
+    for( auto &p: ps.particles )
     {
         p.weight = std::exp( std::log(p.weight/max_weight) );
         weight_sum += p.weight; 
     }
     
     // Normalize the cdf to 1
-    for( auto& p: ps.particles )
+    for( auto &p: ps.particles )
     {
         p.weight /= weight_sum;
     }
@@ -118,12 +120,12 @@ void ParticleFilter::resample(){
     
     // Find incremental sum of weight vector
     std::vector<double> weight_sum{0.0};    //Final size will be np+1 elements
-    for( const auto& p: ps.particles ){
+    for( const auto &p: ps.particles ){
         weight_sum.push_back( weight_sum.back() + p.weight ); 
     }
     
     // Pick a new particles from old particle set 
-    for( auto& new_p: new_ps.particles )
+    for( auto &new_p: new_ps.particles )
     {        
         double pick = pf::uniform_rn();
         for(int i = 0; i < pfp_.np; i++)
@@ -143,14 +145,14 @@ void ParticleFilter::resample(){
     return;
 }
 
-bool ParticleFilter::ifNeff() const{
+bool ParticleFilter::isDegenerate() const{
     double sum = 0;
-    for( auto& p: ps.particles )
+    for( auto &p: ps.particles )
     {
         sum += std::pow( p.weight, 2 );
     }
     
-    if(1.0/sum < pfp_.Neff_lim*pfp_.np) //TODO make np_min instead of Neff_lim
+    if( 1.0/sum < pfp_.np_min )
     {    
         // Degenerate
         return true;
@@ -161,7 +163,8 @@ bool ParticleFilter::ifNeff() const{
 
 void ParticleFilter::printStatistics() const{
     std::vector<double> mean(4,0);
-    for(auto& p: ps.particles){
+    for(auto &p: ps.particles)
+    {
         mean[0] += p.position[0]/pfp_.np;
         mean[1] += p.position[1]/pfp_.np;
         mean[2] += p.position[2]/pfp_.np;
@@ -179,7 +182,7 @@ void ParticleFilter::printStatistics() const{
     // fake_measurement.location[2]= 0.0;
     // pf_params fake_pf_params;
     // fake_pf_params.np = 3000;
-    // fake_pf_params.Neff_lim = 0.8;
+    // fake_pf_params.np_min = 2000;
     // fake_pf_params.R = 1.0;
     // fake_pf_params.Q = 0.1;
 

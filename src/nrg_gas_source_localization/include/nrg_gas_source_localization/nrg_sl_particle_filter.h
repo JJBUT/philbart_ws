@@ -5,10 +5,10 @@
 
 struct pf_params{
     int np; 
-    double Neff_lim;
+    double np_min;
     //Measurement noise
     double R;
-    //Resampling lubricant
+    //Resampling noise
     double Q;
 };
 
@@ -158,7 +158,7 @@ class ParticleFilter{
     * @brief Check if the particle set is degenerate
     * @return bool True if the particle set is degenerate and Neff< Neff_lim
     */
-    bool ifNeff() const; //TODO make name more descriptive about return condition
+    bool isDegenerate() const; //TODO make name more descriptive about return condition
 
     
     pf_params pfp_;
