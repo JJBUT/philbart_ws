@@ -42,10 +42,16 @@ struct particle_set{
 };
 
 struct state_space{
+    state_space()
+    :x(2),
+     y(2),
+     z(2),
+     rate(2)
+    {}
     std::vector<double> x;
     std::vector<double> y;
     std::vector<double> z;
-    std::vector<double>rate;
+    std::vector<double> rate;
 };
 
 struct wind_model{
