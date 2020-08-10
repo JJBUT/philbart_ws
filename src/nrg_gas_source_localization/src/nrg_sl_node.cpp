@@ -3,8 +3,8 @@
 #include <iostream>
 
 NRGSLNode::NRGSLNode()
-:nh_(), 
- private_nh_("~")
+: nh_(), 
+  private_nh_("~")
 {
   pf_params _pfp;
   private_nh_.param( "number_of_particles", 
@@ -38,13 +38,13 @@ NRGSLNode::NRGSLNode()
 
   filter_.initialize(_pfp, _ss, _wm);
 
+  sub1.subscribe( nh_, 
+                  "/anemometer_data_topic", 
+                  10 );
+  sub2.subscribe( nh_, 
+                  "/gas_sensor_data_topic", 
+                  10 );
 
-  private_nh_.param( "anemometer_topic", 
-                     anemometer_topic_ );
-  private_nh_.param( "gas_sensor_topic",
-                     gas_sensor_topic_ );
-  sub1.subscribe(nh_, "/in1", 10);
-  sub2.subscribe(nh_, "/in2", 10);
   sync.reset(new Sync(MySyncPolicy(10), sub1, sub2));   
   sync->registerCallback(boost::bind(&NRGSLNode::callback, this, _1, _2));
 }
