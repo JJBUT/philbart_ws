@@ -13,39 +13,39 @@ ParticleFilter::ParticleFilter(pf_params pfp, state_space ss, wind_model wm): pf
 
 
 void ParticleFilter::initialize(pf_params pfp, state_space ss, wind_model wm){
-    if(initialized == false){
+    if(initialized == false)
+    {
         pfp_ = pfp;
         ss_ = ss;
         wm_ = wm;
         ps.particles.resize(pfp_.np);
-
     
-        for(auto& p: ps.particles){
-            p.weight=1.0/pfp_.np;
-            auto rnv= pf::uniform_rn(4);
-            p.position[0]= ss_.x[0]+rnv[0]*(ss_.x[1]-ss_.x[0]);
-            p.position[1]= ss_.y[0]+rnv[1]*(ss_.y[1]-ss_.y[0]);
-            p.position[2]= ss_.z[0]+rnv[2]*(ss_.z[1]-ss_.z[0]);
-            p.rate= ss_.rate[0]+rnv[3]*(ss_.rate[1]-ss_.rate[0]);
+        for(auto& p: ps.particles)
+        {
+            p.weight = 1.0/pfp_.np;
+            auto rnv = pf::uniform_rn(4);
+            p.position[0] = ss_.x[0] + rnv[0]*(ss_.x[1] - ss_.x[0]);
+            p.position[1] = ss_.y[0] + rnv[1]*(ss_.y[1] - ss_.y[0]);
+            p.position[2] = ss_.z[0] + rnv[2]*(ss_.z[1] - ss_.z[0]);
+            p.rate = ss_.rate[0] + rnv[3]*(ss_.rate[1] - ss_.rate[0]);
         }
         initialized= true;
     }
- 
     return;
 };
 
 void ParticleFilter::initialize(){
-    ps.particles.resize(pfp_.np);
+    ps.particles.resize( pfp_.np );
 
-    for(auto& p: ps.particles){
-        p.weight=1.0/pfp_.np;
-        auto rnv= pf::uniform_rn(4);
-        p.position[0]= ss_.x[0]+rnv[0]*(ss_.x[1]-ss_.x[0]);
-        p.position[1]= ss_.y[0]+rnv[1]*(ss_.y[1]-ss_.y[0]);
-        p.position[2]= ss_.z[0]+rnv[2]*(ss_.z[1]-ss_.z[0]);
-        p.rate= ss_.rate[0]+rnv[3]*(ss_.rate[1]-ss_.rate[0]);
+    for( auto& p: ps.particles )
+    {
+        p.weight = 1.0/pfp_.np;
+        auto rnv = pf::uniform_rn(4);
+        p.position[0] = ss_.x[0] + rnv[0]*(ss_.x[1] - ss_.x[0]);
+        p.position[1] = ss_.y[0] + rnv[1]*(ss_.y[1] - ss_.y[0]);
+        p.position[2] = ss_.z[0] + rnv[2]*(ss_.z[1] - ss_.z[0]);
+        p.rate = ss_.rate[0] + rnv[3]*(ss_.rate[1] - ss_.rate[0]);
     }
-    
     initialized= true;
     return;
 };
@@ -54,7 +54,7 @@ void ParticleFilter::updateFilter(measurement z){
     if (initialized == true){
         predict(z);
         reweight(z);
-        if ( ifNeff() ){
+        if ( ifNeff() ){    //TODO change ifNeff to "isDegenerate"
             resample();
         }    
         return;
@@ -66,10 +66,12 @@ void ParticleFilter::updateFilter(measurement z){
 void ParticleFilter::predict(measurement z){
     double source_local_test_point[3] = { 0, 0, 0 };    //Measurement location in source particle frame //TODO fix up comment
     
-    for(auto& p: ps.particles){
+    for(auto& p: ps.particles)
+    {
         pf::transform(source_local_test_point, z.location, p.position, z.az);
 
-        if(source_local_test_point[0]<0){
+        if(source_local_test_point[0]<0)
+        {
             //Downwind concentration is zero if test point is not downwind of source
             p.downwind_conc = 0.0;
         }else{
@@ -85,38 +87,50 @@ void ParticleFilter::predict(measurement z){
 }
 
 void ParticleFilter::reweight(measurement z){
-    double max_weight=0.0;
+    double max_weight = 0.0;
     // Reweight particles based on similarity between measured concentration and predicted concentration
-    for(auto& p: ps.particles){
-        p.weight *= pf::gaussian(p.downwind_conc, z.conc, pfp_.R);    //TODO check multiply equal
-        if(p.weight>max_weight) max_weight = p.weight;
+    for(auto& p: ps.particles)
+    {
+        p.weight *= pf::gaussian( p.downwind_conc, z.conc, pfp_.R );    //TODO check multiply equal
+        if( p.weight > max_weight ) max_weight = p.weight;
     }
+    
     // Log-likelihood reweight to prevent numerical underflow
-    double weight_sum=0;
-    for(auto& p: ps.particles){
-        p.weight = std::exp(std::log(p.weight/max_weight));
+    double weight_sum = 0;
+    for( auto& p: ps.particles )
+    {
+        p.weight = std::exp( std::log(p.weight/max_weight) );
         weight_sum += p.weight; 
     }
+    
     // Normalize the cdf to 1
-    for(auto& p: ps.particles){
+    for( auto& p: ps.particles )
+    {
         p.weight /= weight_sum;
     }
     return;
 }
 
 void ParticleFilter::resample(){
-    particle_set new_ps;
-    new_ps.particles.resize(pfp_.np);
-
     // See Multinomial Resampling in: "Particle filters and resampling techniques: Importance in computational complexity analysis" IEEE 2013
-    std::vector<double> weight_sum{0.0};
-    for(const auto& p: ps.particles){
-        weight_sum.push_back( weight_sum.back()+p.weight ); 
+    particle_set new_ps;
+    new_ps.particles.resize( pfp_.np );
+    
+    // Find incremental sum of weight vector
+    std::vector<double> weight_sum{0.0};    //Final size will be np+1 elements
+    for( const auto& p: ps.particles ){
+        weight_sum.push_back( weight_sum.back() + p.weight ); 
     }
-    for( auto& new_p: new_ps.particles ){
+    
+    // Pick a new particles from old particle set 
+    for( auto& new_p: new_ps.particles )
+    {        
         double pick = pf::uniform_rn();
-        for(int i = 0; i<pfp_.np; i++){
-            if( pick>weight_sum[i] && pick< weight_sum[i+1] ){
+        for(int i = 0; i < pfp_.np; i++)
+        {
+            if( pick > weight_sum[i] &&
+                pick < weight_sum[i+1] )
+            {
                 new_p = ps.particles[i];
                 new_p.weight = 1.0/pfp_.np;
                 new_p.position[0] += pf::uniform_rn()*pfp_.Q;
@@ -131,10 +145,13 @@ void ParticleFilter::resample(){
 
 bool ParticleFilter::ifNeff() const{
     double sum = 0;
-    for(auto& p: ps.particles){
-        sum += std::pow(p.weight,2);
+    for( auto& p: ps.particles )
+    {
+        sum += std::pow( p.weight, 2 );
     }
-    if(1.0/sum < pfp_.Neff_lim*pfp_.np){    //TODO make np_min instead of Neff_lim
+    
+    if(1.0/sum < pfp_.Neff_lim*pfp_.np) //TODO make np_min instead of Neff_lim
+    {    
         // Degenerate
         return true;
     }
@@ -145,10 +162,10 @@ bool ParticleFilter::ifNeff() const{
 void ParticleFilter::printStatistics() const{
     std::vector<double> mean(4,0);
     for(auto& p: ps.particles){
-        mean[0]+=p.position[0]/pfp_.np;
-        mean[1]+=p.position[1]/pfp_.np;
-        mean[2]+=p.position[2]/pfp_.np;
-        mean[3]+=p.rate/pfp_.np;
+        mean[0] += p.position[0]/pfp_.np;
+        mean[1] += p.position[1]/pfp_.np;
+        mean[2] += p.position[2]/pfp_.np;
+        mean[3] += p.rate/pfp_.np;
     }
 }
 /////////////Playpen Start/////////////
