@@ -26,8 +26,8 @@ class NRGSLNode{
 
     ParticleFilter filter_;
 
-    message_filters::Subscriber<AnemometerMsg> sub1;
-    message_filters::Subscriber<MG811Msg> sub2; 
+    message_filters::Subscriber<AnemometerMsg> sub_wind;
+    message_filters::Subscriber<MG811Msg> sub_gas; 
     typedef message_filters::sync_policies::ApproximateTime<AnemometerMsg, MG811Msg> MySyncPolicy;
     typedef message_filters::Synchronizer<MySyncPolicy> Sync;
     boost::shared_ptr<Sync> sync;
