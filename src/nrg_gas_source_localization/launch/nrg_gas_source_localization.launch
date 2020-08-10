@@ -1,31 +1,35 @@
 <?xml version="1.0"?>
 <launch>
-    <arg name="number_of_particles" default="1000"/>
-    <arg name="minimum_number_of_particles" default="800"/>
-    <arg name="measurement_noise" default="2.0"/>
-    <arg name="resampling_noise" default="0.2"/>
+    <arg name = "number_of_particles" 
+         default = "1000"/>
+    <arg name = "minimum_number_of_particles" 
+         default = "800"/>
+    <arg name = "measurement_noise" 
+         default = "2.0"/>
+    <arg name = "resampling_noise" 
+         default = "0.2"/>
 
     <node pkg="nrg_gas_source_localization"  type="nrg_sl_node" name="source_localization" output="screen">
-        <param name="number_of_particles" value="$(arg number_of_particles)"/>  
-        <param name="minimum_number_of_particles" value="$(arg minimum_number_of_particles)"/>  
-        <param name="measurement_noise" value="$(arg measurement_noise)"/>  
-        <param name="resampling_noise" value="$(arg resampling_noise)"/>  
+        <param name = "number_of_particles" 
+               value = "$(arg number_of_particles)"/>  
+        <param name = "minimum_number_of_particles" 
+               value = "$(arg minimum_number_of_particles)"/>  
+        <param name = "measurement_noise" 
+               value = "$(arg measurement_noise)"/>  
+        <param name = "resampling_noise" 
+               value = "$(arg resampling_noise)"/>  
 
-        <rosparam param = "x_bounds"> 
-                          [-100, 100] </rosparam>
-        <rosparam param = "y_bounds"> 
-                          [-100, 100] </rosparam>
-        <rosparam param = "z_bounds"> 
-                          [-5, 25] </rosparam>
-        <rosparam param = "rate_bounds"> 
-                          [0, 20000] </rosparam>
+        <rosparam param = "x_bounds"> [-100, 100] </rosparam>
+        <rosparam param = "y_bounds"> [-100, 100] </rosparam>
+        <rosparam param = "z_bounds"> [-5, 25] </rosparam>
+        <rosparam param = "rate_bounds"> [0, 20000] </rosparam>
 
-        <rosparam param = "wind_model_horizontal_dispersion"> 
-                          [0.22, 0.0001, 0.5] </rosparam>
-        <rosparam param = "wind_model_vertical_dispersion"> 
-                          [0.20, 0.0, 0.0] </rosparam>
+        <rosparam param = "wind_model_horizontal_dispersion"> [0.22, 0.0001, 0.5] </rosparam>
+        <rosparam param = "wind_model_vertical_dispersion"> [0.20, 0.0, 0.0] </rosparam>
 
-        <remap from="anemometer_data_topic" to="remapped_anemometer_data_topic"/>
-        <remap from="gas_sensor_data_topic" to="remapped_gas_sensor_data_topic"/>
+        <remap from = "anemometer_data_topic" 
+               to = "remapped_anemometer_data_topic"/>
+        <remap from = "gas_sensor_data_topic" 
+               to = "remapped_gas_sensor_data_topic"/>
     </node>
 </launch>
