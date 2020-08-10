@@ -1,6 +1,11 @@
 <?xml version="1.0"?>
 <launch>
-    <node pkg="nrg_gas_source_localization" name="nrg_sl_node" type="nrg_sl_node" output="screen">
-
+    <arg name="measurement_noise" default="2.0"/>
+    <arg name="resampling_noise" default="0.2"/>
+    <!--arg name="" default=""/-->
+    <node pkg="nrg_gas_source_localization"  type="nrg_sl_node" name="source_localization" output="screen">
+        <param name="resampling_noise" value="$(arg measurement_noise)"/>  
+        <param name="resampling_noise" value="$(arg resampling_noise)"/>  
+        <!--param name="" value="$(arg )"/-->  
     </node>
 </launch>
