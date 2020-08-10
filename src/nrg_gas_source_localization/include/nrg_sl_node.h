@@ -3,6 +3,7 @@
 
 //https://answers.ros.org/question/280856/synchronizer-with-approximate-time-policy-in-a-class-c/
 
+#include <nrg_gas_source_localization/nrg_sl_particle_filter.h>
 #include <gmx200_anemometer/AnemometerMsg.h>
 #include <mg_811_co2_sensor/MG811Msg.h>
 
@@ -11,19 +12,29 @@
 #include <message_filters/synchronizer.h>
 #include <message_filters/sync_policies/approximate_time.h>
 
+
+#include <string>
+
 using gmx200_anemometer::AnemometerMsg;
 using gmx200_anemometer::AnemometerMsgConstPtr;
 using mg_811_co2_sensor::MG811Msg;
 using mg_811_co2_sensor::MG811MsgConstPtr;
 
 class NRGSLNode{
-    ros::NodeHandle nh;
-    ros::NodeHandle private_nh;
+    ros::NodeHandle nh_;
+    ros::NodeHandle private_nh_;
+
+    ParticleFilter filter_;
+
+    std::string anemometer_topic_;
+    std::string gas_sensor_topic_;
     message_filters::Subscriber<AnemometerMsg> sub1;
     message_filters::Subscriber<MG811Msg> sub2; 
     typedef message_filters::sync_policies::ApproximateTime<AnemometerMsg, MG811Msg> MySyncPolicy;
     typedef message_filters::Synchronizer<MySyncPolicy> Sync;
     boost::shared_ptr<Sync> sync;
+
+    
 
 
 public:
