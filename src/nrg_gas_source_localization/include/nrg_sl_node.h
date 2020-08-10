@@ -26,8 +26,6 @@ class NRGSLNode{
 
     ParticleFilter filter_;
 
-    std::string anemometer_topic_;
-    std::string gas_sensor_topic_;
     message_filters::Subscriber<AnemometerMsg> sub1;
     message_filters::Subscriber<MG811Msg> sub2; 
     typedef message_filters::sync_policies::ApproximateTime<AnemometerMsg, MG811Msg> MySyncPolicy;
