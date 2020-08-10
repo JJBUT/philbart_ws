@@ -3,14 +3,14 @@
 #include <iostream>
 
 NRGSLNode::NRGSLNode()
+  : nh_(), 
+  private_nh_("~")
 {
   pf_params _pfp;
   private_nh_.param("number_of_particles", _pfp.np, 1000);
   private_nh_.param("minimum_number_of_particles", _pfp.np_min, 500);
   private_nh_.param("measurement_noise", _pfp.R, 1.0);
   private_nh_.param("resampling_noise", _pfp.Q, 0.1);
-
-  ROS_INFO_STREAM(_pfp.Q);
 
   state_space _ss;
   //private_nh_.param("x_bounds", _ss.x);
@@ -35,7 +35,7 @@ void NRGSLNode::callback(const AnemometerMsgConstPtr &in1, const MG811MsgConstPt
 
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "nrg_sl_node");
+  ros::init(argc, argv, "nrg_source_localization_node");
   NRGSLNode synchronizer;
 
   ros::spin();
