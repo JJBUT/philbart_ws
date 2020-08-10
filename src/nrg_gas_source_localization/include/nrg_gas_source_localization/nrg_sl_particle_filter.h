@@ -56,26 +56,13 @@ struct state_space{
 };
 
 struct wind_model{
-    /**
-    * @brief Construct default zero paramaterized wind model
-    * @param sy Horizontal dispersion parameters ()
-    * @param sz Vertical dispersion parameters ()
-    * @return Zero initialized wind_model
-    */
-    wind_model(): sy{0, 0, 0}, sz{0, 0, 0} {};
+    wind_model()
+    :sy(3),
+     sz(3)
+    {}
 
-    /**
-    * @brief Construct input initialized wind model
-    * @param sy Horizontal dispersion parameters ()
-    * @param sz Vertical dispersion parameters ()
-    * @return Input initialized wind_model
-    */
-    wind_model(double sya, double syb, double syc, double sza, double szb, double szc)
-        :sy{sya,syb,syc},sz{sza,szb,szc}
-        {};
-
-    double sy[3];
-    double sz[3];
+    std::vector<double> sy;
+    std::vector<double> sz;
 };
 
 struct measurement
