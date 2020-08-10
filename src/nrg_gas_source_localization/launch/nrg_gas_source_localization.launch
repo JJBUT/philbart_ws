@@ -1,11 +1,17 @@
 <?xml version="1.0"?>
 <launch>
+    <arg name="number_of_particles" default="1000"/>
+    <arg name="minimum_number_of_particles" default="800"/>
     <arg name="measurement_noise" default="2.0"/>
     <arg name="resampling_noise" default="0.2"/>
     <!--arg name="" default=""/-->
     <node pkg="nrg_gas_source_localization"  type="nrg_sl_node" name="source_localization" output="screen">
-        <param name="resampling_noise" value="$(arg measurement_noise)"/>  
+        <param name="number_of_particles" value="$(arg number_of_particles)"/>  
+        <param name="minimum_number_of_particles" value="$(arg minimum_number_of_particles)"/>  
+        <param name="measurement_noise" value="$(arg measurement_noise)"/>  
         <param name="resampling_noise" value="$(arg resampling_noise)"/>  
+
+        <rosparam name="x_bounds" value="[-100.0, 100.0]" />
         <!--param name="" value="$(arg )"/-->  
     </node>
 </launch>
