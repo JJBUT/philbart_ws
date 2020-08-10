@@ -5,7 +5,7 @@
 
 struct pf_params{
     int np; 
-    double np_min;
+    int np_min;
     //Measurement noise
     double R;
     //Resampling noise
@@ -177,7 +177,7 @@ public:
     
     /**
     * @brief Construct a parameterized filter
-    * @param int The number of particlces 
+    * @param pf_params Particle filter parameterization
     * @param state_space The state space bounds
     * @param wind_model The wind model parameters
     * @return ParticleFilter 
