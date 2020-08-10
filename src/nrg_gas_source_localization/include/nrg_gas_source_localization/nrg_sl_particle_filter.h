@@ -42,32 +42,10 @@ struct particle_set{
 };
 
 struct state_space{
-    /**
-    * @brief Construct default zero paramaterized state space
-    * @return Zero intialized state_space 
-    */
-    state_space():x{0.0, 0.0}, y{0.0, 0.0}, z{0.0, 0.0}, rate{0.0, 0.0} {};
-
-    /**
-    * @brief Construct input initialized state space
-    * @param x_min The x-dimension lower bound (m)
-    * @param x_max The x-dimension upper bound (m)
-    * @param y_min The y-dimension lower bound (m)
-    * @param y_max The y-dimension upper bound (m)
-    * @param z_min The z-dimension lower bound (m)
-    * @param z_max The z-dimension upper bound (m)
-    * @param rate_min The rate lower bound (?)
-    * @param rate_max The rate upper bound (?)
-    * @return Input initialized state_space
-    */
-    state_space(double x_min, double x_max, double y_min, double y_max, double z_min, double z_max, double rate_min, double rate_max)
-        :x{x_min, x_max}, y{y_min, y_max}, z{z_min, z_max}, rate{rate_min, rate_max}
-        {};
-
-    double x[2];
-    double y[2];
-    double z[2];
-    double rate[2];
+    std::vector<double> x;
+    std::vector<double> y;
+    std::vector<double> z;
+    std::vector<double>rate;
 };
 
 struct wind_model{
