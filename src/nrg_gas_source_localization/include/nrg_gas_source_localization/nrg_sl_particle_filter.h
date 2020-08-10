@@ -48,6 +48,7 @@ struct state_space{
      z(2),
      rate(2)
     {}
+
     std::vector<double> x;
     std::vector<double> y;
     std::vector<double> z;
