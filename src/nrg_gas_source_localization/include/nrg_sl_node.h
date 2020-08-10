@@ -11,11 +11,10 @@
 #include <message_filters/synchronizer.h>
 #include <message_filters/sync_policies/approximate_time.h>
 
-typedef gmx200_anemometer::AnemometerMsg AnemometerMsg;
-typedef gmx200_anemometer::AnemometerMsgConstPtr AnemometerMsgConstPtr;
-
-typedef mg_811_co2_sensor::MG811Msg MG811Msg;
-typedef mg_811_co2_sensor::MG811MsgConstPtr MG811MsgConstPtr;
+using gmx200_anemometer::AnemometerMsg;
+using gmx200_anemometer::AnemometerMsgConstPtr;
+using mg_811_co2_sensor::MG811Msg;
+using mg_811_co2_sensor::MG811MsgConstPtr;
 
 class NRGSLNode{
     ros::NodeHandle nh;
