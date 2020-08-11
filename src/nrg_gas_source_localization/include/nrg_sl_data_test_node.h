@@ -1,16 +1,12 @@
 #ifndef NRG_SL_DATA_TEST_NODE_H
 #define NRG_SL_DATA_TEST_NODE_H
 
-#include <gmx200_anemometer/AnemometerMsg.h>
-#include <mg_811_co2_sensor/MG811Msg.h>
-
 #include <ros/ros.h>
 
 #include <vector>
 #include <string>
 
-using gmx200_anemometer::AnemometerMsg;
-using mg_811_co2_sensor::MG811Msg;
+
 
 
 class NRGSLdata_testNODE{
