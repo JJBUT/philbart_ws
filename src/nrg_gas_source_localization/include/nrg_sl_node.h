@@ -37,7 +37,7 @@ class NRGSLNode{
 
 public:
     NRGSLNode();
-    void callback(const AnemometerMsgConstPtr &msg1, const MG811MsgConstPtr &msg2);
+    void callback(const AnemometerMsgConstPtr &msg1, const MG811MsgConstPtr &msg2); //TODO does this need to be public?
 };
 
 

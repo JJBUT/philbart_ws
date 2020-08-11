@@ -61,7 +61,7 @@ NRGSLNode::NRGSLNode()
 }
 
 
-void NRGSLNode::callback(const AnemometerMsgConstPtr &in1, const MG811MsgConstPtr &in2)
+void NRGSLNode::callback(const AnemometerMsgConstPtr &wind, const MG811MsgConstPtr &gas)
 {
 } 
 
