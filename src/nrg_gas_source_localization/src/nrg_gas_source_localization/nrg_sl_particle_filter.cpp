@@ -13,14 +13,14 @@ ParticleFilter::ParticleFilter(pf_params pfp, state_space ss, wind_model wm): pf
 
 
 void ParticleFilter::initialize(pf_params pfp, state_space ss, wind_model wm){
-    if(initialized == false)
+    if( initialized == false )
     {
         pfp_ = pfp;
         ss_ = ss;
         wm_ = wm;
 
         ps.particles.resize(pfp_.np);
-        for(auto& p: ps.particles)
+        for( auto& p: ps.particles )
         {
             p.weight = 1.0/pfp_.np;
 
