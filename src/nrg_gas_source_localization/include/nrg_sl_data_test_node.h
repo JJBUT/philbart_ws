@@ -16,10 +16,11 @@ class NRGSLdata_testNODE{
     ros::Publisher pub_gas_;
     tf2_ros::TransformBroadcaster pub_tf_;
 
-    std::vector< std::vector<double> > measurement_data;
+    std::vector< std::vector<double> > simulation_data;
 public:
     NRGSLdata_testNODE();
-    void setMeasurementData( std::string path );
+    int getSimulationDataSize() const;
+    void setSimulationData( std::string path );
     void pubMeasurement();
 
 };
