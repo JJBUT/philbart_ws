@@ -53,10 +53,12 @@ void ParticleFilter::initialize(){
 };
 
 void ParticleFilter::updateFilter(measurement z){
-    if (initialized == true){
+    if ( initialized == true )
+    {
         predict(z);
         reweight(z);
-        if ( isDegenerate() ){ 
+        if ( isDegenerate() )
+        { 
             resample();
         }    
         return;
@@ -68,11 +70,11 @@ void ParticleFilter::updateFilter(measurement z){
 void ParticleFilter::predict( measurement z ){
     double source_local_measurement_point[3] = { 0, 0, 0 };    //Measurement location in source particle frame //TODO fix up comment
     
-    for(auto &p: ps.particles)
+    for( auto &p: ps.particles )
     {
-        pf::transform(source_local_measurement_point, z.location, p.position, z.az);
+        pf::transform( source_local_measurement_point, z.location, p.position, z.az );
 
-        if(source_local_measurement_point[0]<0)
+        if( source_local_measurement_point[0]<0 )
         {
             //Downwind concentration is zero if test point is not downwind of source
             p.downwind_conc = 0.0;
@@ -88,10 +90,10 @@ void ParticleFilter::predict( measurement z ){
     return;
 }
 
-void ParticleFilter::reweight(measurement z){
+void ParticleFilter::reweight( measurement z ){
     double max_weight = 0.0;
     // Reweight particles based on similarity between measured concentration and predicted concentration
-    for(auto &p: ps.particles)
+    for( auto &p: ps.particles )
     {
         p.weight *= pf::gaussian( p.downwind_conc, z.conc, pfp_.R );    //TODO check multiply equal
         if( p.weight > max_weight ) max_weight = p.weight;
