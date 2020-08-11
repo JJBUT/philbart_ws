@@ -18,3 +18,6 @@ target_link_libraries(nrg_sl_node nrg_sl_particle_filter nrg_sl_utils ${catkin_L
 add_library(nrg_sl_utils src/nrg_gas_source_localization/nrg_sl_utils.cpp)
 add_library(nrg_sl_particle_filter src/nrg_gas_source_localization/nrg_sl_particle_filter.cpp)
 
+
+add_executable(nrg_sl_data_test_node src/nrg_sl_data_test_node.cpp)  
+target_link_libraries(nrg_sl_data_test_node nrg_sl_utils ${catkin_LIBRARIES})

@@ -1,5 +1,11 @@
 <?xml version="1.0"?>
 <launch>
+
+    <node pkg="nrg_gas_source_localization"  type="nrg_sl_data_test_node" name="data_test_source_localization" output="screen">
+    </node>
+
+    <node pkg="tf2_ros" type="static_transform_publisher" name="map_to_base_link_broadcaster" args="1 0 0 0 0 0 1 map base_link" />
+    
     <arg name = "number_of_particles" 
          default = "1000"/>
     <arg name = "minimum_number_of_particles" 
