@@ -5,6 +5,8 @@
 #include <mg_811_co2_sensor/MG811Msg.h>
 
 #include <std_msgs/Header.h>
+#include <tf2/LinearMath/Quaternion.h>
+#include <geometry_msgs/TransformStamped.h>
 
 
 using gmx200_anemometer::AnemometerMsg;
@@ -29,11 +31,11 @@ void NRGSLdata_testNODE::setMeasurementData( std::string path )
 
 void NRGSLdata_testNODE::pubMeasurement()
 {
-    ros::Time publication_time = ros::Time::now();
+    ros::Time current_time = ros::Time::now();
 
     Header wind_header; 
            wind_header.seq = 0; 
-           wind_header.stamp = publication_time;
+           wind_header.stamp = current_time;
            wind_header.frame_id = "anemometer_link";
     AnemometerMsg wind_msg;
                   wind_msg.header = wind_header;
@@ -42,16 +44,32 @@ void NRGSLdata_testNODE::pubMeasurement()
 
     Header gas_header;
            gas_header.seq = 0;
-           gas_header.stamp = publication_time;
+           gas_header.stamp = current_time;
            gas_header.frame_id = "gas_sensor_link";
     MG811Msg gas_msg;
              gas_msg.header = gas_header;
              gas_msg.concentration = measurement_data[0][3];
 
+    geometry_msgs::TransformStamped measurementLocation;
+    measurementLocation.header.stamp = current_time;
+    measurementLocation.header.frame_id = "map";
+    measurementLocation.child_frame_id = "base_link";
+    measurementLocation.transform.translation.x = measurement_data[0][0];
+    measurementLocation.transform.translation.y = measurement_data[0][1];
+    measurementLocation.transform.translation.z = measurement_data[0][2];
+    tf2::Quaternion q;
+    q.setRPY(0, 0, 0);
+    measurementLocation.transform.rotation.x = q.x();
+    measurementLocation.transform.rotation.y = q.y();
+    measurementLocation.transform.rotation.z = q.z();
+    measurementLocation.transform.rotation.w = q.w();
+    
+
     measurement_data.erase( measurement_data.begin() );
 
     pub_wind_.publish(wind_msg);
     pub_gas_.publish(gas_msg);
+    pub_tf_.sendTransform(measurementLocation);
 
     return;
 }
