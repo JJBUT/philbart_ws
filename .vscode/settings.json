@@ -61,9 +61,12 @@
         "utility": "cpp",
         "typeindex": "cpp",
         "typeinfo": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "random": "cpp"
     },
     "cSpell.words": [
+        "Ldata",
+        "NRGS",
         "pfps"
     ],
     "python.pythonPath": "/usr/bin/python"
