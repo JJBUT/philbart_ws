@@ -19,13 +19,17 @@ NRGSLdata_testNODE::NRGSLdata_testNODE()
   pub_wind_{nh_.advertise< AnemometerMsg >( "anemometer_data", 5 )},
   pub_gas_{nh_.advertise< MG811Msg >( "gas_sensor_data", 5 )}
 {
-    setMeasurementData("/home/jacksubuntu/philbart_ws/src/nrg_gas_source_localization/data/one_source/a_data_matlab.txt");
+    setSimulationData("/home/jacksubuntu/philbart_ws/src/nrg_gas_source_localization/data/one_source/a_data_matlab.txt");
     return;
 }
 
-void NRGSLdata_testNODE::setMeasurementData( std::string path )
+int NRGSLdata_testNODE::getSimulationDataSize() const
 {
-    measurement_data = pf::read_data( path );      
+    return simulation_data.size();
+}
+void NRGSLdata_testNODE::setSimulationData( std::string path )
+{
+    simulation_data = pf::read_data( path );      
     return;
 }
 
@@ -33,39 +37,34 @@ void NRGSLdata_testNODE::pubMeasurement()
 {
     ros::Time current_time = ros::Time::now();
 
-    Header wind_header; 
-           wind_header.seq = 0; 
-           wind_header.stamp = current_time;
-           wind_header.frame_id = "anemometer_link";
     AnemometerMsg wind_msg;
-                  wind_msg.header = wind_header;
-                  wind_msg.azimuth = measurement_data[0][5];
-                  wind_msg.speed = measurement_data[0][4];
+                  wind_msg.header.seq = 0;
+                  wind_msg.header.stamp = current_time;
+                  wind_msg.header.frame_id = "anemometer_link";   
+                  wind_msg.azimuth = simulation_data[0][5];
+                  wind_msg.speed = simulation_data[0][4];
 
-    Header gas_header;
-           gas_header.seq = 0;
-           gas_header.stamp = current_time;
-           gas_header.frame_id = "gas_sensor_link";
     MG811Msg gas_msg;
-             gas_msg.header = gas_header;
-             gas_msg.concentration = measurement_data[0][3];
+             gas_msg.header.seq = 0;
+             gas_msg.header.stamp = current_time;
+             gas_msg.header.frame_id = "gas_sensor_link";
+             gas_msg.concentration = simulation_data[0][3];
 
     geometry_msgs::TransformStamped measurementLocation;
-    measurementLocation.header.stamp = current_time;
-    measurementLocation.header.frame_id = "map";
-    measurementLocation.child_frame_id = "base_link";
-    measurementLocation.transform.translation.x = measurement_data[0][0];
-    measurementLocation.transform.translation.y = measurement_data[0][1];
-    measurementLocation.transform.translation.z = measurement_data[0][2];
-    tf2::Quaternion q;
-    q.setRPY(0, 0, 0);
-    measurementLocation.transform.rotation.x = q.x();
-    measurementLocation.transform.rotation.y = q.y();
-    measurementLocation.transform.rotation.z = q.z();
-    measurementLocation.transform.rotation.w = q.w();
+                                    measurementLocation.header.stamp = current_time;
+                                    measurementLocation.header.frame_id = "map";
+                                    measurementLocation.child_frame_id = "base_link";
+                                    measurementLocation.transform.translation.x = simulation_data[0][0];
+                                    measurementLocation.transform.translation.y = simulation_data[0][1];
+                                    measurementLocation.transform.translation.z = simulation_data[0][2];
+                                    tf2::Quaternion q;
+                                    q.setRPY(0, 0, 0);
+                                    measurementLocation.transform.rotation.x = q.x();
+                                    measurementLocation.transform.rotation.y = q.y();
+                                    measurementLocation.transform.rotation.z = q.z();
+                                    measurementLocation.transform.rotation.w = q.w();
     
-
-    measurement_data.erase( measurement_data.begin() );
+    simulation_data.erase( simulation_data.begin() );
 
     pub_wind_.publish(wind_msg);
     pub_gas_.publish(gas_msg);
@@ -81,8 +80,8 @@ int main(int argc, char** argv)
 
     NRGSLdata_testNODE test_node;
 
-    ros::Rate r(2.0); 
-    while (1)
+    ros::Rate r(1.0); 
+    while ( test_node.getSimulationDataSize() )
     {
         test_node.pubMeasurement();
         ros::spinOnce();
