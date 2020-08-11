@@ -8,7 +8,10 @@
 #include <string>
 
 
-
+/*
+* Use this node to record bag files of simulated data
+* Or dont record bag file and just run this node everytime you want to publish the topics
+*/
 
 class NRGSLdata_testNODE{
     ros::NodeHandle nh_;

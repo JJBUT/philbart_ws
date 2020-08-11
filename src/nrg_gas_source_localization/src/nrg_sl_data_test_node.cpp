@@ -11,27 +11,31 @@
 
 using gmx200_anemometer::AnemometerMsg;
 using mg_811_co2_sensor::MG811Msg;
-
 using std_msgs::Header;
+
 
 NRGSLdata_testNODE::NRGSLdata_testNODE()
 : nh_(),
   pub_wind_{nh_.advertise< AnemometerMsg >( "anemometer_data", 5 )},
   pub_gas_{nh_.advertise< MG811Msg >( "gas_sensor_data", 5 )}
 {
-    setSimulationData("/home/jacksubuntu/philbart_ws/src/nrg_gas_source_localization/data/one_source/a_data_matlab.txt");
+    setSimulationData( "/home/jacksubuntu/philbart_ws/src/nrg_gas_source_localization/data/one_source/a_data_matlab.txt" );
     return;
 }
+
 
 int NRGSLdata_testNODE::getSimulationDataSize() const
 {
     return simulation_data.size();
 }
+
+
 void NRGSLdata_testNODE::setSimulationData( std::string path )
 {
     simulation_data = pf::read_data( path );      
     return;
 }
+
 
 void NRGSLdata_testNODE::pubMeasurement()
 {
@@ -64,14 +68,16 @@ void NRGSLdata_testNODE::pubMeasurement()
                                     measurementLocation.transform.rotation.z = q.z();
                                     measurementLocation.transform.rotation.w = q.w();
     
-    simulation_data.erase( simulation_data.begin() );
+    // Delete the element we are just about to publish from the front of the vector
+    simulation_data.erase( simulation_data.begin() ); 
 
-    pub_wind_.publish(wind_msg);
-    pub_gas_.publish(gas_msg);
-    pub_tf_.sendTransform(measurementLocation);
+    pub_wind_.publish( wind_msg );
+    pub_gas_.publish( gas_msg );
+    pub_tf_.sendTransform( measurementLocation );
 
     return;
 }
+
 
 ////////////////Entry Point/////////////////
 int main(int argc, char** argv)
