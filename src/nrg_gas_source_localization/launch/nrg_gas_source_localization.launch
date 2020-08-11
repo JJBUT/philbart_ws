@@ -5,6 +5,8 @@
     </node>
 
     <node pkg="tf2_ros" type="static_transform_publisher" name="map_to_base_link_broadcaster" args="1 0 0 0 0 0 1 map base_link" />
+    <node pkg="tf2_ros" type="static_transform_publisher" name="anemometer_to_base_link_broadcaster" args="1 0 0 0 0 0 1 anemometer_link base_link" />
+    <node pkg="tf2_ros" type="static_transform_publisher" name="gas_sensor_to_base_link_broadcaster" args="1 0 0 0 0 0 1 gas_sensor_link base_link" />
     
     <arg name = "number_of_particles" 
          default = "1000"/>
