@@ -67,30 +67,6 @@ struct wind_model{
 
 struct measurement
 {
-    /**
-    * @brief Construct default zero paramaterized measurement
-    * @param az Azimuth of wind velocity (rad)
-    * @param vel Wind velocity (m/s)
-    * @param conc Gas concentration (?)
-    * @param time_stamp Measurement time (s)
-    * @param location XYZ location of measurement (m, m, m)
-    * @return Zero intialized measurement
-    */
-    measurement(): az{0}, vel{0}, conc{0}, time_stamp{0} {};
-
-    /**
-    * @brief Construct input initialized measurement
-    * @param az Azimuth of wind velocity (rad)
-    * @param vel Wind velocity (m/s)
-    * @param conc Gas concentration (?)
-    * @param time_stamp Measurement time (s)
-    * @param location XYZ location of measurement (m, m, m)
-    * @return Input initialized measurement
-    */
-    measurement(double azimuth, double velocity, double concentration, int time_stamp)
-        : az{azimuth}, vel{velocity}, conc{concentration}, time_stamp{time_stamp}
-        {};
-
     double az;
     double vel;
     double conc;
