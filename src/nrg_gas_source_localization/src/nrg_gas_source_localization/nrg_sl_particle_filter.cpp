@@ -30,7 +30,7 @@ void ParticleFilter::initialize(pf_params pfp, state_space ss, wind_model wm){
             p.position[2] = ss_.z[0] + rnv[2]*(ss_.z[1] - ss_.z[0]);
             p.rate = ss_.rate[0] + rnv[3]*(ss_.rate[1] - ss_.rate[0]);
         }
-        initialized= true;
+        initialized = true;
     }
     return;
 };
@@ -48,14 +48,14 @@ void ParticleFilter::initialize(){
         p.position[2] = ss_.z[0] + rnv[2]*(ss_.z[1] - ss_.z[0]);
         p.rate = ss_.rate[0] + rnv[3]*(ss_.rate[1] - ss_.rate[0]);
     }
-    initialized= true;
+    initialized = true;
     return;
 };
 
 void ParticleFilter::updateFilter(measurement z){
     if ( initialized == true )
     {
-        predict(z);
+        theoretical_concentration(z);
         reweight(z);
         if ( isDegenerate() )
         { 
@@ -64,10 +64,10 @@ void ParticleFilter::updateFilter(measurement z){
         return;
     }
     throw "ParticleFilter::updateFilter()";
-    return;
+    return; //TODO is this return definitely redundant because of the throw/
 }
 
-void ParticleFilter::predict( measurement z ){
+void ParticleFilter::theoretical_concentration( measurement z ){
     double source_local_measurement_point[3] = { 0, 0, 0 };    //Measurement location in source particle frame //TODO fix up comment
     
     for( auto &p: ps.particles )
@@ -92,7 +92,7 @@ void ParticleFilter::predict( measurement z ){
 
 void ParticleFilter::reweight( measurement z ){
     double max_weight = 0.0;
-    // Reweight particles based on similarity between measured concentration and predicted concentration
+    // Reweight particles based on similarity between measured concentration and theoretical concentration
     for( auto &p: ps.particles )
     {
         p.weight *= pf::gaussian( p.downwind_conc, z.conc, pfp_.R );    //TODO check multiply equal

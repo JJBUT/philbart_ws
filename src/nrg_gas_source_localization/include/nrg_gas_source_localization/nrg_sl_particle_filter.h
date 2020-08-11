@@ -107,11 +107,11 @@ class ParticleFilter{
     void initialize(); // Change Neff and R to params
 
     /**
-    * @brief Predict the concentration at the measurement location from each particle
+    * @brief Calculate the theoretical concentration at the measurement location from each particle
     * @param measurement 
     * @return void
     */
-    void predict(measurement);  
+    void theoretical_concentration(measurement);  
 
     /**
     * @brief Update the filter's particle set weights
