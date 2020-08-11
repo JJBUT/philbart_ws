@@ -3,6 +3,7 @@
 
 
 #include <cmath>
+#include <iostream>
 
 ParticleFilter::ParticleFilter(): initialized{false}{
 };
@@ -76,7 +77,7 @@ void ParticleFilter::theoretical_concentration( measurement z ){
 
         if( source_local_measurement_point[0]<0 )
         {
-            //Downwind concentration is zero if test point is not downwind of source
+            //Downwind concentration is zero if source local measurement point is not downwind of source 
             p.downwind_conc = 0.0;
         }else{
             double sy = wm_.sy[0]*source_local_measurement_point[0]*std::pow( 1.0+wm_.sy[1]*source_local_measurement_point[0], -wm_.sy[2] );
@@ -165,13 +166,17 @@ bool ParticleFilter::isDegenerate() const{
 
 void ParticleFilter::printStatistics() const{
     std::vector<double> mean(4,0);
-    for(auto &p: ps.particles)
+    for( auto &p: ps.particles )
     {
         mean[0] += p.position[0]/pfp_.np;
         mean[1] += p.position[1]/pfp_.np;
         mean[2] += p.position[2]/pfp_.np;
         mean[3] += p.rate/pfp_.np;
     }
+    std::cout<<"Mean Values-- x: "<< mean[0] <<
+                           "  y: "<< mean[1] <<
+                           "  z: "<< mean[2] <<
+                           "  rate: "<< mean[3] <<"\n" ;
 }
 /////////////Playpen Start/////////////
 
