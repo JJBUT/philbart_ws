@@ -38,7 +38,10 @@ class NRGSLNode{
 
 
 public:
-    
+    //Declaration of copy operations prevents automatic generation of move operations
+    NRGSLNode(const NRGSLNode&) = delete;
+    NRGSLNode& operator=(const NRGSLNode&) = delete;
+
     NRGSLNode();
     void callback(const AnemometerMsgConstPtr &msg1, const MG811MsgConstPtr &msg2); //TODO does this need to be public?
 };
