@@ -26,6 +26,7 @@ void ParticleFilter::initialize(pf_params pfp, state_space ss, wind_model wm){
             p.weight = 1.0/pfp_.np;
 
             auto rnv = pf::uniform_rn(4);
+            p.position.reserve(3);
             p.position[0] = ss_.x[0] + rnv[0]*(ss_.x[1] - ss_.x[0]);
             p.position[1] = ss_.y[0] + rnv[1]*(ss_.y[1] - ss_.y[0]);
             p.position[2] = ss_.z[0] + rnv[2]*(ss_.z[1] - ss_.z[0]);
