@@ -53,14 +53,16 @@ NRGSLNode::NRGSLNode()
   filter_.initialize(_pfp, _ss, _wm);
 
   sub_wind.subscribe( nh_, 
-                  "/anemometer_data_topic", 
-                  10 );
+                  "/anemometer_data", 
+                  20 );
   sub_gas.subscribe( nh_, 
-                  "/gas_sensor_data_topic", 
-                  10 );
+                  "/gas_sensor_data", 
+                  20 );
 
-  sync.reset(new Sync(MySyncPolicy(10), sub_wind, sub_gas));   
+  sync.reset(new Sync(MySyncPolicy(100), sub_wind, sub_gas));   
   sync->registerCallback(boost::bind(&NRGSLNode::callback, this, _1, _2));
+
+  return;
 }
 
 
@@ -75,15 +77,17 @@ void NRGSLNode::callback(const AnemometerMsgConstPtr &wind, const MG811MsgConstP
                                                                                "map",
                                                                                _current_time);
 
-  std::vector _measurement_location = { _measurement_tf.transform.translation.x,
-                                        _measurement_tf.transform.translation.y,
-                                        _measurement_tf.transform.translation.z };
+  std::vector<double> _measurement_location = { _measurement_tf.transform.translation.x,
+                                                _measurement_tf.transform.translation.y,
+                                                _measurement_tf.transform.translation.z };
                                         
   measurement _m = { wind->azimuth, 
                      wind->speed, 
                      gas->concentration, 
-                     _current_time.sec,
+                     static_cast<int>(_current_time.sec),
                      _measurement_location };
+
+  filter_.updateFilter(_m);
 } 
 
 

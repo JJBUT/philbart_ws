@@ -29,9 +29,9 @@
         <rosparam param = "wind_model_vertical_dispersion"> [0.20, 0.0, 0.0] </rosparam>
 
         <remap from = "anemometer_data_topic" 
-               to = "remapped_anemometer_data_topic"/>
+               to = "/anemometer_data"/>
         <remap from = "gas_sensor_data_topic" 
-               to = "remapped_gas_sensor_data_topic"/>
+               to = "/gas_sensor_data"/>
 
     </node>
 </launch>
