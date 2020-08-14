@@ -1,5 +1,7 @@
 #include <nrg_sl_node.h>
 
+#include <geometry_msgs/TransformStamped.h>
+
 NRGSLNode::NRGSLNode()
 : nh_(), 
   private_nh_("~"),
@@ -62,14 +64,33 @@ NRGSLNode::NRGSLNode()
 }
 
 
+
+
 void NRGSLNode::callback(const AnemometerMsgConstPtr &wind, const MG811MsgConstPtr &gas)
 {
+  //TODO turn anemometer msg into twist stamped
+  ros::Time _current_time = wind->header.stamp;
+
+  geometry_msgs::TransformStamped _measurement_tf = tfBuffer_.lookupTransform( "base_link", 
+                                                                               "map",
+                                                                               _current_time);
+
+  std::vector _measurement_location = { _measurement_tf.transform.translation.x,
+                                        _measurement_tf.transform.translation.y,
+                                        _measurement_tf.transform.translation.z };
+                                        
+  measurement _m = { wind->azimuth, 
+                     wind->speed, 
+                     gas->concentration, 
+                     _current_time.sec,
+                     _measurement_location };
 } 
 
 
 ////////////////Entry Point/////////////////
 int main(int argc, char** argv)
 {
+  //TODO put pf in namespace
   ROS_INFO_STREAM_NAMED("nrg_source_localization_node", "Starting source localization node");
   ros::init(argc, argv, "nrg_source_localization_node");
   NRGSLNode synchronizer;
