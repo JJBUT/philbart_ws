@@ -8,6 +8,7 @@
 #include <mg_811_co2_sensor/MG811Msg.h>
 
 #include <ros/ros.h>
+#include <tf2_ros/transform_listener.h>
 #include <message_filters/subscriber.h>
 #include <message_filters/synchronizer.h>
 #include <message_filters/sync_policies/approximate_time.h>
@@ -26,16 +27,18 @@ class NRGSLNode{
 
     ParticleFilter filter_;
 
+    tf2_ros::Buffer tfBuffer_;
+    tf2_ros::TransformListener tfListener_;
+
     message_filters::Subscriber<AnemometerMsg> sub_wind;
     message_filters::Subscriber<MG811Msg> sub_gas; 
     typedef message_filters::sync_policies::ApproximateTime<AnemometerMsg, MG811Msg> MySyncPolicy;
     typedef message_filters::Synchronizer<MySyncPolicy> Sync;
     boost::shared_ptr<Sync> sync;
 
-    
-
 
 public:
+    
     NRGSLNode();
     void callback(const AnemometerMsgConstPtr &msg1, const MG811MsgConstPtr &msg2); //TODO does this need to be public?
 };

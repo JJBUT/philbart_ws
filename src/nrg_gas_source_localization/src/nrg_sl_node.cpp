@@ -2,7 +2,8 @@
 
 NRGSLNode::NRGSLNode()
 : nh_(), 
-  private_nh_("~")
+  private_nh_("~"),
+  tfListener_(tfBuffer_)
 {
   pf_params _pfp;
   private_nh_.param( "number_of_particles", 
