@@ -24,9 +24,7 @@ void ParticleFilter::initialize(pf_params pfp, state_space ss, wind_model wm){
         for( auto& p: ps.particles )
         {
             p.weight = 1.0/pfp_.np;
-
             auto rnv = pf::uniform_rn(4);
-            p.position.reserve(3);
             p.position[0] = ss_.x[0] + rnv[0]*(ss_.x[1] - ss_.x[0]);
             p.position[1] = ss_.y[0] + rnv[1]*(ss_.y[1] - ss_.y[0]);
             p.position[2] = ss_.z[0] + rnv[2]*(ss_.z[1] - ss_.z[0]);
@@ -57,6 +55,7 @@ void ParticleFilter::initialize(){
 void ParticleFilter::updateFilter(measurement z){
     if ( initialized == true )
     {
+        printMeasurement(z);        //TODO remove
         theoretical_concentration(z);
         reweight(z);
         if ( isDegenerate() )
@@ -168,7 +167,24 @@ bool ParticleFilter::isDegenerate() const{
     return false;
 }
 
-void ParticleFilter::printStatistics() const{
+void ParticleFilter::printMeasurement( measurement z ) const
+{
+    // double az;
+    // double vel; //TODO change to speed 
+    // double conc;
+    // int time_stamp;
+    // std::vector<double> location;
+    std::cout<< "Measurement-- az: "<< z.az <<
+                            "  vel: "<< z.vel <<
+                            "  conc: "<< z.conc <<
+                            "  time_stamp: "<< z.time_stamp <<
+                            "  position: "<< z.location[0] <<", "
+                                          << z.location[1] <<", "
+                                          << z.location[2] << std::endl; 
+}
+
+void ParticleFilter::printStatistics() const
+{
     std::vector<double> mean(4,0);
     for( auto &p: ps.particles )
     {

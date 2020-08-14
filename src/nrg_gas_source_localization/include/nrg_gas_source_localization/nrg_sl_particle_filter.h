@@ -21,6 +21,13 @@ struct pf_params{
 * @param double rate The emission rate of the source 
 */
 struct particle{
+    particle()
+    : weight{},
+      downwind_conc{},
+      position(3),
+      rate{}
+    {}
+    
     //Fraction of the probability distribution
     double weight;
     //Concentration produced by the particle at some downwind test point
@@ -87,14 +94,14 @@ class ParticleFilter{
     * @param measurement 
     * @return void
     */
-    void theoretical_concentration(measurement);  
+    void theoretical_concentration( measurement );  
 
     /**
     * @brief Update the filter's particle set weights
     * @param measurement 
     * @return void
     */
-    void reweight(measurement); 
+    void reweight( measurement ); 
 
     /**
     * @brief If Neff<Neff_lim then resample to prevent degeneracy
@@ -108,6 +115,7 @@ class ParticleFilter{
     */
     bool isDegenerate() const; //TODO make name more descriptive about return condition
 
+    void printMeasurement( measurement ) const;
     
     pf_params pfp_;
     state_space ss_;
