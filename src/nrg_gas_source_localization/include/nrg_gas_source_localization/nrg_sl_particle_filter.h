@@ -68,10 +68,10 @@ struct wind_model{
 struct measurement
 {
     double az;
-    double vel;
+    double vel; //TODO change to speed 
     double conc;
     int time_stamp;
-    double location[3];
+    std::vector<double> location;
 };
 
 class ParticleFilter{
