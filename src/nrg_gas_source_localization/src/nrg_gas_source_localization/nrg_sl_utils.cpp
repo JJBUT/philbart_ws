@@ -32,8 +32,8 @@ double uniform_rn(){
     return dist(mersenne_engine);
 }
 
-void transform(double source_local_test_point[3], const double test_point[3], const double source[3], const double& rotation){
-    double temp_local[3];
+void transform(std::vector<double> &source_local_test_point, const std::vector<double> &test_point, const std::vector<double> &source, const double& rotation){
+    std::vector<double> temp_local(3);
 
     // Translation
     temp_local[0] = test_point[0] - source[0];

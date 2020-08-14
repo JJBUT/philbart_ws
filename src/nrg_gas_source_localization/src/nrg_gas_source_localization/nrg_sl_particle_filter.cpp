@@ -69,11 +69,14 @@ void ParticleFilter::updateFilter(measurement z){
 }
 
 void ParticleFilter::theoretical_concentration( measurement z ){
-    double source_local_measurement_point[3] = { 0, 0, 0 };    //Measurement location in source particle frame //TODO fix up comment
+    std::vector<double> source_local_measurement_point(3);    //Measurement location in source particle frame //TODO fix up comment
     
     for( auto &p: ps.particles )
     {
-        pf::transform( source_local_measurement_point, z.location, p.position, z.az );
+        pf::transform( source_local_measurement_point, 
+                       z.location, 
+                       p.position, 
+                       z.az );
 
         if( source_local_measurement_point[0]<0 )
         {

@@ -26,7 +26,7 @@ struct particle{
     //Concentration produced by the particle at some downwind test point
     double downwind_conc;
     //The state which we are trying to predict is the combination of position and rate
-    double position[3];
+    std::vector<double> position;
     double rate;
 };
 

@@ -29,7 +29,7 @@ namespace pf{
     * @param const double& The rotation, most often the azimuth of the wind
     * @return 
     */
-    void transform(double*, const double*, const double*, const double&);
+    void transform(std::vector<double>&, const std::vector<double>&, const std::vector<double>&, const double&);
     
     /**
     * @brief Generate a value from a gaussian distribution
