@@ -1,0 +1,4 @@
+geometry_msgs/PointStamped gas_sensor_position
+float64 rate
+---
+bool success
