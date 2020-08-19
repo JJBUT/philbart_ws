@@ -83,11 +83,11 @@ void ParticleFilter::theoretical_concentration( measurement z ){
             //Downwind concentration is zero if source local measurement point is not downwind of source 
             p.downwind_conc = 0.0;
         }else{
-            double sy = wm_.sy[0]*source_local_measurement_point[0]*std::pow( 1.0+wm_.sy[1]*source_local_measurement_point[0], -wm_.sy[2] );
-            double sz = wm_.sz[0]*source_local_measurement_point[0]*std::pow( 1.0+wm_.sz[1]*source_local_measurement_point[0], -wm_.sz[2] );
-            double expy = std::exp(-std::pow( source_local_measurement_point[1], 2 )/( 2*std::pow(sy, 2) ));
-            double expz = std::exp(-std::pow( source_local_measurement_point[2], 2 )/( 2*std::pow(sz, 2) ));
-            double norm = ( p.rate/z.vel )/( 2*M_PI*sy*sz );
+            const double sy = wm_.sy[0]*source_local_measurement_point[0]*std::pow( 1.0+wm_.sy[1]*source_local_measurement_point[0], -wm_.sy[2] );
+            const double sz = wm_.sz[0]*source_local_measurement_point[0]*std::pow( 1.0+wm_.sz[1]*source_local_measurement_point[0], -wm_.sz[2] );
+            const double expy = std::exp(-std::pow( source_local_measurement_point[1], 2 )/( 2*std::pow(sy, 2) ));  //TODO remove std pow because we know its 2
+            const double expz = std::exp(-std::pow( source_local_measurement_point[2], 2 )/( 2*std::pow(sz, 2) ));
+            const double norm = ( p.rate/z.vel )/( 2*M_PI*sy*sz );
             p.downwind_conc = norm*expy*expz;
         }
     }
