@@ -55,7 +55,6 @@ void ParticleFilter::initialize(){
 void ParticleFilter::updateFilter(measurement z){
     if ( initialized == true )
     {
-        printMeasurement(z);        //TODO remove
         theoretical_concentration(z);
         reweight(z);
         if ( isDegenerate() )
@@ -65,15 +64,15 @@ void ParticleFilter::updateFilter(measurement z){
         return;
     }
     throw "ParticleFilter::updateFilter()";
-    return; //TODO is this return definitely redundant because of the throw/
 }
 
 void ParticleFilter::theoretical_concentration( measurement z ){
-    std::vector<double> source_local_measurement_point(3);    //Measurement location in source particle frame //TODO fix up comment
+    //TODO: move this into the loop, initilize with zeros, and remove zero intialization from the transform fn
+    std::vector<double> source_local_measurement_point(3);    // The location of the measurement in each particles source local frame
     
     for( auto &p: ps.particles )
     {
-        pf::transform( source_local_measurement_point, 
+        pf::transform( source_local_measurement_point, //the SLMP is a visitor that is passed by reference and modified in place
                        z.location, 
                        p.position, 
                        z.az );
@@ -85,8 +84,8 @@ void ParticleFilter::theoretical_concentration( measurement z ){
         }else{
             const double sy = wm_.sy[0]*source_local_measurement_point[0]*std::pow( 1.0+wm_.sy[1]*source_local_measurement_point[0], -wm_.sy[2] );
             const double sz = wm_.sz[0]*source_local_measurement_point[0]*std::pow( 1.0+wm_.sz[1]*source_local_measurement_point[0], -wm_.sz[2] );
-            const double expy = std::exp(-std::pow( source_local_measurement_point[1], 2 )/( 2*std::pow(sy, 2) ));  //TODO remove std pow because we know its 2
-            const double expz = std::exp(-std::pow( source_local_measurement_point[2], 2 )/( 2*std::pow(sz, 2) ));
+            const double expy = std::exp(-( source_local_measurement_point[1]*source_local_measurement_point[1] )/( 2*sy*sy ));  
+            const double expz = std::exp(-( source_local_measurement_point[2]*source_local_measurement_point[2] )/( 2*sz*sz ));
             const double norm = ( p.rate/z.vel )/( 2*M_PI*sy*sz );
             p.downwind_conc = norm*expy*expz;
         }
@@ -99,7 +98,7 @@ void ParticleFilter::reweight( measurement z ){
     // Reweight particles based on similarity between measured concentration and theoretical concentration
     for( auto &p: ps.particles )
     {
-        p.weight *= pf::gaussian( p.downwind_conc, z.conc, pfp_.R );    //TODO check multiply equal
+        p.weight *= pf::gaussian( p.downwind_conc, z.conc, pfp_.R );   
         if( p.weight > max_weight ) max_weight = p.weight;
     }
     
