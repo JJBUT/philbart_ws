@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+    
+    <node pkg="nrg_gas_concentration_server"  type="nrg_gas_concentration_server_node" name="nrg_gas_concentration_server" output="screen">
+    </node>
+
+</launch>
