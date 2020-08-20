@@ -1,4 +1,3 @@
-geometry_msgs/PointStamped gas_sensor_position
-float64 rate
+GasSource source
 ---
 bool success

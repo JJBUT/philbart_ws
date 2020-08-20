@@ -15,7 +15,7 @@ namespace nrg_gas_concentration_server
 
 class SimulatedSourceServer
 {
-    std::vector<double> sources_;
+    std::vector<GasSource> sources_;
 
     bool addSource( SetSource::Request &req, 
                     std_srvs::Empty::Response &res );
