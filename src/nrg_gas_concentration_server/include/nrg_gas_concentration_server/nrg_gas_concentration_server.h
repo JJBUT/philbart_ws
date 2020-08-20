@@ -21,7 +21,7 @@ class SimulatedSourceServer
     std::vector<GasSource> sources_;
 
     bool addSource( SetSource::Request &req, 
-                    std_srvs::Empty::Response &res );
+                    SetSource::Response &res );
 
     bool getConcentration( GetConcentration::Request &req, 
                            GetConcentration::Response &res );

@@ -22,16 +22,18 @@ namespace nrg_gas_concentration_server
     }
 
     bool SimulatedSourceServer::addSource( SetSource::Request &req, 
-                                           std_srvs::Empty::Response &res ) 
+                                           SetSource::Response &res ) 
     {
       const std::lock_guard<std::mutex> lock( sources_mutex_ );
+
       if ( req.source.rate <= 0 ) 
       {
         ROS_DEBUG_STREAM_NAMED( "SimulatedSourceServer::addSource()", "Source rate must be positive" );
-        return 0;
+        res.success = 0;
+        return 1;
       }
-
       sources_.push_back( req.source );
+      res.success = 1;
       //TODO-add visualization component
 
       return 1;
@@ -41,14 +43,18 @@ namespace nrg_gas_concentration_server
                                                   GetConcentration::Response &res ) 
     {
       const std::lock_guard<std::mutex> lock(sources_mutex_);
-      return 0;
+
+      return 1;
     }
 
     bool SimulatedSourceServer::clearSources( std_srvs::Empty::Request &req, 
                                               std_srvs::Empty::Response &res ) 
     {
       const std::lock_guard<std::mutex> lock(sources_mutex_);
-      return 0;
+
+      sources_.clear();
+
+      return 1;
     }
 };
 
