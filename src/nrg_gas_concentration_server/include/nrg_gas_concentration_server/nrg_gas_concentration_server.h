@@ -3,6 +3,9 @@
 
 #include <vector>
 #include <ros/ros.h>
+#include "nrg_gas_concentration_server/SetSource.h"
+#include "nrg_gas_concentration_server/GetConcentration.h"
+#include "nrg_gas_concentration_server/ClearSources.h"
 
 namespace nrg_gas_concentration_server
 {
@@ -11,11 +14,14 @@ class SimulatedSourceServer
 {
     std::vector<double> sources_;
 
-    void addSource();
+    bool addSource( SetSource::SetSource &req, 
+                    SetSource::SetSource &res );
 
-    void getConcentration();
+    bool getConcentration( GetConcentration::GetConcentration &req, 
+                           GetConcentration::GetConcentration &res);
 
-    void clearSources();
+    bool clearSources( ClearSources::ClearSources &req, 
+                       ClearSources::ClearSources &res);
 
     ros::NodeHandle private_nh_;
 
