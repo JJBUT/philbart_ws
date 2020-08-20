@@ -1,2 +1,5 @@
+geometry_msgs/PointStamped gas_sensor_position
+float64 wind_speed
+float64 wind_azimuth
 ---
 float64 concentration
