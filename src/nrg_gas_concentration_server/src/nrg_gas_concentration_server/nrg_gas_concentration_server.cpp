@@ -30,7 +30,6 @@ namespace nrg_gas_concentration_server
     bool SimulatedSourceServer::setWindParams( SetWindParams::Request &req, 
                                                SetWindParams::Response &res )
     {
-      res.success = true;
       return 1;
     }
 
@@ -67,16 +66,6 @@ namespace nrg_gas_concentration_server
       sources_.clear();
 
       return 1;
-    }
-
-    GasSource& SimulatedSourceServer::getSource(int i)
-    {
-      return sources_[i];
-    }
-
-    int SimulatedSourceServer::getSize()
-    {
-      return sources_.size();
     }
 };
 

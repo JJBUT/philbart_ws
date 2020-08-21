@@ -6,6 +6,7 @@
 #include <std_srvs/Empty.h>
 
 #include <nrg_gas_concentration_server/GasSource.h>
+#include <nrg_gas_concentration_server/WindParams.h>
 #include <nrg_gas_concentration_server/SetWindParams.h>
 #include <nrg_gas_concentration_server/SetSource.h>
 #include <nrg_gas_concentration_server/GetConcentration.h>
@@ -33,6 +34,8 @@ class SimulatedSourceServer
 
     std::vector<GasSource> sources_;
 
+    WindParams wp_;
+
     mutable std::mutex sources_mutex_;
 
     ros::NodeHandle private_nh_;
@@ -41,17 +44,9 @@ class SimulatedSourceServer
                        set_gas_source_srv_, 
                        get_concentration_srv_, 
                        clear_sources_srv_ ;
+    
 public:
     SimulatedSourceServer();
-
-    GasSource& getSource(int i);
-
-    int getSize();
-
-
-
-
-
 };
 
 
