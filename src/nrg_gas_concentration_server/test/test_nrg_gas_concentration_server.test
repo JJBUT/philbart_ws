@@ -1,0 +1,7 @@
+<!-- Launch file for test_pf -->
+
+<launch>
+
+    <test test-name="test_nrg_gas_concentration_server" pkg="nrg_gas_concentration_server" type="test_nrg_gas_concentration_server" clear_params="true" time-limit="100.0" />
+
+</launch>

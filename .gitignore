@@ -18,3 +18,5 @@ src/source_localization/particle_filter/src/particle_filter
 src/source_localization/particle_filter/src/main
 
 src/nrg_source_localization/src/nrg_sl_particle_filter
+
+.catkin_tools/*

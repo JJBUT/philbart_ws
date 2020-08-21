@@ -2,11 +2,17 @@
 
 #include <ros/console.h>
 
+#include <iostream> //TODO remove
+
 namespace nrg_gas_concentration_server
 {
     SimulatedSourceServer::SimulatedSourceServer()
     : private_nh_("~")
-    {
+    { 
+        set_wind_params_srv_ = private_nh_.advertiseService( "set_wind_params", 
+                                                             &SimulatedSourceServer::setWindParams, 
+                                                             this );
+
         set_gas_source_srv_ = private_nh_.advertiseService( "set_source", 
                                                              &SimulatedSourceServer::addSource, 
                                                              this );
@@ -21,11 +27,19 @@ namespace nrg_gas_concentration_server
 
     }
 
+    bool SimulatedSourceServer::setWindParams( SetWindParams::Request &req, 
+                                               SetWindParams::Response &res )
+    {
+      res.success = true;
+      return 1;
+    }
+
+
     bool SimulatedSourceServer::addSource( SetSource::Request &req, 
                                            SetSource::Response &res ) 
     {
       const std::lock_guard<std::mutex> lock( sources_mutex_ );
-
+            
       if ( req.source.rate <= 0 ) 
       {
         ROS_DEBUG_STREAM_NAMED( "SimulatedSourceServer::addSource()", "Source rate must be positive" );
@@ -34,8 +48,6 @@ namespace nrg_gas_concentration_server
       }
       sources_.push_back( req.source );
       res.success = 1;
-      //TODO-add visualization component
-
       return 1;
     }
 
@@ -56,16 +68,15 @@ namespace nrg_gas_concentration_server
 
       return 1;
     }
+
+    GasSource& SimulatedSourceServer::getSource(int i)
+    {
+      return sources_[i];
+    }
+
+    int SimulatedSourceServer::getSize()
+    {
+      return sources_.size();
+    }
 };
 
-
-int main(int argc, char **argv)
-{
-  ros::init(argc, argv, "simulated_gas_source_server");
-
-  nrg_gas_concentration_server::SimulatedSourceServer node;
-  
-  ros::spin();
-
-  return 0;
-}
