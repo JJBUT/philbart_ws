@@ -7,7 +7,8 @@
 namespace nrg_gas_concentration_server
 {
     SimulatedSourceServer::SimulatedSourceServer()
-    : private_nh_("~")
+    : private_nh_("~"),
+      initialized_{false}
     { 
         set_wind_params_srv_ = private_nh_.advertiseService( "set_wind_params", 
                                                              &SimulatedSourceServer::setWindParams, 
@@ -30,7 +31,24 @@ namespace nrg_gas_concentration_server
     bool SimulatedSourceServer::setWindParams( SetWindParams::Request &req, 
                                                SetWindParams::Response &res )
     {
-      return 1;
+      if ( req.data.ya >= 0 &&
+           req.data.yb >= 0 &&
+           req.data.yc >= 0 &&
+           req.data.za >= 0 &&
+           req.data.zb >= 0 &&
+           req.data.zc >= 0 )
+      {
+        wp_ = req.data;
+        initialized_ = true;
+        res.success = true;
+        return 1;
+      } 
+      else 
+      {
+        initialized_ = false;
+        res.success = false;
+        return 1;
+      }
     }
 
 

@@ -36,6 +36,8 @@ class SimulatedSourceServer
 
     WindParams wp_;
 
+    bool initialized_;
+
     mutable std::mutex sources_mutex_;
 
     ros::NodeHandle private_nh_;
