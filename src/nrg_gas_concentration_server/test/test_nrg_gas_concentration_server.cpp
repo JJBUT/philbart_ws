@@ -32,11 +32,30 @@ protected:
                      clear_sources_client;
 };
 
-TEST_F(NRGGasConcentrationServiceTests, SetPositiveParams)
+TEST_F(NRGGasConcentrationServiceTests, SetPositiveWindParams)
 {
   SetWindParams srv;
-  srv.request.ya = 0.1;
-  srv.request.zc = 0.2;
+  srv.request.data.ya = 1.1;
+  srv.request.data.za = 2.2;
+
+  set_wind_params_client.call(srv);
+  EXPECT_EQ(srv.response.success, true);
+}
+
+TEST_F(NRGGasConcentrationServiceTests, SetNegativeWindParams)
+{
+  SetWindParams srv;
+  srv.request.data.ya = -1.1;
+  srv.request.data.za = -2.2;
+
+  set_wind_params_client.call(srv);
+  EXPECT_EQ(srv.response.success, false);
+}
+
+TEST_F(NRGGasConcentrationServiceTests, SetZeroWindParams)
+{
+  SetWindParams srv;
+
   set_wind_params_client.call(srv);
   EXPECT_EQ(srv.response.success, true);
 }
@@ -45,6 +64,7 @@ TEST_F(NRGGasConcentrationServiceTests, AddPositiveRateSource)
 {
   SetSource srv;
   srv.request.source.rate = 10.0;
+
   set_gas_source_client.call(srv);
   EXPECT_EQ(srv.response.success, true);
 }
@@ -53,6 +73,7 @@ TEST_F(NRGGasConcentrationServiceTests, AddNegativeRateSource)
 {
   SetSource srv;
   srv.request.source.rate = -10.0;
+
   set_gas_source_client.call(srv);
   EXPECT_EQ(srv.response.success, false);
 }
@@ -61,6 +82,7 @@ TEST_F(NRGGasConcentrationServiceTests, AddZeroRateSource)
 {
   SetSource srv;
   srv.request.source.rate = 0.0;
+
   set_gas_source_client.call(srv);
   EXPECT_EQ(srv.response.success, false);
 }
