@@ -8,7 +8,7 @@
             "name": "Debug C++ ROS node",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/devel/lib/source_localization/source_localization_node",
+            "program": "${workspaceFolder}/devel/lib/nrg_gas_source_localization/nrg_sl_node",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -88,6 +88,28 @@
             ],
             "miDebuggerPath": "/usr/bin/gdb",
             "avoidWindowsConsoleRedirection": false
+        },
+        {
+            "name": "Debug C++ ROS test node",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/home/jacksubuntu/philbart_ws/devel/lib/nrg_gas_concentration_server/${fileBasenameNoExtension}",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "prerun",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "avoidWindowsConsoleRedirection": true
         }
     ]
 }
