@@ -1,5 +1,0 @@
-philbart_navigation
-/home/jacksubuntu/philbart_ws/devel/.private/philbart_navigation/cmake.lock /home/jacksubuntu/philbart_ws/devel/./cmake.lock
-/home/jacksubuntu/philbart_ws/devel/.private/philbart_navigation/share/philbart_navigation/cmake/philbart_navigationConfig.cmake /home/jacksubuntu/philbart_ws/devel/share/philbart_navigation/cmake/philbart_navigationConfig.cmake
-/home/jacksubuntu/philbart_ws/devel/.private/philbart_navigation/share/philbart_navigation/cmake/philbart_navigationConfig-version.cmake /home/jacksubuntu/philbart_ws/devel/share/philbart_navigation/cmake/philbart_navigationConfig-version.cmake
-/home/jacksubuntu/philbart_ws/devel/.private/philbart_navigation/lib/pkgconfig/philbart_navigation.pc /home/jacksubuntu/philbart_ws/devel/lib/pkgconfig/philbart_navigation.pc
