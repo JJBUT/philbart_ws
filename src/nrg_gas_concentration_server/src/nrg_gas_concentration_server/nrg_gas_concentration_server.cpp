@@ -1,4 +1,5 @@
 #include <nrg_gas_concentration_server/nrg_gas_concentration_server.h>
+#include <nrg_gas_source_localization/nrg_sl_utils.h>
 
 #include <ros/console.h>
 
@@ -71,8 +72,40 @@ namespace nrg_gas_concentration_server
     bool SimulatedSourceServer::getConcentration( GetConcentration::Request &req, 
                                                   GetConcentration::Response &res ) 
     {
+      res.concentration = 0.0;
+      //TODO-add check for initialization
       const std::lock_guard<std::mutex> lock(sources_mutex_);
+      std::vector<double> source_local_measurement_point(3);
+      std::vector<double> measurement_point(3);
+      measurement_point[0] = req.gas_sensor_position.point.x;
+      measurement_point[1] = req.gas_sensor_position.point.y;
+      measurement_point[2] = req.gas_sensor_position.point.z;
+      
+      for(const auto &s: sources_)
+      {
+        std::vector<double> source_point(3);
+        source_point[0] = s.position.point.x;
+        source_point[1] = s.position.point.y;
+        source_point[2] = s.position.point.z;
 
+        pf::transform( source_local_measurement_point, 
+                       measurement_point, 
+                       source_point, 
+                       req.wind_azimuth);
+
+        if( source_local_measurement_point[0]<0 )
+        {
+            //Downwind concentration is zero if source local measurement point is not downwind of source 
+            res.concentration += 0.0;
+        }else{
+            const double sy = wp_.ya*source_local_measurement_point[0]*std::pow( 1.0+wp_.yb*source_local_measurement_point[0], -wp_.yc );
+            const double sz = wp_.za*source_local_measurement_point[0]*std::pow( 1.0+wp_.zb*source_local_measurement_point[0], -wp_.zc );
+            const double expy = std::exp(-( source_local_measurement_point[1]*source_local_measurement_point[1] )/( 2*sy*sy ));  
+            const double expz = std::exp(-( source_local_measurement_point[2]*source_local_measurement_point[2] )/( 2*sz*sz ));
+            const double norm = ( s.rate/req.wind_speed )/( 2*M_PI*sy*sz );
+            res.concentration += norm*expy*expz;
+        }
+      }
       return 1;
     }
 

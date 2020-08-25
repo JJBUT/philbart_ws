@@ -87,6 +87,72 @@ TEST_F(NRGGasConcentrationServiceTests, AddZeroRateSource)
   EXPECT_EQ(srv.response.success, false);
 }
 
+TEST_F(NRGGasConcentrationServiceTests, CalculateDownwindConcentration)
+{
+
+  std_srvs::Empty srv;
+  clear_sources_client.call(srv);
+
+  SetWindParams srv1;
+  srv1.request.data.ya = 0.22;
+  srv1.request.data.yb = 0.0001;
+  srv1.request.data.yc = 0.5;
+  srv1.request.data.za = 0.2;
+  srv1.request.data.zb = 0.0;
+  srv1.request.data.zc = 0.0;
+  set_wind_params_client.call(srv1);
+
+  SetSource srv2;
+  srv2.request.source.rate = 12000.0;
+  srv2.request.source.position.point.x = -10.0;
+  srv2.request.source.position.point.y = 20.0;
+  srv2.request.source.position.point.z = 0.0;
+  set_gas_source_client.call(srv2);
+
+  GetConcentration srv3;
+  srv3.request.gas_sensor_position.point.x = -18.5;
+  srv3.request.gas_sensor_position.point.y = -19.225504059505997;
+  srv3.request.gas_sensor_position.point.z = 0.0;
+  srv3.request.wind_azimuth = -2.0;
+  srv3.request.wind_speed = 1.0;
+  get_concentration_client.call(srv3);
+
+  EXPECT_NEAR(0.1, srv3.response.concentration, 17.189372090029856);
+}
+
+
+TEST_F(NRGGasConcentrationServiceTests, CalculateUpwindConcentration)
+{
+  std_srvs::Empty srv;
+  clear_sources_client.call(srv);
+
+  SetWindParams srv1;
+  srv1.request.data.ya = 0.22;
+  srv1.request.data.yb = 0.0001;
+  srv1.request.data.yc = 0.5;
+  srv1.request.data.za = 0.2;
+  srv1.request.data.zb = 0.0;
+  srv1.request.data.zc = 0.0;
+  set_wind_params_client.call(srv1);
+
+  SetSource srv2;
+  srv2.request.source.rate = 12000.0;
+  srv2.request.source.position.point.x = -10.0;
+  srv2.request.source.position.point.y = 20.0;
+  srv2.request.source.position.point.z = 0.0;
+  set_gas_source_client.call(srv2);
+
+  GetConcentration srv3;
+  srv3.request.gas_sensor_position.point.x = -9.0;
+  srv3.request.gas_sensor_position.point.y = 21.0;
+  srv3.request.gas_sensor_position.point.z = 0.0;
+  srv3.request.wind_azimuth = -2.0;
+  srv3.request.wind_speed = 1.0;
+  get_concentration_client.call(srv3);
+
+  EXPECT_EQ(0, srv3.response.concentration);
+}
+
 
 int main(int argc, char **argv)
 {
