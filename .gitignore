@@ -2,3 +2,5 @@ devel/*
 logs/*
 build/*
 catkin_tools/*
+src/rviz_satellite/*
+src/sick_scan/*
