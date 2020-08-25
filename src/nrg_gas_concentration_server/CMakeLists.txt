@@ -10,6 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   message_generation
   rostest
+  nrg_gas_source_localization
 )
 
 ################################################
@@ -86,6 +87,7 @@ add_executable(${PROJECT_NAME}_node src/nrg_gas_concentration_server_node.cpp)
 target_link_libraries(${PROJECT_NAME}_node
   ${catkin_LIBRARIES}
   nrg_gas_concentration_server
+  ${nrg_gas_source_localization_LIBRARIES}
 )
 
 
